@@ -1,0 +1,220 @@
+/* _forms.css */
+
+.error-message {
+  position: absolute;
+  color: var(--notice);
+  font-size: 12px;
+  margin-top: 0.5rem;
+}
+
+/* =================== */
+/*  ContactModal.vue
+/* =================== */
+
+.input-wrapper {
+  height: calc(100% - 37px);
+  position: absolute;
+  top: 37px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: inset 0px 20px 20px -10px rgba(0, 0, 0, 0.5);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+.input-group p {
+  font-size: 15px;
+  text-shadow: 1px 1px 2px black;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.input-group label {
+  width: 80px;
+  margin-right: 0.5rem;
+  font-size: 14px;
+  text-align: right;
+  color: var(--theme-color);
+  text-shadow: 1px 1px 2px black;
+}
+
+.name_input,
+.subject_input,
+.email_input {
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  padding-left: 12px;
+  padding-right: 12px;
+  color: var(--white);
+  background: var(--black);
+  border-radius: 0.5rem;
+  vertical-align: middle;
+}
+
+.input-container {
+  flex: 1 1 0%;
+  padding: 1px;
+  border-radius: 0.5rem;
+  background: linear-gradient(180deg, #444, #777);
+}
+/* =================== */
+/*  Textarea
+/* =================== */
+
+textarea {
+  width: 100%;
+  height: 100%;
+  font-family: var(--special-font);
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+input::placeholder {
+  color: var(--black);
+  opacity: 1;
+}
+
+textarea::placeholder {
+  color: var(--black);
+  opacity: 0.7;
+}
+
+/* =================== */
+/*  Placeholder
+/* =================== */
+
+input::placeholder {
+  color: var(--gray-60);
+  opacity: 0.5;
+}
+
+/* WebKit-Browser (Chrome, Safari) */
+::-webkit-input-placeholder {
+  color: var(--gray-60);
+  opacity: 0.5;
+}
+
+/* Mozilla Firefox */
+:-moz-placeholder {
+  color: var(--gray-60);
+  opacity: 0.5;
+}
+
+/* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  color: var(--gray-60);
+  opacity: 0.5;
+}
+
+/* Edge */
+::-ms-input-placeholder {
+  color: var(--gray-60);
+  opacity: 0.5;
+}
+
+/* Für Chrome, Safari, Edge und Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Für Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Autofill */
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #fcfcfe;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-moz-autofill {
+  color: #fcfcfe;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+#customer-email:-webkit-autofill {
+  -webkit-text-fill-color: #1a1a1a;
+}
+
+#customer-email:-moz-autofill {
+  color: #1a1a1a;
+}
+
+/* =================== */
+/*  Input
+/* =================== */
+.input-label {
+  height: 100%;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.input-text {
+  width: 100%;
+  height: 35px;
+  font-size: 14px;
+  background: none;
+  outline: none;
+  border-bottom: 1px solid var(--black);
+  -webkit-transition: border 300ms, transform 300ms, font-size 300ms,
+    box-shadow 0ms;
+  transition: border 300ms, transform 300ms, font-size 300ms, box-shadow 0ms;
+}
+
+.input-placeholder {
+  -webkit-box-ordinal-group: 0;
+  -ms-flex-order: -1;
+  order: -1;
+  height: 15px;
+  font-size: 14px;
+  text-align: left;
+  color: var(--black);
+  opacity: 1;
+  -webkit-transform: translateY(1.5em);
+  transform: translateY(1.5em);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  pointer-events: none;
+  -webkit-transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.input-placeholder::before {
+  content: "*";
+  color: var(--theme-color);
+  margin-right: 4px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.input-text:focus + .input-placeholder,
+.input-text:not(:placeholder-shown) + .input-placeholder {
+  font-size: 12px;
+  line-height: 12px;
+  opacity: 1;
+  transform: none;
+}

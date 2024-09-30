@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="25" viewBox="0 0 29 25" version="1.1" id="svg2" xml:space="preserve">
+  <defs>
+    <filter id="insetShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset dx="0" dy="3" result="offsetBlur"/>
+      <feComposite operator="out" in="SourceGraphic" in2="offsetBlur" result="inverse"/>
+      <feFlood flood-color="black" flood-opacity="0.7" result="color"/>
+      <feComposite in="color" in2="inverse" operator="in" result="shadow"/>
+      <feComposite in="shadow" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </defs>
+  
+  <path fill="#ffffff" stroke="#000000" stroke-width="1" filter="url(#insetShadow)" id="path1" d="M 16.478034,2.5956147
+C 13.274657,2.2540772 10.257112,2.823306 7.4077008,4.2945441 4.859159,5.7395099 3.2574712,8.0864847 2.87696,9.7416273 2.6380341,11.011443 2.2575226,15.197467 6.8236599,18.113671
+c 3.0263923,1.777745 6.2828661,2.417032 9.7782601,1.935379 2.38041,1.04213 4.858159,1.839048 7.388998,2.434547 0.194683,0.035 0.05309,-0.13136 -0.02655,-0.210173 -1.09729,-1.033371 -1.982203,-2.224374 -2.645885,-3.573007 1.265422,-0.788164 2.380409,-1.742721 3.353811,-2.872421 2.247666,-3.28401 2.097234,-6.4454208 -0.469006,-9.484228 -2.17687,-2.0842531 -4.74311,-3.3277997 -7.725259,-3.7481533
+z"/>
+</svg>

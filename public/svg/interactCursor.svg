@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="28" viewBox="0 0 32 28" version="1.1">
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%">
+        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#ccac00;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#8c6600;stop-opacity:1" />
+      </linearGradient>
+      <filter id="insetShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+        <feOffset dx="0" dy="3" result="offsetBlur"/>
+        <feComposite operator="out" in="SourceGraphic" in2="offsetBlur" result="inverse"/>
+        <feFlood flood-color="black" flood-opacity="0.7" result="color"/>
+        <feComposite in="color" in2="inverse" operator="in" result="shadow"/>
+        <feComposite in="shadow" in2="SourceGraphic" operator="over"/>
+      </filter>
+    </defs>
+    <path fill="#ffffff" stroke="#000000" stroke-width="1" d="M 20.55,4.87 C 16.93,4.48 13.52,5.13 10.30,6.81 7.42,8.46 5.61,11.14 5.18,13.03 c -0.27,1.45 -0.70,6.23 4.46,9.56 3.42,2.03 7.10,2.76 11.05,2.21 2.69,1.19 5.49,2.10 8.35,2.78 0.22,0.04 0.06,-0.15 -0.03,-0.24 -1.24,-1.18 -2.24,-2.54 -2.99,-4.08 1.43,-0.90 2.69,-1.99 3.79,-3.28 2.54,-3.75 2.37,-7.36 -0.53,-10.83 C 26.82,6.77 23.92,5.35 20.55,4.87 Z" filter="url(#insetShadow)"/>
+    <polygon stroke="#000000" fill="url(#goldGradient)" stroke-width="1" points="0,11.06 0,0 11.06,0"/>
+  </svg>
+  

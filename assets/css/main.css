@@ -1,0 +1,160 @@
+/* assets/css/main.css */
+
+@import "components/_buttons.css";
+@import "components/_forms.css";
+@import "components/_transitions.css";
+@import "components/_vendor.css";
+@import "components/_modal.css";
+@import "components/_objectives.css";
+@import "components/_timeline.css";
+@import "components/_cursors.css";
+
+/* Base Styles */
+@import 'base/_reset.css';
+@import 'base/_fonts.css';
+@import 'base/_variables.css';
+@import 'base/_clamps.css';
+
+/* Header */
+
+/* 
+cubic-bezier(0.42, 0, 0.58, 1) ease-in-out
+cubic-bezier(0, 0, 0.58, 1) ease-out
+cubic-bezier(0.42, 0, 1, 1) ease-in 
+*/
+
+header {
+  transition: height 300ms cubic-bezier(0.42, 0, 0.58, 1),
+              transform 300ms cubic-bezier(0.42, 0, 0.58, 1),
+              box-shadow 300ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+header > div:first-child {
+  background-color: rgba(10, 30, 64, 0.95);
+}
+
+header.start {
+  height: var(--header-start-height);
+}
+
+header.in {
+  height: var(--header-scroll-height);
+  transform: translateY(0px);
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.4);
+}
+
+header.out {
+  height: var(--header-scroll-height);
+  transform: translateY(calc(var(--header-scroll-height) * -1));
+}
+
+/* Logo */
+
+.logo {
+  transition: 
+  transform 200ms cubic-bezier(0.42, 0, 0.58, 1), 
+  opacity 200ms cubic-bezier(0.42, 0, 0.58, 1), 
+  filter 200ms ease;
+}
+
+.shrink {
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* Menu */
+
+nav {
+  counter-reset: item;
+}
+
+nav ol li {
+  counter-increment: item;
+}
+
+nav ol li a::before {
+  content: "0" counter(item) ".";
+  margin-right: 5px;
+  color: var(--theme-color);
+  text-align: right;
+}
+
+
+main {
+  counter-reset: section;
+}
+
+/* Nummerierte Überschrift */
+.numbered-heading::before {
+  counter-increment: section; 
+  content: "0" counter(section) ".";
+  margin-right: 10px;
+  color: var(--theme-color);
+  font: var(--special-font);
+  font-size: clamp(16px, 3vw, 24px);
+}
+
+
+.text-shadow-none {
+  text-shadow: none;
+}
+
+.group:hover .logo {
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.light-gradient-to-b {
+  background: linear-gradient(to bottom, #3c3c3c, #484848);
+}
+
+.dark-gradient-to-b {
+  background: linear-gradient(to bottom, #242424, #424242);
+}
+
+.quest-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 230, 100, 0.3) 0%,
+    rgba(255, 230, 100, 0.5) 50%,
+    rgba(255, 230, 100, 0.3) 100%
+  );
+}
+
+.quest-item:active span {
+  transform: translate(1px, 2px);
+}
+
+
+.techs-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 200px));
+  font-size: 14px;
+  row-gap: 0.75rem;
+}
+
+.techs-list li {
+  display: flex; 
+  align-items: center; 
+  position: relative;
+  padding-left: 20px; 
+}
+
+.techs-list li::before {
+  content: "▹";
+  position: absolute;
+  left: 0px;
+  font-size: 20px;
+  color: var(--theme-color);
+}

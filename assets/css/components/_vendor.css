@@ -1,0 +1,91 @@
+.item-wrap {
+  height: max-content;
+  position: relative;
+  padding: 0.125rem;
+  margin-right: 0.125rem;
+  border-radius: 0.5rem;
+  background-color: var(--black);
+  z-index: 2;
+}
+
+.item-wrap::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(225deg, #daa520, #555);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  z-index: -1;
+}
+
+.empty-item {
+  height: 50px;
+  width: 50px;
+  background-image: url("/img/empty-slot.png");
+  background-size: cover;
+  border-radius: 0.5rem;
+}
+
+.item-description {
+  height: 65px;
+  box-shadow: inset -5px 5px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.item-description::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #222, #555);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  z-index: -1;
+}
+
+/* Loot Items */
+
+.loot-item {
+  height: -moz-max-content;
+  height: max-content;
+  position: relative;
+  padding: 0.125rem;
+  margin-right: 0.125rem;
+  border-radius: 0.5rem;
+  background-color: var(--black);
+  z-index: 2;
+}
+
+.loot-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #222 0%, #555 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  z-index: -1;
+}
+
+.loot-item:hover::before {
+  background: var(--gray-50);
+}

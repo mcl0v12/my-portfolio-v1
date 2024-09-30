@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "Morpheus";
+    src: url("/assets/fonts/MORPHEUS.woff2") format("woff2"),
+      url("/assets/fonts/MORPHEUS.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  .font-special {
+    font-family: var(--special-font), monospace;
+    letter-spacing: .05rem;
+  }

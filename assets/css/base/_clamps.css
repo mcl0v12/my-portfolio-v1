@@ -1,0 +1,155 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.heading-xxl {
+  font-size: clamp(48px, 6vw, 80px);
+}
+
+.heading-xl {
+  font-size: clamp(36px, 5vw, 72px);
+}
+
+.heading-lg {
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.heading-md {
+  font-size: clamp(24px, 3vw, 28px);
+}
+
+.heading-base {
+  font-size: clamp(16px, 2vw, 20px);
+}
+
+.heading-sm {
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+/* Spaces */
+
+.space-lg {
+  margin-bottom: clamp(2.25rem, 5vw, 2.75rem);
+}
+
+@media (orientation: landscape) {
+  .hr\:mb-0 {
+    margin-bottom: 0;
+  }
+}
+
+/* Galaxy Z Fold */
+@media (min-width: 320px) and (max-width: 360px) {
+  .max-w-stacked {
+    max-width: 50%;
+  }
+  .max-w-obj {
+    max-width: 25%;
+  }
+}
+
+/* Galaxy, Pixel and other Mobiles */
+@media (min-width: 360px) {
+  .max-w-stacked {
+    max-width: 43%;
+  }
+  .max-w-obj {
+    max-width: 28%;
+  }
+}
+
+/* Old Galaxy Models (ex. Galaxy S5) */
+@media (min-width: 360px) and (max-height: 700px) {
+  .max-w-stacked {
+    max-width: 29%;
+  }
+  .max-w-obj {
+    max-width: 28%;
+  }
+}
+
+/* iPhone SE */
+@media (min-width: 375px) and (max-width: 390px) {
+  .max-w-stacked {
+    max-width: 31%;
+  }
+  .max-w-obj {
+    max-width: 28%;
+  }
+}
+
+/* most iPhone/Modern Mobiles */
+@media (min-width: 390px) and (max-width: 600px) and (min-height: 800px) {
+  .max-w-stacked {
+    max-width: 50%;
+  }
+  .max-w-obj {
+    max-width: 25%;
+  }
+}
+
+/* Landscape - Mobiles and Small Laptops */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .max-w-stacked {
+    max-width: 20%;
+  }
+  .max-w-obj {
+    max-width: 25%;
+  }
+}
+
+/* Blocky Devices (e.g., Surface Duo) */
+@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
+  .max-w-stacked {
+    max-width: 28%;
+  }
+  .max-w-obj {
+    max-width: 28%;
+  }
+}
+
+/* Small Tablets - Portrait */
+@media (min-width: 600px) and (orientation: portrait) {
+  .max-w-stacked {
+    max-width: 37%;
+  }
+  .max-w-obj {
+    max-width: 25%;
+  }
+}
+
+/* Small Tablets - Landscape */
+@media (min-width: 1024px) and (max-width: 1280px) and (orientation: landscape) {
+  .max-w-stacked {
+    max-width: 22%;
+  }
+  .max-w-obj {
+    max-width: 27%;
+  }
+}
+
+/* Large Tablets - Portrait */
+@media (min-width: 800px) and (orientation: portrait) {
+  .max-w-stacked {
+    max-width: 37%;
+  }
+  .max-w-obj {
+    max-width: 28%;
+  }
+}
+
+/* Large Tablets & Desktops - Landscape */
+@media (min-width: 1280px) and (orientation: landscape) {
+  .max-w-stacked {
+    max-width: 25%;
+  }
+  .max-w-obj {
+    max-width: 30%;
+  }
+}

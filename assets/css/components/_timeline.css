@@ -1,0 +1,177 @@
+.timeline-container::before {
+  content: "";
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--theme-color);
+}
+
+.timeline-item {
+  opacity: 0;
+  transition: opacity var(--animation-duration) cubic-bezier(0, 0, 0.58, 1);
+  will-change: transform;
+}
+
+.timeline-item[data-visible="true"] {
+  opacity: 1;
+}
+
+.timeline-item::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: calc(25% + 15px);
+  left: 0;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  background-color: var(--theme-bg);
+  background-size: 60% 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.timeline-item[data-icon="education"]::before {
+  background-image: url("/img/experience/graduate-cap.png");
+}
+
+.timeline-item[data-icon="work"]::before {
+  background-image: url("/img/experience/briefcase.png");
+}
+
+.timeline-item[data-icon="learning"]::before {
+  background-image: url("/img/experience/notebook.png");
+}
+
+.timeline-content {
+  width: calc(100% - 60px);
+  left: 60px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  right: 100%;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 15px solid var(--theme-bg);
+  filter: drop-shadow(-5px 0px 3px rgba(0, 0, 0, 0.4));
+}
+
+.timeline-text {
+  color: var(--gray-50);
+}
+
+.timeline-subtitle {
+  color: var(--theme-color);
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(25%);
+  }
+  70% {
+    transform: translateX(-3%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-25%);
+  }
+  70% {
+    transform: translateX(3%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.timeline-item[data-visible="true"] .timeline-content {
+  animation: slideInFromRight var(--animation-duration)
+    cubic-bezier(0, 0, 0.58, 1) forwards;
+}
+
+@media (min-width: 768px) {
+  .timeline-text {
+    display: none;
+  }
+
+  .timeline-container::before {
+    left: 50%;
+  }
+
+  .timeline-item::after {
+    display: block;
+    content: attr(timeline-text);
+    position: absolute;
+    top: calc(25% + 5px);
+    font-size: 14px;
+  }
+
+  .timeline-item:nth-child(odd)::after {
+    left: 50%;
+    margin-left: 40px;
+  }
+
+  .timeline-item:nth-child(even) {
+    justify-content: flex-end;
+  }
+
+  .timeline-item:nth-child(even)::after {
+    right: 50%;
+    left: auto;
+    margin-right: 40px;
+  }
+
+  .timeline-item[data-visible="true"]:nth-child(odd)::after {
+    animation: slideInFromLeft var(--animation-duration)
+      cubic-bezier(0, 0, 0.58, 1) forwards;
+  }
+
+  .timeline-item[data-visible="true"]:nth-child(even)::after {
+    animation: slideInFromRight var(--animation-duration)
+      cubic-bezier(0, 0, 0.58, 1) forwards;
+  }
+
+  .timeline-item:nth-child(odd)[data-visible="true"] .timeline-content {
+    animation: slideInFromLeft var(--animation-duration)
+      cubic-bezier(0, 0, 0.58, 1) forwards;
+  }
+
+  .timeline-item:nth-child(even)[data-visible="true"] .timeline-content {
+    animation: slideInFromRight var(--animation-duration)
+      cubic-bezier(0, 0, 0.58, 1) forwards;
+  }
+
+  .timeline-content {
+    width: 43%;
+    left: 0;
+  }
+
+  .timeline-item::before {
+    left: 50%;
+  }
+
+  .timeline-item:nth-child(odd) .timeline-content::after {
+    left: 100%;
+    border-left: 15px solid var(--theme-bg);
+    border-right: none;
+    filter: drop-shadow(5px 0px 3px rgba(0, 0, 0, 0.4));
+  }
+
+  .timeline-item:nth-child(even) .timeline-content::after {
+    right: 100%;
+    border-right: 15px solid var(--theme-bg);
+    border-left: none;
+    filter: drop-shadow(-5px 0px 3px rgba(0, 0, 0, 0.4));
+  }
+}

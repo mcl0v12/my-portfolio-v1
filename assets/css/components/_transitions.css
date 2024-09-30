@@ -1,0 +1,21 @@
+.fly-item {
+  transition: opacity 600ms ease, transform 600ms ease;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fly-item.enter-down {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- */
+
+.fade-item {
+  transition: opacity 600ms ease;
+  opacity: 0;
+}
+
+.fade-item.enter {
+  opacity: 1;
+}

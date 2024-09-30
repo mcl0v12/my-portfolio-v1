@@ -1,0 +1,70 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+  }
+
+html {
+    height: 100%;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    font-family: var(--main-font);
+    letter-spacing: 0.02rem;
+    padding: 0;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    background: var(--theme-bg);
+  }
+
+  input,
+  select {
+    font-family: var(--main-font);
+    outline: none;
+    border: none;
+  }
+  
+  button {
+    font-family: var(--main-font);
+    padding: 0;
+    border: 0;
+    background: 0;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre {
+    margin: 0;
+  }
+  
+  menu, ol, ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  label,
+  select,
+  textarea {
+    touch-action: manipulation; 
+  }
+
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  
+  
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }  

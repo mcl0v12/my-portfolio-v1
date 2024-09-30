@@ -1,0 +1,73 @@
+:root {
+  /* Fonts */
+  --main-font: "Helvetica Neue", Arial, sans-serif;
+  --special-font: "Morpheus", monospace;
+
+  /* Layout */
+  --base-width: 1280px;
+  --padding-x: 20px;
+
+  /* Header */
+  --header-start-height: 100px;
+  --header-scroll-height: 70px;
+
+  /* Colors */
+  --theme-color: #ffd700;
+  --theme-gradient: linear-gradient(
+    90deg,
+    #5e0000,
+    #8b0000 25%,
+    #8b0000 75%,
+    #5e0000
+  );
+  --theme-bg: #0a1e40;
+  --white: #fcfcfe;
+  --black: #1d1d1e;
+  --notice: #dc3545;
+  --disabled: rgba(48, 1, 3, 0.7);
+  --gray-10: #f5f5f5;
+  --gray-20: #e6e7e7;
+  --gray-30: #d2d4d5;
+  --gray-40: #bdc0c1;
+  --gray-50: #aaadaf;
+  --gray-60: #979b9d;
+  --gray-70: #808485;
+  --gray-80: #6b6e6f;
+  --gray-90: #565859;
+  --gray-100: #444647;
+
+  /* Rarity Colors */
+  --epic-color: #a335ee;
+  --epic-gradient-top: #a335ee;
+  --epic-gradient-mid: #9221e0;
+  --epic-gradient-bottom: #7c00d9;
+
+  --rare-color: #0070dd;
+  --rare-gradient-top: #0070dd;
+  --rare-gradient-mid: #005db1;
+  --rare-gradient-bottom: #00468b;
+
+  --uncommon-color: #1eff00; 
+  --uncommon-gradient-top: #1eff00;
+  --uncommon-gradient-mid: #17c900;
+  --uncommon-gradient-bottom: #12a300;
+
+  /* Empty Slot Colors */
+  --empty-gradient-top: #dddddd;
+  --empty-gradient-mid: #777777;
+  --empty-gradient-bottom: #444444;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --padding-x: 50px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --header-start-height: 120px;
+    --header-scroll-height: 90px;
+    --padding-x: 65px;
+  }
+}

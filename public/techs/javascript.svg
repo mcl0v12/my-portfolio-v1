@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0,0,256,256" width="48px" height="48px">
+  
+  
+    <g fill="#fdd400" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal" id="g1">
+      <path d="M 64,256 C 28.653773,256 0,227.34623 0,192 V 64 C 0,28.653773 28.653773,0 64,0 h 128 c 35.34623,0 64,28.653773 64,64 v 128 c 0,35.34623 -28.65377,64 -64,64 z" id="shape" style="stroke-width:1.13636"/>
+    </g>
+    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal" id="g3">
+      <g transform="scale(5.33333,5.33333)" id="g2">
+        <path d="M 3.5454525,44.454543 V 3.5454525 H 44.454543 V 44.454543 Z" fill="#ffd600" id="path1" style="stroke-width:1.13636"/>
+        <path d="m 30.29318,34.167043 c 0.786363,1.277273 1.640909,2.501137 3.451136,2.501137 1.520454,0 2.318182,-0.755682 2.318182,-1.801137 0,-1.251136 -0.825,-1.695454 -2.497728,-2.423863 l -0.917045,-0.39091 c -2.646591,-1.122727 -4.406818,-2.529545 -4.406818,-5.501136 0,-2.738636 2.096591,-4.822727 5.372727,-4.822727 2.332955,0 4.009091,0.807954 5.218182,2.923863 l -2.856818,1.826137 c -0.628409,-1.122727 -1.307955,-1.564773 -2.361364,-1.564773 -1.075,0 -1.755682,0.678409 -1.755682,1.564773 0,1.095454 0.681818,1.538636 2.255682,2.217045 l 0.917046,0.390909 c 3.119318,1.328409 4.878409,2.685228 4.878409,5.735228 0,3.286363 -2.595455,5.0875 -6.079546,5.0875 -3.407954,0 -5.343182,-1.710228 -6.420454,-3.827273 z m -13.16591,0.09318 c 0.575,1.029545 1.448864,1.821591 2.705682,1.821591 1.202273,0 1.894318,-0.475 1.894318,-2.321591 V 21.72727 h 3.7875 v 12.614773 c 0,3.826137 -2.219318,5.567046 -5.460227,5.567046 -2.928409,0 -5.042045,-1.984091 -5.903409,-3.827273 z" fill="#000001" id="path2" style="stroke-width:1.13636"/>
+      </g>
+    </g>
+  </svg>

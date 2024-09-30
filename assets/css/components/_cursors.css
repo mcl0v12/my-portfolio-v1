@@ -1,0 +1,15 @@
+.mail-cursor {
+  cursor: url("/svg/mailCursor.svg") 10 10, auto;
+}
+
+.speech-cursor {
+  cursor: url("/svg/interactCursor.svg") 10 10, auto;
+}
+
+.cursor-buy {
+  cursor: url("/svg/buyCursorEnabled.svg") 10 10, auto;
+}
+
+.cursor-no-buy {
+  cursor: url("/svg/buyCursorDisabled.svg") 10 10, auto;
+}
