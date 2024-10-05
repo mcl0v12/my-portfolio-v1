@@ -45,15 +45,11 @@ const openModal = () => {
 watch(emailSuccess, (newValue) => {
   if (newValue) {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
-    mailStore.setEmailSuccess(false); // Setze emailSuccess wieder auf false
+    mailStore.setEmailSuccess(false);
 
-    // Rufe resetForm im ContactForm auf
-    if (
-      contactModalRef.value &&
-      contactModalRef.value.contactFormRef && // Zugriff auf das interne ref von ContactModal
-      contactModalRef.value.contactFormRef.resetForm
-    ) {
-      contactModalRef.value.contactFormRef.resetForm();
+    // Rufe resetForm in ContactModal auf, um alle Felder zurückzusetzen
+    if (contactModalRef.value && contactModalRef.value.resetForm) {
+      contactModalRef.value.resetForm();
     }
   }
 });

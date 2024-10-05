@@ -60,15 +60,7 @@ watch(isFormValid, (newValue) => {
 
 // Erweitere resetForm, um alle Felder zurückzusetzen
 const resetForm = () => {
-  form.value = {
-    additionalInfo: "",
-  };
-
-  // Setze Props zurück, wenn möglich
-  props.name = "";
-  props.subject = "";
-  props.email = "";
-
+  form.value.additionalInfo = ""; // Nur interne Daten zurücksetzen
   formSubmitAttempted.value = false;
 };
 

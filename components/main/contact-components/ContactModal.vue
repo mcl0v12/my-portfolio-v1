@@ -241,8 +241,19 @@ const mailStore = useHandleMailStore();
 const name = ref("");
 const subject = ref("");
 const email = ref("");
-
 const contactFormRef = ref(null);
+
+const resetForm = () => {
+  // Zurücksetzen der Felder in ContactModal
+  name.value = "";
+  email.value = "";
+  subject.value = "";
+  
+  // Zusätzliche Felder in ContactForm zurücksetzen
+  if (contactFormRef.value && contactFormRef.value.resetForm) {
+    contactFormRef.value.resetForm();
+  }
+};
 
 const validateNameOnBlur = () => {
   if (!name.value) {
@@ -451,7 +462,7 @@ onBeforeUnmount(() => {
 });
 
 defineExpose({
-  contactFormRef, // Ref nach außen exponieren
+  resetForm,
 });
 </script>
 
