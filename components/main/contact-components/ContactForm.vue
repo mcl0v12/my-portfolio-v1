@@ -1,5 +1,4 @@
 <!-- ContactForm.vue -->
-
 <template>
   <form @submit.prevent="submitForm" class="h-full flex flex-col px-5">
     <div class="flex-grow">
@@ -51,10 +50,7 @@ const formSubmitAttempted = ref(false);
 
 const isFormValid = computed(() => {
   return (
-    props.name &&
-    props.subject &&
-    props.email && 
-    form.value.additionalInfo
+    props.name && props.subject && props.email && form.value.additionalInfo
   );
 });
 
@@ -62,10 +58,17 @@ watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
 
+// Erweitere resetForm, um alle Felder zurückzusetzen
 const resetForm = () => {
   form.value = {
     additionalInfo: "",
   };
+
+  // Setze Props zurück, wenn möglich
+  props.name = "";
+  props.subject = "";
+  props.email = "";
+
   formSubmitAttempted.value = false;
 };
 
