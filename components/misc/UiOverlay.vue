@@ -21,6 +21,12 @@
           </div>
         </div>
       </template>
+      <template v-if="message.type === 'notification'">
+        <!-- Standard Error-Messages -->
+        <p class="text-shadow text-theme-color mt-2 select-none">
+          {{ message.text }}
+        </p>
+      </template>
       <template v-else>
         <!-- Standard Error-Messages -->
         <p class="text-shadow text-notice-color mt-2 select-none">

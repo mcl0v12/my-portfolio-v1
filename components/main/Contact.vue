@@ -17,20 +17,18 @@
       </div>
 
       <ContactModal v-if="openMail" />
-
-      <SuccessPopup :show="emailSuccess" @close="handlePopupClose" />
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import ContactModal from "~/components/main/contact-components/ContactModal.vue";
-import SuccessPopup from "~/components/main/contact-components/SuccessPopup.vue";
-
 import { useHandleMailStore } from "~/store/handleMail.js";
+import { useUiOverlayStore } from "~/store/uiOverlay";
 
 const mailStore = useHandleMailStore();
+const uiOverlayStore = useUiOverlayStore();
 const openMail = computed(() => mailStore.isModalOpen);
 const emailSuccess = computed(() => mailStore.emailSuccess);
 
@@ -41,12 +39,13 @@ const openModal = () => {
   mailStore.openModal();
 };
 
-const handlePopupClose = () => {
-  mailStore.setEmailSuccess(false);
-  if (contactFormRef.value && contactFormRef.value.resetForm) {
-    contactFormRef.value.resetForm();
+// Beobachte die emailSuccess und zeige die Benachrichtigung an, wenn sie auf true gesetzt wird
+watch(emailSuccess, (newValue) => {
+  if (newValue) {
+    uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
+    mailStore.setEmailSuccess(false); // Setze emailSuccess wieder auf false, um wiederkehrende Benachrichtigungen zu verhindern
   }
-};
+});
 
 const closeModalIfOutOfView = () => {
   mailStore.closeModal();
