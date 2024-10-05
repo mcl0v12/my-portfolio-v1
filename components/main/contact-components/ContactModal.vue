@@ -299,7 +299,7 @@ const handleSendMail = () => {
 };
 
 const closeModal = () => {
-  mailStore.closeModal(); 
+  mailStore.closeModal();
 };
 
 // Scrollbar Logic
@@ -312,9 +312,9 @@ let startScrollTop = 0;
 // Reactive variables
 const originalWidth = 450;
 const originalHeight = 600;
-const targetWidth = ref(450); 
+const targetWidth = ref(450);
 const padding = 30;
-const uniqueId = "C"; 
+const uniqueId = "C";
 
 // Computed properties
 const cutCornersId = computed(() => `clip-${uniqueId}`);
@@ -337,11 +337,11 @@ const wrapperStyle = computed(() => ({
 }));
 
 const topDivStyle = computed(() => ({
-  height: "175px", 
+  height: "175px",
 }));
 
 const contentDivStyle = computed(() => ({
-  height: `calc(100% - 175px - (60px * ${targetWidth.value} / ${originalWidth}))`, 
+  height: `calc(100% - 175px - (60px * ${targetWidth.value} / ${originalWidth}))`,
 }));
 
 const bottomDivStyle = computed(() => ({
@@ -361,7 +361,7 @@ const scalePoints = (points) => {
 const updateDimensions = () => {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  const isLandscape = screenWidth > screenHeight; 
+  const isLandscape = screenWidth > screenHeight;
 
   if (screenWidth <= 767) {
     targetWidth.value = screenWidth - 2 * padding;
@@ -448,6 +448,10 @@ onBeforeUnmount(() => {
   if (scrollContent.value) {
     scrollContent.value.removeEventListener("scroll", handleScroll);
   }
+});
+
+defineExpose({
+  contactFormRef, // Ref nach außen exponieren
 });
 </script>
 
