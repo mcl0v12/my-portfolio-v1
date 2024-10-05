@@ -1,12 +1,12 @@
 <!-- SendMailButtons.vue -->
 <template>
-      <ThemeButton
-        :height="30"
-        buttonText="Send"
-        :disabled="!mailStore.isFormValid"
-        :buttonTextSize="14"
-        @click="sendMail"
-      />
+  <ThemeButton
+    :height="30"
+    buttonText="Send"
+    :disabled="!mailStore.isFormValid"
+    :buttonTextSize="14"
+    @click="sendMail"
+  />
 </template>
 
 <script setup>
@@ -19,12 +19,12 @@ const emit = defineEmits(["sendMail"]);
 
 const mailStore = useHandleMailStore();
 
-
 const cancelMail = () => {
-  mailStore.closeModal();
+  mailStore.closeModal(); // Close Modal mit Sound
 };
 
 const sendMail = () => {
+  mailStore.sendMail(); // Spiele den Coinflip Sound ab
   emit("sendMail");
 };
 

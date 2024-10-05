@@ -74,11 +74,11 @@ function trackProgress() {
   const extremeLogoChallengeId = 3;
 
   if (questStore.acceptedQuestIds.includes(logoChallengeId)) {
-    updateQuestProgress("The Logo Challenge", logoChallengeId, 10);
+    updateQuestProgress("Logo Challenge", logoChallengeId, 10);
   }
 
   if (questStore.acceptedQuestIds.includes(extremeLogoChallengeId)) {
-    updateQuestProgress("The Logo Challenge x2", extremeLogoChallengeId, 20);
+    updateQuestProgress("Logo Challenge x2", extremeLogoChallengeId, 20);
   }
 }
 

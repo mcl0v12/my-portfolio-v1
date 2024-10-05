@@ -53,6 +53,10 @@
 import { ref, computed } from "vue";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
 import CloseModalButton from "~/components/misc/CloseModalButton.vue";
+import { SoundManager } from "~/utils/soundManager"; // Importiere SoundManager
+
+// Initialisiere SoundManager für Scroll Button
+const scrollButtonSound = new SoundManager(['/sounds/interface/uScrollButton.ogg']);
 
 const objectivesStore = useObjectivesStore();
 const objectives = computed(() => objectivesStore.objectives);
@@ -62,6 +66,7 @@ const playedAnimations = ref(new Set());
 
 const toggleIcon = () => {
   isOpen.value = !isOpen.value;
+  scrollButtonSound.playNextSound(); // Spiele den Sound bei jedem Toggle ab
 };
 
 const onAnimationEnd = (index) => {

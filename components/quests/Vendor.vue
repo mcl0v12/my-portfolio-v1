@@ -82,6 +82,7 @@ import ItemBadge from "~/components/misc/ItemBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 import { onUseItems } from "~/data/onUseItems.js";
 import { useRarityColors } from "~/composables/useRarityColors";
+import { SoundManager } from '~/utils/soundManager';
 
 const experienceStore = useExperienceStore();
 
@@ -92,6 +93,11 @@ const backpackStore = useBackpackStore();
 const { getColorFromRarity, getGradientColor } = useRarityColors();
 
 const maxSlots = 10;
+
+const vendorSounds = {
+  notBuyable: new SoundManager(['/sounds/interface/notBuyable.ogg']), // Sound für nicht käuflich
+};
+
 
 const isItemDisabled = (item) => {
   return !!(item.requiredLevel && experienceStore.level < item.requiredLevel);
@@ -124,6 +130,10 @@ const canAffordItem = (costs, requiredLevel = 0) => {
 
 const handleItemClick = (column) => {
   if (!canAffordItem(column.costs, column.requiredLevel)) {
+    // Wenn nicht kaufbar, spiele den 'notBuyable' Sound ab
+    vendorSounds.notBuyable.playNextSound();
+    
+    // Nachricht im Overlay anzeigen
     uiOverlayStore.showMessage(
       experienceStore.level < column.requiredLevel
         ? `You dont have the required Level to buy this item.`
@@ -131,6 +141,7 @@ const handleItemClick = (column) => {
       3000
     );
   } else {
+    // Geld abziehen und Item zum Rucksack hinzufügen
     currencyStore.subtractCurrency(
       column.costs.gold,
       column.costs.silver,

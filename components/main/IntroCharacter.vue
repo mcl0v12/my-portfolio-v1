@@ -1,3 +1,5 @@
+<!-- IntroCharacter.vue -->
+
 <template>
   <div class="max-w-stacked mx-auto speech-cursor" @click="startAnimation">
     <picture>
@@ -51,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
 
@@ -108,8 +110,8 @@ const dotFill = computed(() =>
 
 // Hilfsfunktion zur Rückgabe des Quest-Namens
 function getQuestNameById(id) {
-  if (id === 2) return "The Logo Challenge";
-  if (id === 3) return "EXTREME Logo Challenge";
+  if (id === 2) return "Logo Challenge";
+  if (id === 3) return "Logo Challenge x2";
   return null;
 }
 
@@ -122,9 +124,11 @@ const specialGifDuration = 2000;
 
 let gifTimeout = null;
 
+
 const startAnimation = () => {
-  questStore.startInteraction();
   if (currentState.value === "stand") {
+    // Sound und Animation nur starten, wenn der aktuelle Zustand "stand" ist
+    questStore.startInteraction();
     currentState.value = "special";
     reloadGif(dynamicSpecialGifUrl, specialGifUrl);
     playGif("stand", specialGifDuration);
@@ -136,7 +140,6 @@ const playGif = (nextState, duration) => {
   gifTimeout = setTimeout(() => {
     currentState.value = nextState;
     if (nextState === "stand") {
-      isPlayingSpecial.value = false;
       questStore.triggerTalkAnimation = false;
     }
   }, duration);
@@ -158,19 +161,14 @@ const preloadGif = (url) => {
   img.src = url;
 };
 
+defineExpose({
+  startAnimation,
+});
+
 onMounted(() => {
   preloadGif(standGifUrl);
   preloadGif(specialGifUrl);
 });
-
-watch(
-  () => questStore.triggerTalkAnimation,
-  (newVal) => {
-    if (newVal) {
-      startAnimation();
-    }
-  }
-);
 </script>
 
 <style scoped></style>

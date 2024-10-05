@@ -49,7 +49,7 @@
 
         <ThemeButton :disabled="showQuests" @click="startInteraction" />
       </div>
-      <IntroCharacter />
+      <IntroCharacter ref="introCharacter" />
     </div>
   </section>
   <QuestModal v-if="showQuests" />
@@ -66,19 +66,25 @@ import { useQuestStore } from "~/store/handleInteraction.js";
 const questStore = useQuestStore();
 const showQuests = computed(() => questStore.showQuests);
 
-const triggerGifAnimation = ref(false);
 const heroSection = ref(null);
 const observer = ref(null);
 const rootMargin = ref("0px");
 
+const introCharacter = ref(null);
+
 const startInteraction = () => {
-  questStore.startInteraction();
   rootMargin.value = "-25%";
-  triggerGifAnimation.value = true;
+
+  if (introCharacter.value && introCharacter.value.startAnimation) {
+    introCharacter.value.startAnimation();
+  }
 };
 
 const closeQuestIfOutOfView = () => {
-  questStore.closeInteraction();
+  // Überprüfe, ob das Quest-Log geöffnet ist, bevor closeInteraction aufgerufen wird
+  if (showQuests.value) {
+    questStore.closeInteraction();
+  }
 };
 
 const createObserver = () => {

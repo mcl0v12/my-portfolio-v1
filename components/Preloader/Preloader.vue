@@ -1,17 +1,20 @@
+<!-- Preloader.vue -->
+
 <template>
-  <div v-if="isPreloaderVisible" class="preloader px-base">
-    <LogoAnimation @animationEnded="onAnimationEnd" />
+  <div v-if="isPreloaderVisible" class="preloader">
+    <PreloaderAnimation @animationEnded="onAnimationEnd" />
   </div>
 </template>
 
 <script setup>
-import LogoAnimation from "~/components/misc/LogoAnimation.vue";
 import { usePreloader } from "~/composables/usePreloader";
+import PreloaderAnimation from "~/components/Preloader/PreloaderAnimation.vue";
 
 const { isPreloaderVisible, hidePreloader } = usePreloader();
 
 function onAnimationEnd() {
-  hidePreloader();
+  hidePreloader(); 
+  document.body.classList.remove('overflow-hidden'); 
 }
 </script>
 
@@ -21,11 +24,8 @@ function onAnimationEnd() {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
   background-color: var(--theme-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
+  overflow-y: hidden;
 }
 </style>

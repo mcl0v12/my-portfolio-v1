@@ -35,7 +35,7 @@ export default defineNuxtConfig({
       ],
       script: [
         { src: 'https://js.hcaptcha.com/1/api.js', async: true, defer: true },
-      ]
+      ],
     }
   },
   pages: true,

@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+import { useHead } from '@vueuse/head'; // Verwende useHead, um body-Klassen zu setzen
 import { ref, onMounted } from "vue";
 
 import Intro from "~/components/main/Intro.vue";
@@ -19,12 +20,12 @@ import Experience from "~/components/main/Experience.vue";
 import Work from "~/components/main/Work.vue";
 import Contact from "~/components/main/Contact.vue";
 
-// import Particles from "~/components/useLater/particles.vue";
-// import Slideshow from "@/components/slideshow.vue";
-
-// import Character from '~/components/BlizzCharacter.vue';
-// import CharacterStats from '~/components/characterStats.vue';
-// import 3DModelViewer from "~/components/3DModelViewer.vue";
+// Setze die Klasse "overflow-hidden" standardmäßig beim Laden der Seite
+useHead({
+  bodyAttrs: {
+    class: 'overflow-hidden' // Setze die Klasse, um Scrollen zu verhindern
+  }
+});
 
 const textVisible = ref(false);
 const blinkCaret = ref(true);
@@ -55,40 +56,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.typewriter {
-  display: flex;
-  width: max-content;
-  position: relative;
-}
-
-.typewriter-text {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 0.12rem solid black;
-  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-.no-blink {
-  border-right: none;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: black;
-  }
-}
 </style>

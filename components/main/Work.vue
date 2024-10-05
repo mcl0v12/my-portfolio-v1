@@ -5,7 +5,8 @@
     <div
       class="max-w-base mx-auto px-base py-16 lg:py-24 text-white text-shadow leading-relaxed"
     >
-      <h2 class="numbered-heading heading-lg mb-6">Collection
+      <h2 class="numbered-heading heading-lg mb-6">
+        Collection
         <span class="text-sm text-gray-400 ml-2">(more coming soon)</span>
       </h2>
 
@@ -21,7 +22,9 @@
               <p class="text-gray-30">{{ project.description }}</p>
             </div>
 
-            <ul class="project-tech-list flex flex-wrap space-x-3 text-sm text-gray-30 mt-6">
+            <ul
+              class="project-tech-list flex flex-wrap space-x-3 text-sm text-gray-30 mt-6"
+            >
               <li v-for="tool in project.tools" :key="tool.name">
                 {{ tool.name }}
               </li>
@@ -44,7 +47,7 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="w-[20px] mr-2"
+                  class="w-[20px]"
                 >
                   <title>GitHub</title>
                   <path
@@ -69,7 +72,7 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="w-[20px] mr-2"
+                  class="w-[20px]"
                 >
                   <title>External Link</title>
                   <path
@@ -95,16 +98,15 @@
       <div class="py-8 lg:py-14">
         <Chest :chestId="'chest2'" />
       </div>
-
-
+      
     </div>
   </section>
 </template>
 
 <script setup>
 import { projectsData } from "@/data/projectsData.js";
-  import Chest from '~/components/misc/Chest.vue';
-  
+import Chest from "~/components/misc/Chest.vue";
+
 const projects = projectsData;
 </script>
 

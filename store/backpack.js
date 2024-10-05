@@ -1,5 +1,13 @@
 // /store/backpack.js
 import { defineStore } from "pinia";
+import { SoundManager } from "~/utils/soundManager";
+
+// SoundManager für Backpack-Sounds initialisieren
+const backpackSounds = {
+  open: new SoundManager(['/sounds/interface/iBackpackOpen.ogg']),
+  close: new SoundManager(['/sounds/interface/iBackpackClose.ogg']),
+  coinFlip: new SoundManager(['/sounds/interface/coinFlips.ogg']), // Neuer CoinFlip Sound
+};
 
 export const useBackpackStore = defineStore("backpack", {
   state: () => ({
@@ -10,14 +18,21 @@ export const useBackpackStore = defineStore("backpack", {
   actions: {
     openBackpack() {
       this.isBackpackOpen = true;
+      backpackSounds.open.playNextSound(); // Sound abspielen wenn geöffnet
     },
 
     closeBackpack() {
       this.isBackpackOpen = false;
+      backpackSounds.close.playNextSound(); // Sound abspielen wenn geschlossen
     },
 
     toggleBackpack() {
       this.isBackpackOpen = !this.isBackpackOpen;
+      if (this.isBackpackOpen) {
+        backpackSounds.open.playNextSound(); // Sound abspielen wenn geöffnet
+      } else {
+        backpackSounds.close.playNextSound(); // Sound abspielen wenn geschlossen
+      }
     },
 
     addItemToBackpack(item) {
@@ -30,11 +45,13 @@ export const useBackpackStore = defineStore("backpack", {
       }
 
       this.saveBackpackItems();
+      backpackSounds.coinFlip.playNextSound(); // Sound abspielen wenn ein Item hinzugefügt wird
     },
 
     replaceItemWithEmpty(index) {
       this.items.splice(index, 1, { id: null });
       this.saveBackpackItems();
+      backpackSounds.coinFlip.playNextSound();
     },
 
     loadBackpackItems() {
@@ -56,6 +73,6 @@ export const useBackpackStore = defineStore("backpack", {
       this.items = Array(16).fill({ id: null });
       this.clearBackpackStorage();
       this.closeBackpack();
-    },
-  },
+    }
+  }
 });
