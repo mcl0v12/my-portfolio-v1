@@ -16,7 +16,7 @@
         />
       </div>
 
-      <ContactModal v-if="openMail" />
+      <ContactModal v-if="openMail" ref="contactFormRef" /> <!-- ref hinzugefügt -->
     </div>
   </section>
 </template>
@@ -31,9 +31,7 @@ const mailStore = useHandleMailStore();
 const uiOverlayStore = useUiOverlayStore();
 const openMail = computed(() => mailStore.isModalOpen);
 const emailSuccess = computed(() => mailStore.emailSuccess);
-
-const contactSection = ref(null);
-const observer = ref(null);
+const contactFormRef = ref(null); // Referenz für das Kontaktformular
 
 const openModal = () => {
   mailStore.openModal();
@@ -44,6 +42,11 @@ watch(emailSuccess, (newValue) => {
   if (newValue) {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false); // Setze emailSuccess wieder auf false, um wiederkehrende Benachrichtigungen zu verhindern
+
+    // Rufe die resetForm Methode auf, um das Formular zurückzusetzen
+    if (contactFormRef.value && contactFormRef.value.resetForm) {
+      contactFormRef.value.resetForm();
+    }
   }
 });
 
