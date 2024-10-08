@@ -1,4 +1,4 @@
-<!-- QuestOverview.vue -->
+<!-- Talk.vue -->
 <template>
   <section>
     <!-- Wenn keine Quest ausgewählt ist -->
@@ -51,20 +51,16 @@
     <!-- Objectives -->
     <ClickLogoChallenge v-if="showQuestId === 2" />
     <ExtremeClickLogoChallenge v-if="showQuestId === 3" />
-
-    <!--
-    <div v-else class="px-4 mb-3">
-      <p>No details available for this quest.</p>
-      <button @click="goBack">Back to Quests</button>
-    </div> -->
   </section>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useQuestStore } from "~/store/handleInteraction.js";
-import { iconPaths } from "~/data/questPaths.js"
+import { iconPaths } from "~/data/questPaths.js";
+import { useModalLoader } from "~/composables/useModalLoader";
 
+// Importiere Komponenten für die Quests
 import WhoAreYou from "~/components/quests/WhoAreYou.vue";
 import ClickLogoChallenge from "~/components/quests/ClickLogoChallenge.vue";
 import ExtremeClickLogoChallenge from "~/components/quests/ExtremeClickLogoChallenge.vue";
@@ -74,8 +70,51 @@ const questStore = useQuestStore();
 const showQuestId = computed(() => questStore.showQuestId);
 const availableQuests = computed(() => questStore.availableQuests);
 
+// Ressourcen, die für verschiedene Quests benötigt werden
+const vendorResources = [
+  "/img/blackish-bg.png",
+  "/img/items/speed.png",
+  "/img/items/time-warp.png",
+  "/img/items/key.jpg",
+  "/img/empty-slot.png",
+];
+
+const clickLogoChallengeResources = [
+  "/img/questRewards/social-credit.png",
+  "/img/currency/goldcoin.png",
+  "/img/currency/silvercoin.png",
+  "/img/currency/coppercoin.png",
+];
+
+const { isLoaded: isVendorLoaded } = useModalLoader(vendorResources);
+const { isLoaded: isClickLogoLoaded } = useModalLoader(clickLogoChallengeResources);
+
 const showQuest = (quest) => {
-  questStore.showQuest(quest.id);
+  if (quest.id === 99) {
+    if (isVendorLoaded.value) {
+      questStore.showQuest(quest.id);
+    } else {
+      const unwatch = watch(isVendorLoaded, (loaded) => {
+        if (loaded) {
+          questStore.showQuest(quest.id);
+          unwatch();
+        }
+      });
+    }
+  } else if (quest.id === 2) {
+    if (isClickLogoLoaded.value) {
+      questStore.showQuest(quest.id);
+    } else {
+      const unwatch = watch(isClickLogoLoaded, (loaded) => {
+        if (loaded) {
+          questStore.showQuest(quest.id);
+          unwatch();
+        }
+      });
+    }
+  } else {
+    questStore.showQuest(quest.id);
+  }
 };
 
 const isTaskCompleted = (questId) => {

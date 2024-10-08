@@ -75,11 +75,6 @@
       </template>
     </div>
   </div>
-
-  <!--
-  <div v-else>
-    Loading...
-  </div> -->
 </template>
 
 <script setup>
@@ -89,8 +84,6 @@ import { useUiOverlayStore } from "~/store/uiOverlay";
 import { useBackpackStore } from "~/store/backpack.js";
 import { useExperienceStore } from "~/store/experience.js";
 import { useRarityColors } from "~/composables/useRarityColors";
-
-import { useModalLoader } from "~/composables/useModalLoader";
 
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
@@ -104,17 +97,6 @@ const currencyStore = useCurrencyStore();
 const uiOverlayStore = useUiOverlayStore();
 const backpackStore = useBackpackStore();
 const { getColorFromRarity, getGradientColor } = useRarityColors();
-
-// Ressourcen für die Vendor-Komponente
-const resources = [
-  "/img/blackish-bg.png",
-  "/img/items/speed.png",
-  "/img/items/time-warp.png",
-  "/img/items/key.jpg",
-  "/img/empty-slot.png",
-];
-
-const { isLoaded } = useModalLoader(resources);
 
 const maxSlots = 10;
 

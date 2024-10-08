@@ -52,18 +52,7 @@
 import RewardBadge from "~/components/misc/RewardBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 
-import { useModalLoader } from "~/composables/useModalLoader";
-
 import { questItems } from "~/data/questItems.js";
-
-const resources = [
-  "/img/questRewards/social-credit.png",
-  "/img/currency/goldcoin.png",
-  "/img/currency/silvercoin.png",
-  "/img/currency/coppercoin.png",
-];
-
-const { isLoaded } = useModalLoader(resources);
 
 const questId = 2;
 const quest = questItems.find((item) => item.id === questId);

@@ -153,19 +153,11 @@ const clearGifTimeout = () => {
   }
 };
 
-const preloadGif = (url) => {
-  const img = new Image();
-  img.src = url;
-};
-
 defineExpose({
   startAnimation,
 });
 
 onMounted(() => {
-  preloadGif(standGifUrl);
-  preloadGif(specialGifUrl);
-
   checkLandscapeOrientation();
   window.addEventListener("resize", checkLandscapeOrientation);
 });

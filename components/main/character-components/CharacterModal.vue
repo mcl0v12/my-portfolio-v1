@@ -1,4 +1,4 @@
-<!-- QuestModal.vue -->
+<!-- CharacterModal.vue -->
 
 <template>
   <div v-if="isLoaded" class="fixed inset-0 flex justify-center items-center z-[2]">

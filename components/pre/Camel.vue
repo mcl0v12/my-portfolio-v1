@@ -4,7 +4,7 @@
     <div class="max-w-stacked--lg relative mx-auto">
       <picture>
         <img
-          v-show="currentState === 'stand'"
+          v-show="currentState === 'stand' || (currentState === 'special' && !isSpecialGifLoaded)"
           :src="standGifUrl"
           draggable="false"
           alt="Camel standing"
@@ -12,10 +12,11 @@
           class="cursor-pointer"
         />
         <img
-          v-show="currentState === 'special'"
+          v-show="currentState === 'special' && isSpecialGifLoaded"
           :src="dynamicSpecialGifUrl"
           draggable="false"
           alt="Camel special animation"
+          @load="onSpecialGifLoad"
           class="relative z-[2]"
         />
       </picture>
@@ -30,7 +31,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from "vue";
+  import { ref, onBeforeUnmount } from "vue";
   
   const currentState = ref("stand");
   const standGifUrl = "/gif/preloader/camel-stand.gif";
@@ -38,14 +39,21 @@
   const dynamicSpecialGifUrl = ref(specialGifUrl);
   const specialGifDuration = 2500;
   
+  const isSpecialGifLoaded = ref(false);
+  
   let gifTimeout = null;
   
   const playSpecialAnimation = () => {
     if (currentState.value === "stand") {
       currentState.value = "special";
       reloadGif(dynamicSpecialGifUrl, specialGifUrl);
+      isSpecialGifLoaded.value = false; 
       playGif("stand", specialGifDuration);
     }
+  };
+  
+  const onSpecialGifLoad = () => {
+    isSpecialGifLoaded.value = true;
   };
   
   const playGif = (nextState, duration) => {
@@ -65,16 +73,6 @@
       gifTimeout = null;
     }
   };
-  
-  const preloadGif = (url) => {
-    const img = new Image();
-    img.src = url;
-  };
-  
-  onMounted(() => {
-    preloadGif(standGifUrl);
-    preloadGif(specialGifUrl);
-  });
   
   onBeforeUnmount(() => {
     clearGifTimeout();
