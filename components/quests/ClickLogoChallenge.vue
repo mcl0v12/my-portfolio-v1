@@ -49,10 +49,15 @@
 </template>
 
 <script setup>
+import { defineProps } from "vue";
 import RewardBadge from "~/components/misc/RewardBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 
 import { questItems } from "~/data/questItems.js";
+
+const props = defineProps({
+  showQuestId: Number,
+});
 
 const questId = 2;
 const quest = questItems.find((item) => item.id === questId);

@@ -2,7 +2,7 @@
 <template>
   <section>
     <!-- Wenn keine Quest ausgewählt ist -->
-    <p v-if="!showQuestId" class="px-4 mb-3">How can I help you?</p>
+    <p v-if="!showQuestId" class="px-4 mb-3">Hi, how can I help you?</p>
 
     <!-- Show Available Quest -->
     <div
@@ -27,29 +27,29 @@
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 29 25"
       >
-      <path
-      v-for="(path, index) in getIconPaths(quest)"
-      :key="index"
-      :d="path.d"
-      :style="{
-        fill: isTaskCompleted(quest.id)
-          ? path.completedFill
-          : path.fill || path.defaultFill,
-        stroke: path.stroke,
-        strokeWidth: path.strokeWidth,
-      }"
-    />
+        <path
+          v-for="(path, index) in getIconPaths(quest)"
+          :key="index"
+          :d="path.d"
+          :style="{
+            fill: isTaskCompleted(quest.id)
+              ? path.completedFill
+              : path.fill || path.defaultFill,
+            stroke: path.stroke,
+            strokeWidth: path.strokeWidth,
+          }"
+        />
       </svg>
 
       <span>{{ quest.title }}</span>
     </div>
 
     <!-- Talk -->
-    <WhoAreYou v-if="showQuestId === 1" />
-    <Vendor v-if="showQuestId === 99" />
+    <WhoAreYou v-if="showQuestId === 1"/>
+    <Vendor v-if="showQuestId === 99" :showQuestId="showQuestId" />
 
     <!-- Objectives -->
-    <ClickLogoChallenge v-if="showQuestId === 2" />
+    <ClickLogoChallenge v-if="showQuestId === 2" :showQuestId="showQuestId" />
     <ExtremeClickLogoChallenge v-if="showQuestId === 3" />
   </section>
 </template>
@@ -87,7 +87,9 @@ const clickLogoChallengeResources = [
 ];
 
 const { isLoaded: isVendorLoaded } = useModalLoader(vendorResources);
-const { isLoaded: isClickLogoLoaded } = useModalLoader(clickLogoChallengeResources);
+const { isLoaded: isClickLogoLoaded } = useModalLoader(
+  clickLogoChallengeResources
+);
 
 const showQuest = (quest) => {
   if (quest.id === 99) {
@@ -123,8 +125,8 @@ const isTaskCompleted = (questId) => {
 
 const getIconPaths = (quest) => {
   if (questStore.acceptedQuestIds.includes(quest.id)) {
-    return iconPaths.questionMark; 
+    return iconPaths.questionMark;
   }
-  return iconPaths.exclamationMark; 
+  return iconPaths.exclamationMark;
 };
 </script>

@@ -78,6 +78,7 @@
 </template>
 
 <script setup>
+import { defineProps } from "vue";
 import { useTooltipStore } from "~/store/tooltip.js";
 import { useCurrencyStore } from "~/store/currency.js";
 import { useUiOverlayStore } from "~/store/uiOverlay";
@@ -85,11 +86,14 @@ import { useBackpackStore } from "~/store/backpack.js";
 import { useExperienceStore } from "~/store/experience.js";
 import { useRarityColors } from "~/composables/useRarityColors";
 
-
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 import { onUseItems } from "~/data/onUseItems.js";
 import { SoundManager } from "~/utils/soundManager";
+
+const props = defineProps({
+  showQuestId: Number,
+});
 
 const experienceStore = useExperienceStore();
 

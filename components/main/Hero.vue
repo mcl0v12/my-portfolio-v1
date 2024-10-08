@@ -22,7 +22,7 @@
             data-animation="enter-up"
           >
             <h1 class="heading-base text-theme-color font-normal">
-              Hi, my name is
+              My name is
             </h1>
           </div>
 
