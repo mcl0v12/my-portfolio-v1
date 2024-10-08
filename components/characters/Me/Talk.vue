@@ -1,57 +1,54 @@
 <!-- Talk.vue -->
 <template>
-  <section>
-    <!-- Wenn keine Quest ausgewählt ist -->
-    <p v-if="!showQuestId" class="px-4 mb-3">Hi, how can I help you?</p>
+  <p v-if="!showQuestId" class="px-4 mb-3">Hi, how can I help you?</p>
 
-    <!-- Show Available Quest -->
-    <div
-      v-if="!showQuestId"
-      v-for="quest in availableQuests"
-      :key="quest.id"
-      class="quest-item w-full px-2 py-1.5 flex items-center cursor-pointer select-none"
-      @click="showQuest(quest)"
-    >
-      <!-- Für QA-Quests -->
-      <img
-        v-if="quest.type === 'Talk'"
-        :src="quest.iconSrc"
-        alt="Dialogue"
-        class="w-5 h-5 mr-2"
-      />
-
-      <!-- Normale Quests -->
-      <svg
-        v-else
-        class="w-5 h-5 mr-2"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 29 25"
-      >
-        <path
-          v-for="(path, index) in getIconPaths(quest)"
-          :key="index"
-          :d="path.d"
-          :style="{
-            fill: isTaskCompleted(quest.id)
-              ? path.completedFill
-              : path.fill || path.defaultFill,
-            stroke: path.stroke,
-            strokeWidth: path.strokeWidth,
-          }"
-        />
-      </svg>
-
-      <span>{{ quest.title }}</span>
-    </div>
-
-    <!-- Talk -->
-    <WhoAreYou v-if="showQuestId === 1"/>
-    <Vendor v-if="showQuestId === 99" :showQuestId="showQuestId" />
+  <!-- Available Quest -->
+  <div
+    v-if="!showQuestId"
+    v-for="quest in availableQuests"
+    :key="quest.id"
+    class="quest-item w-full px-2 py-1.5 flex items-center cursor-pointer select-none"
+    @click="showQuest(quest)"
+  >
+    <!-- QA-Quests -->
+    <img
+      v-if="quest.type === 'Talk'"
+      :src="quest.iconSrc"
+      alt="Dialogue"
+      class="w-5 h-5 mr-2"
+    />
 
     <!-- Objectives -->
-    <ClickLogoChallenge v-if="showQuestId === 2" :showQuestId="showQuestId" />
-    <ExtremeClickLogoChallenge v-if="showQuestId === 3" />
-  </section>
+    <svg
+      v-else
+      class="w-5 h-5 mr-2"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 29 25"
+    >
+      <path
+        v-for="(path, index) in getIconPaths(quest)"
+        :key="index"
+        :d="path.d"
+        :style="{
+          fill: isTaskCompleted(quest.id)
+            ? path.completedFill
+            : path.fill || path.defaultFill,
+          stroke: path.stroke,
+          strokeWidth: path.strokeWidth,
+        }"
+      />
+    </svg>
+
+    <span>{{ quest.title }}</span>
+  </div>
+
+  <!-- Talk -->
+  <WhoAreYou v-if="showQuestId === 1" />
+  <Vendor v-if="showQuestId === 99" :showQuestId="showQuestId" />
+
+  <!-- Objectives -->
+  <ClickLogoChallenge v-if="showQuestId === 2" :showQuestId="showQuestId" />
+  <ExtremeClickLogoChallenge v-if="showQuestId === 3" />
 </template>
 
 <script setup>
@@ -60,7 +57,6 @@ import { useQuestStore } from "~/store/handleInteraction.js";
 import { iconPaths } from "~/data/questPaths.js";
 import { useModalLoader } from "~/composables/useModalLoader";
 
-// Importiere Komponenten für die Quests
 import WhoAreYou from "~/components/quests/WhoAreYou.vue";
 import ClickLogoChallenge from "~/components/quests/ClickLogoChallenge.vue";
 import ExtremeClickLogoChallenge from "~/components/quests/ExtremeClickLogoChallenge.vue";
@@ -70,7 +66,7 @@ const questStore = useQuestStore();
 const showQuestId = computed(() => questStore.showQuestId);
 const availableQuests = computed(() => questStore.availableQuests);
 
-// Ressourcen, die für verschiedene Quests benötigt werden
+// Vendor.vue
 const vendorResources = [
   "/img/blackish-bg.png",
   "/img/items/speed.png",
@@ -79,6 +75,7 @@ const vendorResources = [
   "/img/empty-slot.png",
 ];
 
+// ClickLogoChallenge.vue
 const clickLogoChallengeResources = [
   "/img/questRewards/social-credit.png",
   "/img/currency/goldcoin.png",

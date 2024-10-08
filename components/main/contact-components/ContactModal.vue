@@ -306,17 +306,14 @@ const gold = computed(() => currencyStore.gold);
 const silver = computed(() => currencyStore.silver);
 const copper = computed(() => currencyStore.copper);
 
-// Berechne das gesamte Guthaben in Kupfer
 const totalCopper = computed(() => {
   return gold.value * 10000 + silver.value * 100 + copper.value;
 });
 
-// Überprüfe, ob das Guthaben kleiner als 30 Kupfer ist
 const isLessThan30Copper = computed(() => {
   return totalCopper.value < 30;
 });
 
-// Methode zum Senden der Mail
 const handleSendMail = () => {
   if (isLessThan30Copper.value) {
     uiOverlayStore.showMessage("You don't have enough money.", 3000);

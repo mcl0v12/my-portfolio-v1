@@ -31,9 +31,6 @@ export const useHandleMailStore = defineStore("handleMail", {
     },
     setEmailSuccess(success) {
       this.emailSuccess = success;
-    },
-    sendMail() {
-      modalSounds.coinFlip.playNextSound(); 
-    },
+    }
   },
 });
