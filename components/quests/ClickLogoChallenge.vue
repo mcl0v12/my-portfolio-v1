@@ -1,7 +1,7 @@
 <!-- ClickLogoChallenge.vue -->
 
 <template>
-  <div v-if="isLoaded" class="px-5">
+  <div v-if="showQuestId === 2" class="px-5">
     <!-- Quest Text -->
     <h1 class="heading-base font-special font-bold mb-3">
       {{ quest.title }}

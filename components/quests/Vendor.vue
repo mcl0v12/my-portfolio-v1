@@ -1,7 +1,7 @@
 <!-- /quests/Vendor.vue -->
 <template>
   <div
-    v-if="isLoaded"
+    v-if="showQuestId === 99"
     class="grid grid-cols-1 xl:grid-cols-2 px-5 gap-4 font-default text-white text-shadow"
   >
     <div v-for="(column, index) in columns" :key="index" class="flex">
@@ -84,6 +84,7 @@ import { useUiOverlayStore } from "~/store/uiOverlay";
 import { useBackpackStore } from "~/store/backpack.js";
 import { useExperienceStore } from "~/store/experience.js";
 import { useRarityColors } from "~/composables/useRarityColors";
+
 
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
