@@ -21,14 +21,18 @@
           </div>
         </div>
       </template>
-      
+
       <!-- Notification-Messages -->
-      <template v-else-if="message.type === 'notification' && typeof message.text === 'string'">
+      <template
+        v-else-if="
+          message.type === 'notification' && typeof message.text === 'string'
+        "
+      >
         <p class="text-shadow text-theme-color mt-2 select-none">
           {{ message.text }}
         </p>
       </template>
-      
+
       <!-- Standard Error-Messages -->
       <template v-else-if="typeof message.text === 'string'">
         <p class="text-shadow text-notice-color mt-2 select-none">
@@ -38,7 +42,6 @@
     </div>
   </transition-group>
 </template>
-
 
 <script setup>
 import { useUiOverlayStore } from "~/store/uiOverlay";

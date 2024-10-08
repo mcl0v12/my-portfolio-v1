@@ -1,4 +1,4 @@
-<!-- IntroCharacter.vue -->
+<!-- Me.vue -->
 
 <template>
   <div
@@ -37,10 +37,11 @@
         />
 
         <img
-          v-show="currentState === 'special'"
+          v-show="currentState === 'special' && isSpecialGifLoaded"
           :src="dynamicSpecialGifUrl"
           draggable="false"
           alt="talking"
+          @load="onSpecialGifLoad"
         />
       </div>
     </picture>
@@ -73,15 +74,12 @@ const getLargeIconPaths = () => {
 
   let paths = [];
 
-  // Falls eine aktive Quest existiert, verwende das große Fragezeichen-Symbol
   if (activeQuest) {
     paths = iconPaths.largeQuestionMark;
   } else {
-    // Falls keine aktive Quest vorhanden ist, nutze das Ausrufezeichen-Symbol
-    paths = iconPaths.largeExclamationMark || [];
+    paths = iconPaths.largeExclamationMark;
   }
 
-  // Mappe über die Pfade und passe das Fill an basierend auf dem Abschlussstatus der Quest
   return paths.map((path) => ({
     ...path,
     fill: isTaskCompleted(activeQuest?.id)
@@ -113,6 +111,8 @@ const specialGifUrl = "/gif/emoteTalk.gif";
 const dynamicSpecialGifUrl = ref(specialGifUrl);
 const specialGifDuration = 2000;
 
+const isSpecialGifLoaded = ref(false);
+
 let gifTimeout = null;
 
 const startAnimation = () => {
@@ -123,8 +123,13 @@ const startAnimation = () => {
   if (isLandscape.value && currentState.value === "stand") {
     currentState.value = "special";
     reloadGif(dynamicSpecialGifUrl, specialGifUrl);
+    isSpecialGifLoaded.value = false;
     playGif("stand", specialGifDuration);
   }
+};
+
+const onSpecialGifLoad = () => {
+  isSpecialGifLoaded.value = true;
 };
 
 const playGif = (nextState, duration) => {
