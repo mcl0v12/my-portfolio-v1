@@ -3,7 +3,7 @@
   <div class="fade-item" :ref="animationRef" data-animation="enter">
     <a href="#" class="group" @click.prevent="handleClick">
       <svg
-        class="logo w-10 xl:w-12 overflow-visible text-white-color text-shadow select-none"
+        class="logo w-10 xl:w-12 overflow-visible font-default text-white text-shadow select-none"
         :class="{ shrink: isShrinking }"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 45 52"

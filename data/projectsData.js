@@ -32,7 +32,7 @@ export const projectsData = [
     id: 3,
     title: "My Portfolio v1",
     overline: "Featured Project",
-    description: `The project you're currently viewing! This is my personal portfolio, mimicking the WoW Classic theme. It features a loot, level, and experience system, presenting information about me in a gamified way.`,
+    description: `The project you're currently viewing! This is my personal portfolio, mimicking the WoW Classic theme. It features a loot and level system, presenting information about me in a gamified way.`,
     image: "/img/projects/my-portfolio-v1.png",
     tools: [
       { name: "JavaScript", icon: "/techs/javascript.svg" },

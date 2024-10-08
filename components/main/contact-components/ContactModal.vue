@@ -1,7 +1,10 @@
 <!-- ContactModal.vue -->
 
 <template>
-  <div class="fixed inset-0 flex justify-center items-center z-[2]">
+  <div
+    v-if="isLoaded"
+    class="fixed inset-0 flex justify-center items-center z-[2]"
+  >
     <div
       class="max-w-base w-full px-base relative flex justify-center hr:justify-start"
     >
@@ -63,14 +66,18 @@
           ></polygon>
         </svg>
 
-        <ContactImage />
+        <ModalImage
+          imageSrc="/img/letters.png"
+          wrapperClass="max-w-[18vw] md:max-w-[100px] -translate-x-1/2 -translate-y-1/2 absolute top-[25px] left-[25px] z-[3]"
+          patternId="lettersPattern"
+        />
         <div
           :class="['absolute light-gradient-to-b top-0 left-0']"
           :style="wrapperStyle"
         >
           <div class="element-wrap">
             <!-- Top Element -->
-            <div :class="['relative']" :style="topDivStyle">
+            <div class="relative" :style="topDivStyle">
               <div class="top-wrap">
                 <p
                   class="w-full text-sm text-theme-color text-shadow flex flex-center ml-[18vw] md:ml-[100px] mr-[30px]"
@@ -99,7 +106,10 @@
                       @blur="validateNameOnBlur"
                     />
                   </div>
-                  <p :class="{ 'text-notice-color': isLessThan30Copper }">
+                  <p
+                    class="font-default"
+                    :class="{ 'text-notice-color': isLessThan30Copper }"
+                  >
                     <label>Postage:</label>
                     <CurrencyDisplay :gold="0" :silver="0" :copper="30" />
                   </p>
@@ -138,7 +148,7 @@
             </div>
 
             <!-- Content Element -->
-            <div :class="['relative']" :style="contentDivStyle">
+            <div class="relative" :style="contentDivStyle">
               <div class="scroll-wrapper">
                 <div
                   class="scroll-content"
@@ -199,12 +209,12 @@
             </div>
 
             <!-- Bottom Element -->
-            <div :class="['relative']" :style="bottomDivStyle">
+            <div class="relative" :style="bottomDivStyle">
               <div
                 class="bottom-wrap w-full h-full flex items-center justify-between gap-4 px-5"
               >
                 <div
-                  class="w-full h-[20px] flex justify-end px-2 text-white text-shadow bg-black border border-solid border-theme-color rounded-lg"
+                  class="w-full h-[20px] flex justify-end px-2 font-default text-white text-shadow bg-black border border-solid border-theme-color rounded-lg"
                 >
                   <CurrencyDisplay
                     :gold="gold"
@@ -224,32 +234,42 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import ContactImage from "~/components/main/contact-components/ContactImage.vue";
-import SendMailButtons from "~/components/main/contact-components/SendMailButtons.vue";
-import ContactForm from "~/components/main/contact-components/ContactForm.vue";
+import ModalImage from "~/components/main/character-components/ModalImage.vue";
 import CloseModalButton from "~/components/misc/CloseModalButton.vue";
+import ContactForm from "~/components/main/contact-components/ContactForm.vue";
+import SendMailButtons from "~/components/main/contact-components/SendMailButtons.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
+
+import { useModalLoader } from "~/composables/useModalLoader";
 
 import { useUiOverlayStore } from "~/store/uiOverlay";
 import { useCurrencyStore } from "~/store/currency.js";
 import { useHandleMailStore } from "~/store/handleMail.js";
 
+const resources = [
+  "/img/letters.png",
+  "/img/quest-paper.png",
+  "/img/currency/goldcoin.png",
+  "/img/currency/silvercoin.png",
+  "/img/currency/coppercoin.png",
+];
+
+const { isLoaded } = useModalLoader(resources);
+
 const currencyStore = useCurrencyStore();
 const uiOverlayStore = useUiOverlayStore();
-
 const mailStore = useHandleMailStore();
+
 const name = ref("");
 const subject = ref("");
 const email = ref("");
 const contactFormRef = ref(null);
 
 const resetForm = () => {
-  // Zurücksetzen der Felder in ContactModal
   name.value = "";
   email.value = "";
   subject.value = "";
-  
-  // Zusätzliche Felder in ContactForm zurücksetzen
+
   if (contactFormRef.value && contactFormRef.value.resetForm) {
     contactFormRef.value.resetForm();
   }

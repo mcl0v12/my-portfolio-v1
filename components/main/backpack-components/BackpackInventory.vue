@@ -4,6 +4,8 @@
   <div class="grid grid-cols-4 gap-1 text-white">
     <template v-for="(slot, index) in filledSlots" :key="index">
       <ItemBadge
+        :size="50"
+        :overlayScale="1"
         :imageUrl="slot.id ? slot.imageUrl : '/img/empty-slot.png'"
         :gradientId="index"
         :gradientTopColor="getGradientColor(slot.rarity, 'top', !!slot.id)"
@@ -62,11 +64,14 @@ const handleItemClick = (slot, index) => {
 };
 
 const handleMouseEnter = (event, slot) => {
-  const color = getColorFromRarity(slot.rarity);
+  const titleColor = getColorFromRarity(slot.rarity);
+  const descriptionColor = slot.descriptionColor;
+
   tooltipStore.showTooltip(event, {
-    title: slot.text,
+    title: slot.title,
     description: slot.description,
-    color,
+    titleColor,
+    descriptionColor,
     sellPrice: slot.sellPrice,
   });
 };

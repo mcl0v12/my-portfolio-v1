@@ -6,7 +6,7 @@ import { SoundManager } from "~/utils/soundManager";
 const backpackSounds = {
   open: new SoundManager(['/sounds/interface/iBackpackOpen.ogg']),
   close: new SoundManager(['/sounds/interface/iBackpackClose.ogg']),
-  coinFlip: new SoundManager(['/sounds/interface/coinFlips.ogg']), // Neuer CoinFlip Sound
+  coinFlip: new SoundManager(['/sounds/utils/coinFlips.ogg']), // Neuer CoinFlip Sound
 };
 
 export const useBackpackStore = defineStore("backpack", {

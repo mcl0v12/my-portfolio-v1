@@ -18,12 +18,21 @@
 
       <ContactModal v-if="openMail" ref="contactModalRef" />
     </div>
+
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  watch,
+} from "vue";
 import ContactModal from "~/components/main/contact-components/ContactModal.vue";
+
 import { useHandleMailStore } from "~/store/handleMail.js";
 import { useUiOverlayStore } from "~/store/uiOverlay";
 
@@ -41,13 +50,11 @@ const openModal = () => {
   mailStore.openModal();
 };
 
-// Beobachte die emailSuccess und zeige die Benachrichtigung an, wenn sie auf true gesetzt wird
 watch(emailSuccess, (newValue) => {
   if (newValue) {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
 
-    // Rufe resetForm in ContactModal auf, um alle Felder zurückzusetzen
     if (contactModalRef.value && contactModalRef.value.resetForm) {
       contactModalRef.value.resetForm();
     }

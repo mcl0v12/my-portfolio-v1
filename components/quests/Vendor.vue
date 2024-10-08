@@ -1,11 +1,16 @@
 <!-- /quests/Vendor.vue -->
 <template>
-  <div class="grid grid-cols-1 xl:grid-cols-2 px-5 gap-4 text-white">
+  <div
+    v-if="isLoaded"
+    class="grid grid-cols-1 xl:grid-cols-2 px-5 gap-4 font-default text-white text-shadow"
+  >
     <div v-for="(column, index) in columns" :key="index" class="flex">
       <template v-if="column.id">
         <!-- Belegter Slot mit Item -->
         <div class="item-wrap">
           <ItemBadge
+            :size="50"
+            :overlayScale="1"
             :imageUrl="column.imageUrl"
             :gradientId="index"
             :gradientTopColor="getGradientColor(column.rarity, 'top', true)"
@@ -16,10 +21,11 @@
             @mouseenter="
               handleMouseEnter(
                 $event,
-                column.text,
+                column.title,
                 column.description,
                 getColorFromRarity(column.rarity),
-                column.requiredLevel
+                column.requiredLevel,
+                column
               )
             "
             @mouseleave="handleMouseLeave"
@@ -42,7 +48,7 @@
             class="text-sm"
             :style="{ color: getColorFromRarity(column.rarity) }"
           >
-            {{ column.text }}
+            {{ column.title }}
           </p>
           <!-- CurrencyDisplay für jedes Item -->
           <div
@@ -69,6 +75,11 @@
       </template>
     </div>
   </div>
+
+  <!--
+  <div v-else>
+    Loading...
+  </div> -->
 </template>
 
 <script setup>
@@ -77,12 +88,14 @@ import { useCurrencyStore } from "~/store/currency.js";
 import { useUiOverlayStore } from "~/store/uiOverlay";
 import { useBackpackStore } from "~/store/backpack.js";
 import { useExperienceStore } from "~/store/experience.js";
+import { useRarityColors } from "~/composables/useRarityColors";
+
+import { useModalLoader } from "~/composables/useModalLoader";
 
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 import { onUseItems } from "~/data/onUseItems.js";
-import { useRarityColors } from "~/composables/useRarityColors";
-import { SoundManager } from '~/utils/soundManager';
+import { SoundManager } from "~/utils/soundManager";
 
 const experienceStore = useExperienceStore();
 
@@ -92,12 +105,22 @@ const uiOverlayStore = useUiOverlayStore();
 const backpackStore = useBackpackStore();
 const { getColorFromRarity, getGradientColor } = useRarityColors();
 
+// Ressourcen für die Vendor-Komponente
+const resources = [
+  "/img/blackish-bg.png",
+  "/img/items/speed.png",
+  "/img/items/time-warp.png",
+  "/img/items/key.jpg",
+  "/img/empty-slot.png",
+];
+
+const { isLoaded } = useModalLoader(resources);
+
 const maxSlots = 10;
 
 const vendorSounds = {
-  notBuyable: new SoundManager(['/sounds/interface/notBuyable.ogg']), // Sound für nicht käuflich
+  notBuyable: new SoundManager(["/sounds/utils/notBuyable.ogg"]), // Sound für nicht käuflich
 };
-
 
 const isItemDisabled = (item) => {
   return !!(item.requiredLevel && experienceStore.level < item.requiredLevel);
@@ -130,10 +153,8 @@ const canAffordItem = (costs, requiredLevel = 0) => {
 
 const handleItemClick = (column) => {
   if (!canAffordItem(column.costs, column.requiredLevel)) {
-    // Wenn nicht kaufbar, spiele den 'notBuyable' Sound ab
     vendorSounds.notBuyable.playNextSound();
-    
-    // Nachricht im Overlay anzeigen
+
     uiOverlayStore.showMessage(
       experienceStore.level < column.requiredLevel
         ? `You dont have the required Level to buy this item.`
@@ -151,11 +172,19 @@ const handleItemClick = (column) => {
   }
 };
 
-const handleMouseEnter = (event, title, description, color, requiredLevel) => {
+const handleMouseEnter = (
+  event,
+  title,
+  description,
+  color,
+  requiredLevel,
+  column
+) => {
   tooltipStore.showTooltip(event, {
     title,
     description,
-    color,
+    titleColor: color,
+    descriptionColor: column.descriptionColor,
     requiredLevel,
   });
 };

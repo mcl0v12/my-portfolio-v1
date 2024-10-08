@@ -5,8 +5,24 @@
     font-weight: normal;
     font-style: normal;
   }
+
+  @font-face {
+    font-family: "Friz Quadrata";
+    src: url("/assets/fonts/friz-quadrata-regular.woff2") format("woff2"),
+      url("/assets/fonts/friz-quadrata-regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
   
   .font-special {
     font-family: var(--special-font), monospace;
     letter-spacing: .05rem;
+  }
+
+  .font-primary {
+    font-family: var(--primary-font), monospace;
+  }
+
+  .font-default {
+    font-family: var(--default-font), monospace;
   }

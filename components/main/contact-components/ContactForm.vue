@@ -58,9 +58,8 @@ watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
 
-// Erweitere resetForm, um alle Felder zurückzusetzen
 const resetForm = () => {
-  form.value.additionalInfo = ""; // Nur interne Daten zurücksetzen
+  form.value.additionalInfo = ""; // interne Daten zurücksetzen
   formSubmitAttempted.value = false;
 };
 

@@ -2,7 +2,7 @@
 <template>
   <nav
     id="navbar"
-    class="hidden relative text-gray-30 text-sm text-shadow font-special hr-lg:flex hr-lg:items-center hr-lg:justify-center"
+    class="hidden relative text-gray-30 text-sm text-shadow hr-lg:flex hr-lg:items-center hr-lg:justify-center"
     tabindex="-1"
   >
     <ol class="flex gap-4 z-[2]" @mouseleave="resetBackground">
@@ -10,7 +10,7 @@
         v-for="(link, index) in links"
         :key="link.href"
         :style="{ transitionDelay: `${index * 100}ms` }"
-        class="fly-item"
+        class="fall-item"
         :ref="animationRef"
         data-animation="enter-down"
         @mouseover="moveBackground($event)"
@@ -26,7 +26,7 @@
 
     <div
       style="transition-delay: 400ms"
-      class="fly-item z-[2]"
+      class="fall-item z-[2]"
       :ref="animationRef"
       data-animation="enter-down"
     >
@@ -92,7 +92,7 @@
 import { ref } from "vue";
 import { animationObserver } from "~/composables/useIntersectionObserver";
 import { useOnUseItemEffectsStore } from "~/store/onUseItemEffects.js";
-import { useUiOverlayStore } from '~/store/uiOverlay.js';
+import { useUiOverlayStore } from "~/store/uiOverlay.js";
 import { storeToRefs } from "pinia";
 
 let isFirstHover = true;
@@ -101,35 +101,33 @@ const intersectionItems = ref([]);
 
 // Links für die Navigation
 const links = [
-  { href: "#about", text: "About" },
-  { href: "#experience", text: "Experience" },
-  { href: "#work", text: "Work" },
-  { href: "#contact", text: "Contact" },
+  { href: "#background", text: "Background" },
+  { href: "#achievments", text: "Achievments" },
+  { href: "#collection", text: "Collection" },
+  { href: "#mailbox", text: "Mailbox" },
 ];
 
-// Zugriff auf den UiOverlay Store
 const uiOverlayStore = useUiOverlayStore();
 
 const onUseItemEffectsStore = useOnUseItemEffectsStore();
 const { resumeKeyUsed } = storeToRefs(onUseItemEffectsStore);
 
-
-// Berechne die href basierend auf dem Zustand
 const resumeHref = computed(() => {
   return resumeKeyUsed.value ? "/resume.pdf" : "#";
 });
 
-// Klick-Handler für den Resume-Link
 const handleResumeClick = (event) => {
   if (!resumeKeyUsed.value) {
     event.preventDefault();
 
-    // Zeige die Fehlermeldung über das UI-Overlay an
-    uiOverlayStore.showMessage('You need to use the Resume Key to unlock the resume.', 3000, 'error');
+    uiOverlayStore.showMessage(
+      "You need to use the Resume Key to unlock the resume.",
+      3000,
+      "error"
+    );
   }
 };
 
-// moveBackground Funktion auskommentiert
 const moveBackground = (event) => {
   const linkRect = event.currentTarget.getBoundingClientRect();
   const navRect = event.currentTarget.closest("nav").getBoundingClientRect();
@@ -169,7 +167,7 @@ const animationRef = (el) => {
   }
 };
 
-animationObserver([intersectionItems], { threshold: 0.1 }, null);
+animationObserver([intersectionItems]);
 </script>
 
 <style scoped>

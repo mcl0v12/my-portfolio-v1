@@ -55,7 +55,7 @@
 
 <script setup>
 import { ref, onBeforeUnmount, onMounted, computed, watch } from "vue";
-import LootModal from "~/components/main/LootModal.vue";
+import LootModal from "~/components/main/loot-components/LootModal.vue";
 import { lootItemsData } from "~/data/lootItems.js";
 import { useLootStore } from "~/store/loot.js";
 

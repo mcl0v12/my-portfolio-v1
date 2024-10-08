@@ -1,6 +1,7 @@
 :root {
   /* Fonts */
-  --main-font: "Helvetica Neue", Arial, sans-serif;
+  --default-font: "Helvetica Neue", Arial, sans-serif;
+  --primary-font: "Friz Quadrata", monospace;
   --special-font: "Morpheus", monospace;
 
   /* Layout */
@@ -21,6 +22,7 @@
     #5e0000
   );
   --theme-bg: #0a1e40;
+  --theme-bg--light: #162b5c;
   --white: #fcfcfe;
   --black: #1d1d1e;
   --notice: #dc3545;

@@ -34,7 +34,7 @@ import DesktopNav from "~/components/header/DesktopNav.vue";
 import MenuIcon from "~/components/header/MenuIcon.vue";
 import MobileMenu from "~/components/header/MobileMenu.vue";
 
-import Backpack from "~/components/main/Backpack.vue";
+import Backpack from "~/components/header/Backpack.vue";
 
 import { useQuestStore } from "~/store/handleInteraction.js";
 

@@ -5,6 +5,8 @@
     :style="buttonStyle"
     :disabled="disabled"
     class="relative group origin-top-left select-none"
+    @click="handleClick"
+    v-bind="transition"
   >
     <!-- Outer Layer -->
     <svg
@@ -33,7 +35,10 @@
     <!-- Inner Layer -->
     <div
       :style="innerLayerStyle"
-      :class="[ 'inner-layer absolute top-0 left-0', { 'inner-layer__disabled': disabled } ]"
+      :class="[
+        'inner-layer absolute top-0 left-0',
+        { 'inner-layer__disabled': disabled },
+      ]"
     >
       <svg
         :width="scaledInnerWidth"
@@ -52,28 +57,72 @@
       </svg>
 
       <div class="absolute inset-0 flex items-center justify-center">
-        <span :style="{ fontSize: `${buttonTextSize}px` }">{{ buttonText }}</span>
+        <span :style="{ fontSize: `${selectedButtonTextSize}px` }">
+          {{ buttonText }}
+        </span>
       </div>
     </div>
   </button>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
+import { SoundManager } from "~/utils/soundManager";
+
+const buttonClickSound = new SoundManager([
+  "/sounds/interface/iInterfaceButton.ogg",
+]);
 
 const props = defineProps({
-  width: { type: Number, default: 160 },
   height: { type: Number, default: 50 },
-  buttonText: { type: String, default: "Let's Talk" },
-  buttonTextSize: { type: Number, default: 18 },
+  mdHeight: { type: Number, default: null },
+  lgHeight: { type: Number, default: null },
+  buttonText: { type: String, default: "null" },
+  buttonTextSize: { type: Number, default: null },
+  mdButtonTextSize: { type: Number, default: null },
+  lgButtonTextSize: { type: Number, default: null },
   disabled: { type: Boolean, default: false },
+  transition: { type: Object, default: null },
 });
 
-const scaleFactor = computed(() => Math.min(props.width / 160, props.height / 50));
+const emit = defineEmits(["click"]);
+
+// Größen anpassen
+const selectedHeight = ref(props.height);
+const selectedButtonTextSize = ref(props.buttonTextSize || 16);
+
+const updateSizes = () => {
+  if (typeof window !== "undefined") {
+    if (
+      window.matchMedia("(min-width: 1024px)").matches &&
+      props.lgHeight &&
+      props.lgButtonTextSize
+    ) {
+      selectedHeight.value = props.lgHeight;
+      selectedButtonTextSize.value = props.lgButtonTextSize;
+    } else if (
+      window.matchMedia("(min-width: 768px)").matches &&
+      props.mdHeight &&
+      props.mdButtonTextSize
+    ) {
+      selectedHeight.value = props.mdHeight;
+      selectedButtonTextSize.value = props.mdButtonTextSize;
+    } else {
+      selectedHeight.value = props.height;
+      selectedButtonTextSize.value = props.buttonTextSize;
+    }
+  }
+};
+
+onMounted(() => {
+  updateSizes();
+  window.addEventListener("resize", updateSizes);
+});
+
+const scaleFactor = computed(() => selectedHeight.value / 50);
 const scaledWidth = computed(() => Math.round(166 * scaleFactor.value));
 const scaledHeight = computed(() => Math.round(56 * scaleFactor.value));
 const viewBox = "0 0 166 56";
-
 const scaledInnerWidth = computed(() => 160 * scaleFactor.value);
 const scaledInnerHeight = computed(() => 50 * scaleFactor.value);
 const innerViewBox = "0 0 160 50";
@@ -84,19 +133,27 @@ const buttonStyle = computed(() => ({
 }));
 
 const innerLayerStyle = computed(() => ({
-  transform: `translate(${Math.round(3 * scaleFactor.value)}px, ${Math.round(3 * scaleFactor.value)}px)`,
+  transform: `translate(${(3 * scaleFactor.value).toFixed(3)}px, ${(
+    3 * scaleFactor.value
+  ).toFixed(3)}px)`,
 }));
+
+const handleClick = (event) => {
+  if (!props.disabled) {
+    buttonClickSound.playNextSound();
+    emit("click", event);
+  }
+};
 </script>
 
 <style scoped>
 button:disabled {
-  opacity: 0.35;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .inner-layer {
-  will-change: clip-path, transform, filter;
+  will-change: transform;
   color: var(--theme-color);
   background: var(--theme-gradient);
   clip-path: polygon(
@@ -111,21 +168,17 @@ button:disabled {
   );
   transition: filter 200ms ease, color 200ms ease;
 }
-
 .inner-layer__disabled {
   color: var(--gray-40);
   background: var(--gray-90);
 }
-
 .inner-layer:hover {
   filter: brightness(1.2);
   color: var(--white);
 }
-
 .group:active .inner-layer {
   box-shadow: inset 0px 8px 10px rgba(0, 0, 0, 0.7);
 }
-
 .group:active .inner-layer span {
   transform: translate(1px, 2px);
 }

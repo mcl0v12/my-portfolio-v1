@@ -21,11 +21,11 @@
 
 <script setup>
 import { computed, onMounted } from 'vue';
-import Preloader from '~/components/Preloader/Preloader.vue';
+import Preloader from '~/components/preloader/Preloader.vue';
 import HeaderNav from '~/layouts/header-nav.vue';
 import UiOverlay from '~/components/misc/UiOverlay.vue';
-import ObjectivesTracker from '~/components/objectives/ObjectivesTracker.vue';
-import ExperienceBar from '~/components/objectives/ExperienceBar.vue';
+import ObjectivesTracker from '~/components/main/ObjectivesTracker.vue';
+import ExperienceBar from '~/components/misc/ExperienceBar.vue';
 import Tooltip from '~/components/main/Tooltip.vue';
 import BackpackModal from '~/components/main/backpack-components/BackpackModal.vue';
 

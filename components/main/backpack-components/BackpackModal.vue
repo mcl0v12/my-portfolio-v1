@@ -2,6 +2,7 @@
 
 <template>
   <div
+    v-if="isLoaded"
     class="fixed bottom-[20px] right-[20px] flex justify-center items-center z-[2]"
   >
     <div class="relative flex justify-center hr:justify-end">
@@ -65,7 +66,11 @@
           ></polygon>
         </svg>
 
-        <BackpackImage />
+        <ModalImage
+          imageSrc="/img/backpack.png"
+          wrapperClass="max-w-[4rem] -translate-x-1/2 -translate-y-1/2 absolute top-[25px] left-[25px] z-[3]"
+          patternId="backpackPattern"
+        />
 
         <!-- Wrapper for Top, Content, and Bottom Elements -->
         <div
@@ -74,7 +79,7 @@
         >
           <div class="element-wrap">
             <!-- Top Element -->
-            <div :class="['relative']" :style="topDivStyle">
+            <div class="relative" :style="topDivStyle">
               <div class="top-wrap">
                 <p
                   class="w-full text-sm text-theme-color text-shadow flex flex-center ml-[4rem]"
@@ -89,20 +94,24 @@
                 />
               </div>
             </div>
-            <!-- Content Element (BackpackInventory) -->
-            <div :class="['relative']" :style="contentDivStyle">
+            <!-- Content Element -->
+            <div class="relative" :style="contentDivStyle">
               <div class="content-wrap">
                 <BackpackInventory />
               </div>
             </div>
 
             <!-- Bottom Element -->
-            <div :class="['relative']" :style="bottomDivStyle">
+            <div class="relative" :style="bottomDivStyle">
               <div class="bottom-wrap w-full h-full flex items-center px-2">
                 <div
-                  class="w-full h-[20px] flex justify-end px-2 text-white text-shadow bg-black border border-solid border-theme-color rounded-lg"
+                  class="w-full h-[20px] flex justify-end px-2 font-default text-white text-shadow bg-black border border-solid border-theme-color rounded-lg"
                 >
-                <CurrencyDisplay :gold="gold" :silver="silver" :copper="copper" />
+                  <CurrencyDisplay
+                    :gold="gold"
+                    :silver="silver"
+                    :copper="copper"
+                  />
                 </div>
               </div>
             </div>
@@ -115,19 +124,32 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import BackpackImage from "~/components/main/backpack-components/BackpackImage.vue";
+import ModalImage from "~/components/main/character-components/ModalImage.vue";
+import CloseModalButton from "~/components/misc/CloseModalButton.vue";
+
 import BackpackInventory from "~/components/main/backpack-components/BackpackInventory.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
-import CloseModalButton from "~/components/misc/CloseModalButton.vue";
+
+import { useModalLoader } from "~/composables/useModalLoader";
 
 import { useBackpackStore } from "~/store/backpack.js";
 import { useCurrencyStore } from "~/store/currency.js";
+
+const resources = [
+  "/img/blackish-bg.png",
+  "/img/empty-slot.png",
+  "/img/currency/goldcoin.png",
+  "/img/currency/silvercoin.png",
+  "/img/currency/coppercoin.png",
+];
+
+const { isLoaded } = useModalLoader(resources);
 
 const backpackStore = useBackpackStore();
 const currencyStore = useCurrencyStore();
 
 const toggleBackpack = () => {
-  backpackStore.toggleBackpack(); 
+  backpackStore.toggleBackpack();
 };
 
 const gold = computed(() => currencyStore.gold);

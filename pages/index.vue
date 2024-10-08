@@ -3,8 +3,8 @@
 <template>
   <Intro />
   <main>
-    <About />
-    <Experience />
+    <Background />
+    <Achievments />
     <Work />
     <Contact />
   </main>
@@ -14,9 +14,9 @@
 import { useHead } from '@vueuse/head'; // Verwende useHead, um body-Klassen zu setzen
 import { ref, onMounted } from "vue";
 
-import Intro from "~/components/main/Intro.vue";
-import About from "~/components/main/About.vue";
-import Experience from "~/components/main/Experience.vue";
+import Intro from "~/components/main/Hero.vue";
+import Background from "~/components/main/Background.vue";
+import Achievments from "~/components/main/Achievments.vue";
 import Work from "~/components/main/Work.vue";
 import Contact from "~/components/main/Contact.vue";
 

@@ -31,17 +31,17 @@ export const useObjectivesStore = defineStore("objectives", {
         this.saveObjectives();
       }
     },
-    updateObjectiveProgress(name, progress) {
-      const objective = this.objectives.find((o) => o.name === name);
-      if (objective) {
-        objective.progress = Math.min(progress, objective.total);
-        this.saveObjectives();
-      }
-    },
     completeObjective(name) {
       const objective = this.objectives.find((o) => o.name === name);
       if (objective) {
         objective.progress = objective.total;
+        this.saveObjectives();
+      }
+    },
+    updateObjectiveProgress(name, progress) {
+      const objective = this.objectives.find((o) => o.name === name);
+      if (objective) {
+        objective.progress = Math.min(progress, objective.total);
         this.saveObjectives();
       }
     },

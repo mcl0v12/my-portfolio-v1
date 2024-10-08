@@ -1,14 +1,13 @@
 <!-- Preloader.vue -->
-
 <template>
-  <div v-if="isPreloaderVisible" class="preloader">
+  <div v-if="isPreloaderVisible" class="w-screen fixed top-0 left-0 bg-theme-bg overflow-hidden z-[1000]">
     <PreloaderAnimation @animationEnded="onAnimationEnd" />
   </div>
 </template>
 
 <script setup>
 import { usePreloader } from "~/composables/usePreloader";
-import PreloaderAnimation from "~/components/Preloader/PreloaderAnimation.vue";
+import PreloaderAnimation from "~/components/preloader/PreloaderAnimation.vue";
 
 const { isPreloaderVisible, hidePreloader } = usePreloader();
 
@@ -19,13 +18,4 @@ function onAnimationEnd() {
 </script>
 
 <style scoped>
-.preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  background-color: var(--theme-bg);
-  z-index: 1000;
-  overflow-y: hidden;
-}
 </style>

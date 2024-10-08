@@ -13,11 +13,11 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Fabian Daume is a software engineer who specializes in building exceptional digital experiences.' },
+        { name: 'description', content: 'Fabian Daume is a versatile UI/UX developer who specializes in building accessible, exceptional digital experiences.' },
         { property: 'og:site_name', content: 'Fabian Daume' },
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: 'Fabian Daume - Software Engineer' },
-        { property: 'og:description', content: 'Fabian Daume is a software engineer who specializes in building exceptional digital experiences.' },
+        { property: 'og:description', content: 'Fabian Daume is a versatile UI/UX developer who specializes in building accessible, exceptional digital experiences.' },
         { property: 'og:image', content: 'img/me.png' },
         { property: 'og:url', content: 'https://fabian-daume.com' },
         { name: 'robots', content: 'index, follow' },

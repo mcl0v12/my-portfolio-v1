@@ -1,7 +1,7 @@
 <!-- Work.vue -->
 
 <template>
-  <section id="work">
+  <section id="collection">
     <div
       class="max-w-base mx-auto px-base py-16 lg:py-24 text-white text-shadow leading-relaxed"
     >
@@ -11,9 +11,16 @@
       </h2>
 
       <ul class="space-y-6 lg:space-y-16">
-        <li v-for="project in projects" :key="project.id" class="project-item">
+        <li
+        v-for="(project, index) in projects"
+        :key="project.id"
+        :style="{ transitionDelay: `${index * 100}ms` }"
+        class="project-item fly-item"
+        :ref="animationRef"
+        data-animation="enter-up"
+        >
           <div class="project-content">
-            <p class="text-sm text-theme-color font-special mb-2">
+            <p class="text-sm text-theme-color mb-2">
               {{ project.overline }}
             </p>
             <h3 class="heading-lg mb-6">{{ project.title }}</h3>
@@ -98,7 +105,6 @@
       <div class="py-8 lg:py-14">
         <Chest :chestId="'chest2'" />
       </div>
-      
     </div>
   </section>
 </template>
@@ -106,116 +112,19 @@
 <script setup>
 import { projectsData } from "@/data/projectsData.js";
 import Chest from "~/components/misc/Chest.vue";
+import { animationObserver } from "~/composables/useIntersectionObserver";
 
 const projects = projectsData;
+
+const intersectionItems = ref([]);
+
+const animationRef = (el) => {
+  if (el) {
+    intersectionItems.value.push(el);
+  }
+};
+
+animationObserver([intersectionItems]);
 </script>
 
-<style scoped>
-/* Projektstruktur */
-.project-item {
-  display: grid;
-  min-height: 350px;
-}
-
-.project-item .project-content {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 20px;
-}
-
-.project-item .project-image {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
-  position: relative;
-  z-index: -1;
-}
-
-.project-item .project-image img {
-  height: 100%;
-  overflow: hidden;
-  border-radius: 5px;
-}
-
-.project-item .project-image::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(10, 30, 64, 0.9);
-  mix-blend-mode: multiply;
-  transition: background-color 300ms ease;
-}
-
-@media (min-width: 769px) {
-  .project-item .project-image:hover::after {
-    background-color: rgba(0, 0, 0, 0);
-  }
-
-  .project-item {
-    grid-template-columns: repeat(12, 1fr);
-    align-items: center;
-  }
-  .project-item .project-description-wrapper {
-    padding: 1.5rem;
-    border-radius: 5px;
-    background: #162b5c;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    z-index: 2;
-  }
-
-  .project-item .project-content {
-    grid-column: 1 / 9;
-    grid-row: 1;
-    padding: 0;
-    text-align: left;
-  }
-
-  .project-item:nth-of-type(2n + 1) .project-content {
-    grid-column: 5 / -1;
-    text-align: right;
-  }
-
-  .project-item .project-image {
-    grid-column: 6 / -1;
-    grid-row: 1;
-    opacity: 1;
-    z-index: 1;
-  }
-
-  .project-item:nth-of-type(2n + 1) .project-image {
-    grid-column: 1 / 8;
-  }
-
-  .project-item .project-tech-list {
-    justify-content: flex-start;
-  }
-
-  .project-item:nth-of-type(2n + 1) .project-tech-list {
-    justify-content: flex-end;
-  }
-
-  .project-item .project-links {
-    justify-content: flex-start;
-  }
-
-  .project-item:nth-of-type(2n + 1) .project-links {
-    justify-content: flex-end;
-  }
-}
-
-@media (min-width: 900px) {
-  .project-item .project-content {
-    grid-column: 1 / 7;
-    grid-row: 1;
-  }
-
-  .project-item:nth-of-type(2n + 1) .project-content {
-    grid-column: 7 / -1;
-  }
-}
-</style>
+<style scoped></style>

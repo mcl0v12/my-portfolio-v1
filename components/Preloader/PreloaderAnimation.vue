@@ -1,26 +1,63 @@
 <!-- PreloaderAnimation.vue -->
 
 <template>
-  <div class="relative h-screen flex flex-center overflow-hidden">
-    <!-- Zeige das richtige Bild oder GIF basierend auf dem aktuellen Zustand -->
-    <div class="max-w-lg">
+  <div class="relative h-screen flex flex-center">
+    <template v-if="!hasInteracted">
+      <img
+        src="/img/alliance-logo.png"
+        draggable="false"
+        alt="Alliance Logo"
+        class="w-[70px] xl:w-[100px] absolute top-5 left-5"
+      />
+      <div
+        class="max-w-base w-full px-base mx-auto flex flex-col hr:flex-row hr:items-center"
+      >
+        <div
+          class="w-full hr:w-1/2 flex flex-col items-center space-lg hr:mb-0"
+        >
+          <div
+            class="flex flex-col items-start text-notice-color text-left text-shadow leading-relaxed"
+          >
+            <h3 class="heading-base mb-3">READ!</h3>
+            <p class="space-lg">
+              My page uses sound effects to make things more "realistic". To
+              prevent a heart attack, I recommend checking your system audio
+              before starting the intro.
+            </p>
+
+            <ThemeButton
+              buttonText="Start Intro"
+              :buttonTextSize="16"
+              :height="35"
+              @click="startInteraction"
+            />
+          </div>
+        </div>
+
+        <Camel />
+      </div>
+    </template>
+
+    <!-- Animationen -->
+    <div v-if="hasInteracted" class="max-w-lg">
       <img
         v-show="currentState === 'run'"
         :src="runGifUrl"
         draggable="false"
         alt="Running Animation"
-        class="scale-up-animation"
+        class="scale-up-animation select-none"
       />
       <img
         v-show="currentState === 'finish'"
         :src="finishRunGifUrl"
         draggable="false"
         alt="Finish Run Animation"
-        class="transition-opacity duration-1000 ease-in-out"
+        class="transition-opacity duration-1000 ease-in-out select-none"
         :class="fadeOut ? 'opacity-0' : 'opacity-100'"
       />
     </div>
-    <!-- Onyxia GIF: fliegt von links nach rechts -->
+
+    <!-- Onyxia GIF -->
     <img
       v-if="showOnyxia"
       :src="onyxiaGifUrl"
@@ -32,87 +69,94 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
+import { SoundManager } from "@/utils/soundManager";
+import ThemeButton from "~/components/misc/ThemeButton.vue";
+import { useTooltipStore } from "~/store/tooltip.js";
+import Camel from "~/components/preloader/Camel.vue";
 
-const emit = defineEmits(["animationEnded"]); // Emit an Event when animation ends
+const emit = defineEmits(["animationEnded"]);
+const tooltipStore = useTooltipStore();
 
-// Initialer Zustand und Bild-URLs
-const currentState = ref("run"); // Startzustand ist das "run" GIF
+const currentState = ref("run");
 const runGifUrl = "/gif/preloader/run.gif";
 const finishRunGifUrl = "/gif/preloader/finishRun.gif";
 const onyxiaGifUrl = "/gif/preloader/onyxia.gif";
+const showOnyxia = ref(false);
 
-// Neues Onyxia GIF
-const showOnyxia = ref(false); // Zustand für das Onyxia-GIF
+const runGifDuration = 10; /* 3000 */
+const finishRunGifDuration = 10; /* 3500 */
 
-// GIF-Dauern (in Millisekunden)
-const runGifDuration = 3000; // 4 Sekunden für das "run" GIF
-const finishRunGifDuration = 4000; // 4 Sekunden für das "finishRun" GIF + FadeOut-Dauer
+const fadeOut = ref(false);
+const hasInteracted = ref(false);
 
-let gifTimeout = null;
-const fadeOut = ref(false); // Zustand für Opacity-Effekt
+const footstepSounds = [
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_01.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_02.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_03.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_04.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_05.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_06.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_07.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_08.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_09.ogg",
+  "/sounds/utils/MON_Footstep_Bipedal_Foot_Small_Stone_10.ogg",
+];
+const soundManager = new SoundManager(footstepSounds);
 
-// Funktion zum Starten der Animation
+const startInteraction = () => {
+  hasInteracted.value = true;
+  startAnimation();
+  tooltipStore.hideTooltip();
+};
+
 const startAnimation = () => {
   if (currentState.value === "run") {
+    soundManager.playLoop(runGifDuration);
     playGif("finish", runGifDuration);
 
     showOnyxia.value = true;
     setTimeout(() => {
-      showOnyxia.value = false; // Verstecke das GIF nach der Animation
+      showOnyxia.value = false;
     }, 3000);
   }
 };
 
-// Funktion, um das nächste GIF nach einer gewissen Zeit anzuzeigen
 const playGif = (nextState, duration) => {
-  clearGifTimeout(); // Stellt sicher, dass keine doppelten Zeitüberschreitungen laufen
-  gifTimeout = setTimeout(() => {
-    currentState.value = nextState; // Ändere den Zustand auf "finish"
+  setTimeout(() => {
+    currentState.value = nextState;
 
     if (nextState === "finish") {
       setTimeout(() => {
-        fadeOut.value = true; // Führe Opacity-Transition aus
+        soundManager.playSingleSound("/sounds/utils/ChangeEquip.ogg");
+      }, 700);
 
-        // Warte, bis der FadeOut-Übergang abgeschlossen ist, bevor der Preloader verschwindet
+      setTimeout(() => {
+        fadeOut.value = true;
+
         setTimeout(() => {
-          emit("animationEnded"); // Emit event when fade-out finishes
-        }, 1000); // Dauer des FadeOut-Effekts (1 Sekunde in diesem Beispiel)
-      }, finishRunGifDuration); // Warte, bis das GIF abgespielt wurde
+          emit("animationEnded");
+        }, 1000);
+      }, finishRunGifDuration);
     }
   }, duration);
 };
-
-// Funktion, um die laufenden GIF-Zeitüberschreitungen zu löschen
-const clearGifTimeout = () => {
-  if (gifTimeout) {
-    clearTimeout(gifTimeout);
-    gifTimeout = null;
-  }
-};
-
-// Startet die Animation, sobald die Komponente geladen wird
-onMounted(() => {
-  startAnimation();
-});
 </script>
 
 <style scoped>
-/* CSS für Skalierungseffekt */
 .scale-up-animation {
   animation: scaleUp 3s ease-in-out forwards;
 }
 
 @keyframes scaleUp {
   0% {
-    transform: scale(0.3); /* Startgröße 50% */
+    transform: scale(0.3);
   }
   100% {
-    transform: scale(1); /* Endgröße 100% (Originalgröße) */
+    transform: scale(1);
   }
 }
 
-/* Animation für das Onyxia-GIF: von links nach rechts */
 .onyxia-animation {
   position: absolute;
   top: 30%;

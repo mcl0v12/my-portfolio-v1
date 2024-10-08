@@ -21,7 +21,7 @@ export const useTooltipStore = defineStore("tooltip", () => {
     const tooltipHeight = tooltipElement ? tooltipElement.offsetHeight : 0;
     const tooltipWidth = tooltipElement ? tooltipElement.offsetWidth : 0;
 
-    const offsetX = 10;
+    const offsetX = 0;
     const offsetY = -tooltipHeight;
 
     const isRightSide = rect.right > window.innerWidth / 2;
@@ -39,7 +39,7 @@ export const useTooltipStore = defineStore("tooltip", () => {
     }
 
     if (left < 0) {
-      left = 10;
+      left = 0;
     }
 
     if (top < 0) {

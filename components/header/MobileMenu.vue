@@ -6,42 +6,42 @@
     :style="{ height: menuHeight }"
     class="mobile-menu overflow-hidden mx-auto mt-6 rounded-md transition-height duration-300 ease-in-out"
   >
-    <nav class="p-8 text-gray-30 text-sm text-shadow font-special">
+    <nav class="p-8 text-gray-30 text-sm text-shadow">
       <ol class="flex flex-col space-y-4 mb-4">
         <li>
           <a
             @click="props.toggleMenu"
-            href="#about"
+            href="#background"
             class="w-full inline-block bg-gray-100 rounded-lg p-2.5"
           >
-            About
+            Background
           </a>
         </li>
         <li>
           <a
             @click="props.toggleMenu"
-            href="#experience"
+            href="#achievments"
             class="w-full inline-block bg-gray-100 rounded-lg p-2.5"
           >
-            Experience
+            Achievments
           </a>
         </li>
         <li>
           <a
             @click="props.toggleMenu"
-            href="#work"
+            href="#collection"
             class="w-full inline-block bg-gray-100 rounded-lg p-2.5"
           >
-            Work
+            Collection
           </a>
         </li>
         <li>
           <a
             @click="props.toggleMenu"
-            href="#contact"
+            href="#mailbox"
             class="w-full inline-block bg-gray-100 rounded-lg p-2.5"
           >
-            Contact
+            Mailbox
           </a>
         </li>
       </ol>

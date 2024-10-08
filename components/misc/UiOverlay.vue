@@ -8,27 +8,29 @@
     leave-to-class="opacity-0"
   >
     <div v-for="(message, index) in uiOverlayStore.messages" :key="index">
-      <!-- Level-Up-Messages und Error-Messages -->
+      <!-- Level-Up-Messages -->
       <template v-if="message.type === 'level-up'">
         <div
-          class="objectives-header relative p-[2px] text-theme-color text-shadow"
+          class="objectives-header relative p-[2px] font-default text-theme-color text-shadow"
         >
           <div
             class="w-full flex flex-center flex-col p-2 bg-gradient-shadow-top"
           >
-            <p class="text-white-color text-sm">{{ message.text.title }}</p>
-            <p class="text-theme-color text-3xl">{{ message.text.content }}</p>
+            <p class="text-white text-sm">{{ message.text.title }}</p>
+            <p class="text-3xl">{{ message.text.content }}</p>
           </div>
         </div>
       </template>
-      <template v-if="message.type === 'notification'">
-        <!-- Standard Error-Messages -->
+      
+      <!-- Notification-Messages -->
+      <template v-else-if="message.type === 'notification' && typeof message.text === 'string'">
         <p class="text-shadow text-theme-color mt-2 select-none">
           {{ message.text }}
         </p>
       </template>
-      <template v-else>
-        <!-- Standard Error-Messages -->
+      
+      <!-- Standard Error-Messages -->
+      <template v-else-if="typeof message.text === 'string'">
         <p class="text-shadow text-notice-color mt-2 select-none">
           {{ message.text }}
         </p>
@@ -36,6 +38,7 @@
     </div>
   </transition-group>
 </template>
+
 
 <script setup>
 import { useUiOverlayStore } from "~/store/uiOverlay";

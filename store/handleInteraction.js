@@ -1,11 +1,11 @@
 // /store/handleInteraction.js
 import { defineStore } from "pinia";
 import { questItems } from "~/data/questItems.js";
+import { useTooltipStore } from "~/store/tooltip"; 
 import { useObjectivesStore } from "~/store/handleObjectives.js";
 import { useBackpackStore } from "~/store/backpack.js";
 import { SoundManager } from "~/utils/soundManager";
 
-// Gruß- und Abschiedssounds
 const npcGreetingSounds = new SoundManager([
   "/sounds/greetings/HumanMaleOfficialNPCGreeting01.ogg",
   "/sounds/greetings/HumanMaleOfficialNPCGreeting02.ogg",
@@ -22,18 +22,17 @@ const npcFarewellSounds = new SoundManager([
   "/sounds/farewells/HumanMaleOfficialNPCFarewell04.ogg",
 ]);
 
-// Interface Sounds (Quest Log öffnen/schließen, Quest aktivieren)
 const interfaceSounds = {
   questLogOpen: new SoundManager(["/sounds/interface/iQuestLogOpen.ogg"]),
   questLogClose: new SoundManager(["/sounds/interface/iQuestLogClose.ogg"]),
   questActivate: new SoundManager(["/sounds/interface/iQuestActivate.ogg"]),
   questComplete: new SoundManager(["/sounds/interface/iQuestComplete.ogg"]),
   characterSheetOpen: new SoundManager([
-    "/sounds/interface/uCharacterSheetOpen.ogg",
-  ]), // Neuer Sound für Charakterblatt öffnen
+    "/sounds/utils/uCharacterSheetOpen.ogg",
+  ]),
   characterSheetClose: new SoundManager([
-    "/sounds/interface/uCharacterSheetClose.ogg",
-  ]), // Neuer Sound für Charakterblatt schließen
+    "/sounds/utils/uCharacterSheetClose.ogg",
+  ]),
 };
 
 export const useQuestStore = defineStore("quest", {
@@ -61,7 +60,7 @@ export const useQuestStore = defineStore("quest", {
     // Verfügbare Quests, die nicht abgeschlossen sind
     availableQuests() {
       return questItems.filter((quest) => {
-        // Quest 3 nur anzeigen, wenn Quest 2 abgeschlossen ist (z.B. Quest-Kette)
+        // Quest 3 nur anzeigen, wenn Quest 2 abgeschlossen ist
         if (quest.id === 3 && !this.completedQuestIds.includes(2)) return false;
         return !this.completedQuestIds.includes(quest.id);
       });
@@ -70,23 +69,25 @@ export const useQuestStore = defineStore("quest", {
   actions: {
     startInteraction() {
       this.showQuests = true;
-      npcGreetingSounds.playNextSound(); // Spielt die NPC-Gruß-Sounds in Rotation ab
+      npcGreetingSounds.playNextSound();
     },
 
     closeInteraction() {
       const backpackStore = useBackpackStore();
+      const tooltipStore = useTooltipStore(); // Tooltip Store verwenden
 
-      // Quest mit ID 99 schließt den Rucksack und spielt den Character Sheet Close Sound ab
+      // Schließe das Tooltip, wenn die Interaktion endet
+      tooltipStore.hideTooltip();
+
       if (this.showQuestId === 99) {
         backpackStore.closeBackpack();
-        interfaceSounds.characterSheetClose.playNextSound(); // Sound für Charakterblatt schließen
+        interfaceSounds.characterSheetClose.playNextSound();
       }
 
-      // Nur den Quest-Log-Close-Sound abspielen, wenn showQuestId gesetzt und Quest vom Typ 'Objective' ist
       if (this.showQuestId !== null) {
         const quest = questItems.find((q) => q.id === this.showQuestId);
         if (quest && quest.type === "Objective") {
-          interfaceSounds.questLogClose.playNextSound(); // Sound für Quest Log schließen
+          interfaceSounds.questLogClose.playNextSound();
         }
       }
 
@@ -94,7 +95,6 @@ export const useQuestStore = defineStore("quest", {
       this.showQuests = false;
       this.showQuestId = null;
 
-      // Abschiedssound abspielen
       npcFarewellSounds.playNextSound();
     },
 
@@ -102,22 +102,20 @@ export const useQuestStore = defineStore("quest", {
       const backpackStore = useBackpackStore();
       this.showQuestId = id;
 
-      // Wenn die Quest die ID 99 hat, spiele den Character Sheet Open Sound
       if (id === 99) {
         backpackStore.openBackpack();
-        interfaceSounds.characterSheetOpen.playNextSound(); // Sound für Charakterblatt öffnen
+        interfaceSounds.characterSheetOpen.playNextSound();
       } else {
-        // Überprüfe, ob die Quest vom Typ 'Objective' ist, bevor der Sound abgespielt wird
         const quest = questItems.find((q) => q.id === id);
         if (quest && quest.type === "Objective") {
-          interfaceSounds.questLogOpen.playNextSound(); // Sound für Quest Log öffnen nur bei 'Objective' Quests
+          interfaceSounds.questLogOpen.playNextSound();
         }
       }
     },
 
     deselectQuest() {
       this.showQuestId = null;
-      interfaceSounds.questLogClose.playNextSound(); // Sound für Quest Log schließen
+      interfaceSounds.questLogClose.playNextSound();
     },
 
     acceptQuest(id) {
@@ -130,7 +128,7 @@ export const useQuestStore = defineStore("quest", {
           );
         }
 
-        interfaceSounds.questActivate.playNextSound(); // Sound für Quest aktivieren abspielen
+        interfaceSounds.questActivate.playNextSound();
       }
       const objectivesStore = useObjectivesStore();
       objectivesStore.addObjectiveByQuestId(id);

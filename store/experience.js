@@ -5,7 +5,7 @@ import { SoundManager } from "~/utils/soundManager";
 
 // Interface Sounds (für LevelUp Sound)
 const interfaceSounds = {
-  levelUp: new SoundManager(["/sounds/interface/LevelUp.ogg"]),
+  levelUp: new SoundManager(["/sounds/utils/LevelUp.ogg"]),
 };
 
 export const useExperienceStore = defineStore("experience", {

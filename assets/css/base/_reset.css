@@ -9,7 +9,7 @@ html {
   }
   
   body {
-    font-family: var(--main-font);
+    font-family: var(--primary-font);
     letter-spacing: 0.02rem;
     padding: 0;
     margin: 0;

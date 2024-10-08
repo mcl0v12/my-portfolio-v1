@@ -18,7 +18,7 @@
   opacity: 1;
 }
 
-.timeline-item::before {
+.timeline-mark {
   content: "";
   width: 40px;
   height: 40px;
@@ -28,21 +28,21 @@
   transform: translate(-50%, -50%);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   border-radius: 50%;
-  background-color: var(--theme-bg);
+  transition: background-color 300ms cubic-bezier(0.25, 0.1, 0.25, 1);
   background-size: 60% 60%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.timeline-item[data-icon="education"]::before {
+.timeline-mark[data-icon="education"] {
   background-image: url("/img/experience/graduate-cap.png");
 }
 
-.timeline-item[data-icon="work"]::before {
+.timeline-mark[data-icon="work"] {
   background-image: url("/img/experience/briefcase.png");
 }
 
-.timeline-item[data-icon="learning"]::before {
+.timeline-mark[data-icon="learning"] {
   background-image: url("/img/experience/notebook.png");
 }
 
@@ -52,14 +52,31 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
 }
 
+.timeline-item:nth-child(even) .timeline-content:hover::after,
+.timeline-item:nth-child(even)
+  .timeline-mark:hover
+  ~ .timeline-content::after {
+  border-right-color: var(--theme-bg--light);
+  border-left-color: var(--theme-bg--light);
+}
+
+.timeline-item:nth-child(odd) .timeline-content:hover::after,
+.timeline-item:nth-child(odd)
+  .timeline-mark:hover
+  ~ .timeline-content::after {
+  border-left-color: var(--theme-bg--light);
+  border-right-color: var(--theme-bg--light);
+}
+
 .timeline-content::after {
   content: "";
   position: absolute;
   top: 25%;
-  right: 100%;
+  right: 99.9%;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-right: 15px solid var(--theme-bg);
+  transition: border-color 300ms cubic-bezier(0.25, 0.1, 0.25, 1);
   filter: drop-shadow(-5px 0px 3px rgba(0, 0, 0, 0.4));
 }
 
@@ -132,16 +149,6 @@
     margin-right: 40px;
   }
 
-  .timeline-item[data-visible="true"]:nth-child(odd)::after {
-    animation: slideInFromLeft var(--animation-duration)
-      cubic-bezier(0, 0, 0.58, 1) forwards;
-  }
-
-  .timeline-item[data-visible="true"]:nth-child(even)::after {
-    animation: slideInFromRight var(--animation-duration)
-      cubic-bezier(0, 0, 0.58, 1) forwards;
-  }
-
   .timeline-item:nth-child(odd)[data-visible="true"] .timeline-content {
     animation: slideInFromLeft var(--animation-duration)
       cubic-bezier(0, 0, 0.58, 1) forwards;
@@ -157,21 +164,22 @@
     left: 0;
   }
 
-  .timeline-item::before {
+  .timeline-mark {
     left: 50%;
   }
 
   .timeline-item:nth-child(odd) .timeline-content::after {
-    left: 100%;
+    left: 99.9%;
     border-left: 15px solid var(--theme-bg);
     border-right: none;
     filter: drop-shadow(5px 0px 3px rgba(0, 0, 0, 0.4));
   }
 
   .timeline-item:nth-child(even) .timeline-content::after {
-    right: 100%;
+    right: 99.9%;
     border-right: 15px solid var(--theme-bg);
     border-left: none;
     filter: drop-shadow(-5px 0px 3px rgba(0, 0, 0, 0.4));
   }
+
 }
