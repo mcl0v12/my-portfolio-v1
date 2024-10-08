@@ -322,7 +322,6 @@ const handleSendMail = () => {
 
   if (contactFormRef.value && contactFormRef.value.submitForm) {
     contactFormRef.value.submitForm();
-    currencyStore.subtractCurrency(0, 0, 30);
   }
 };
 

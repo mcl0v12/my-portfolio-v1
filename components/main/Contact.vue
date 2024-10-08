@@ -35,9 +35,12 @@ import ContactModal from "~/components/main/contact-components/ContactModal.vue"
 
 import { useHandleMailStore } from "~/store/handleMail.js";
 import { useUiOverlayStore } from "~/store/uiOverlay";
+import { useCurrencyStore } from "~/store/currency.js";
 
 const mailStore = useHandleMailStore();
 const uiOverlayStore = useUiOverlayStore();
+const currencyStore = useCurrencyStore();
+
 const openMail = computed(() => mailStore.isModalOpen);
 const emailSuccess = computed(() => mailStore.emailSuccess);
 
@@ -55,11 +58,19 @@ watch(emailSuccess, (newValue) => {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
 
+    // Führe das Abziehen der Währung aus
+    currencyStore.subtractCurrency(0, 0, 30);
+
+    // Führe sendMail() aus, um den Sound abzuspielen
+    mailStore.sendMail();
+
+    // Setze das Formular zurück
     if (contactModalRef.value && contactModalRef.value.resetForm) {
       contactModalRef.value.resetForm();
     }
   }
 });
+
 
 const closeModalIfOutOfView = () => {
   mailStore.closeModal();
