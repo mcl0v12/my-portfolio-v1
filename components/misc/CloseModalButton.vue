@@ -36,7 +36,7 @@
       :height="scaledInnerHeight"
       xmlns="http://www.w3.org/2000/svg"
       :viewBox="innerViewBox"
-      class="inner-layer absolute top-0"
+      class="inner-layer absolute top-0 will-change-transform"
       :style="innerLayerStyle"
     >
       <path
@@ -152,7 +152,6 @@ const handleClick = (event) => {
 
 <style scoped>
 .inner-layer {
-  will-change: clip-path, transform, filter;
   color: var(--theme-color);
   background: var(--theme-gradient);
   clip-path: polygon(

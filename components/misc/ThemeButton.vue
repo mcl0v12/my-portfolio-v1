@@ -36,7 +36,7 @@
     <div
       :style="innerLayerStyle"
       :class="[
-        'inner-layer absolute top-0 left-0',
+        'inner-layer absolute top-0 will-change-transform',
         { 'inner-layer__disabled': disabled },
       ]"
     >
@@ -153,7 +153,6 @@ button:disabled {
 }
 
 .inner-layer {
-  will-change: transform;
   color: var(--theme-color);
   background: var(--theme-gradient);
   clip-path: polygon(

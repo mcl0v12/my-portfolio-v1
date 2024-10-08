@@ -33,8 +33,8 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'canonical', href: 'https://fabian-daume.com' },
         // Preload Fonts
-        { rel: 'preload', href: '/assets/fonts/MORPHEUS.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
-        { rel: 'preload', href: '/assets/fonts/friz-quadrata-regular.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+        { rel: 'preload', href: '/fonts/MORPHEUS.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+        { rel: 'preload', href: '/fonts/friz-quadrata-regular.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
       ],
       script: [
         { src: 'https://js.hcaptcha.com/1/api.js', async: true, defer: true },
@@ -48,16 +48,13 @@ export default defineNuxtConfig({
     },
     email: process.env.EMAIL,
     emailPassword: process.env.EMAIL_PASSWORD,
-
-    clientId: process.env.CLIENT_ID,  
-    clientSecret: process.env.CLIENT_SECRET, 
   },
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia',
   ],
   plugins: [
-    '~/plugins/photoswipe.client.js',
+  //  '~/plugins/photoswipe.client.js',
   ],
   compatibilityDate: '2024-08-03',
 });

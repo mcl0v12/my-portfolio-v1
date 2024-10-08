@@ -45,7 +45,7 @@
           :src="runGifUrl"
           draggable="false"
           alt="Running Animation"
-          class="scale-up-animation select-none"
+          class="scale-up-animation will-change-transform select-none"
         />
         <img
           v-show="currentState === 'finish'"
@@ -143,35 +143,5 @@
   </script>
   
   <style scoped>
-  .scale-up-animation {
-    animation: scaleUp 3s ease-in-out forwards;
-  }
-  
-  @keyframes scaleUp {
-    0% {
-      transform: scale(0.3);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  .onyxia-animation {
-    position: absolute;
-    top: 30%;
-    left: -500px;
-    transform: translateY(-50%);
-    width: 500px;
-    animation: flyAcross 3s linear forwards;
-  }
-  
-  @keyframes flyAcross {
-    0% {
-      left: -500px;
-    }
-    100% {
-      left: calc(100vw + 500px);
-    }
-  }
   </style>
   
