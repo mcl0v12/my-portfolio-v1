@@ -13,18 +13,13 @@
 import { onMounted, onBeforeUnmount, defineEmits } from "vue";
 import ThemeButton from "~/components/misc/ThemeButton.vue";
 
-import { useHandleMailStore } from "~/store/handleMail.js";
-
 const emit = defineEmits(["sendMail"]);
 
-const mailStore = useHandleMailStore();
-
 const cancelMail = () => {
-  mailStore.closeModal(); // Close Modal mit Sound
+  mailStore.closeModal();
 };
 
 const sendMail = () => {
-  mailStore.sendMail(); // Spiele den Coinflip Sound ab
   emit("sendMail");
 };
 
@@ -43,5 +38,4 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
