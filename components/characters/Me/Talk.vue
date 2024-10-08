@@ -75,6 +75,7 @@ const vendorResources = [
   "/img/empty-slot.png",
 ];
 
+
 // ClickLogoChallenge.vue
 const clickLogoChallengeResources = [
   "/img/questRewards/social-credit.png",

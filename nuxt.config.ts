@@ -32,6 +32,9 @@ export default defineNuxtConfig({
         { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#0a1e40' },
         { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'canonical', href: 'https://fabian-daume.com' },
+        // Preload Fonts
+        { rel: 'preload', href: '/assets/fonts/MORPHEUS.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+        { rel: 'preload', href: '/assets/fonts/friz-quadrata-regular.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
       ],
       script: [
         { src: 'https://js.hcaptcha.com/1/api.js', async: true, defer: true },

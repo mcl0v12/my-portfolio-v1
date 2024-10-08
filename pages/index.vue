@@ -1,7 +1,7 @@
 <!-- components/index.vue -->
 
 <template>
-  <Intro />
+  <Hero />
   <main>
     <Background />
     <Achievments />
@@ -11,19 +11,19 @@
 </template>
 
 <script setup>
-import { useHead } from '@vueuse/head'; // Verwende useHead, um body-Klassen zu setzen
+import { useHead } from '@vueuse/head'; 
 import { ref, onMounted } from "vue";
 
-import Intro from "~/components/main/Hero.vue";
+import Hero from "~/components/main/Hero.vue";
 import Background from "~/components/main/Background.vue";
 import Achievments from "~/components/main/Achievments.vue";
 import Work from "~/components/main/Work.vue";
 import Contact from "~/components/main/Contact.vue";
 
-// Setze die Klasse "overflow-hidden" standardmäßig beim Laden der Seite
+
 useHead({
   bodyAttrs: {
-    class: 'overflow-hidden' // Setze die Klasse, um Scrollen zu verhindern
+    class: 'overflow-hidden' 
   }
 });
 

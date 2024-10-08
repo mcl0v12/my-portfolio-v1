@@ -56,11 +56,10 @@ watch(emailSuccess, (newValue) => {
     mailStore.setEmailSuccess(false);
 
     currencyStore.subtractCurrency(0, 0, 30);
-    mailStore.sendMail();
+    mailStore.mailSend();
     mailStore.resetForm();
   }
 });
-
 
 const closeModalIfOutOfView = () => {
   mailStore.closeModal();

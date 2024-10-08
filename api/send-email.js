@@ -14,8 +14,6 @@ export default async (req, res) => {
   const { name, email, phone, subject, additionalInfo, recaptchaToken } =
     req.body;
 
-  console.log("Received recaptchaToken on server:", recaptchaToken);
-
   const hcaptchaSecretKey = process.env.HCAPTCHA_SECRET_KEY;
   console.log("HCAPTCHA_SECRET_KEY:", hcaptchaSecretKey);
 
@@ -37,7 +35,7 @@ export default async (req, res) => {
     console.log("hCaptcha Response:", hcaptchaData);
 
     if (!hcaptchaData.success) {
-      console.log("hCaptcha Error Codes:", hcaptchaData["error-codes"]); // Fügen Sie diese Zeile hinzu
+      console.log("hCaptcha Error Codes:", hcaptchaData["error-codes"]);
       return res.status(400).json({
         message: "Captcha validation failed.",
         "error-codes": hcaptchaData["error-codes"],
@@ -59,7 +57,7 @@ export default async (req, res) => {
   const mailOptions = {
     from: process.env.EMAIL,
     to: process.env.EMAIL,
-    subject: `New Request: ${subject}`, // Subject in Betreff einfügen
+    subject: `New Request: ${subject}`,
     text: `New contact details:
     Name: ${name}
     Email: ${email}
@@ -70,7 +68,6 @@ export default async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
     return res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending email:", error);

@@ -30,7 +30,6 @@ const hcaptchaRef = ref(null);
 const isLoading = ref(false);
 const formSubmitAttempted = ref(false);
 
-// Berechne die Gültigkeit des Formulars basierend auf dem Store
 const isFormValid = computed(() => {
   return (
     mailStore.name &&
@@ -40,7 +39,6 @@ const isFormValid = computed(() => {
   );
 });
 
-// Überwache die Gültigkeit des Formulars und aktualisiere sie im Store
 watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
