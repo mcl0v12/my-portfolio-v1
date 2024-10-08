@@ -58,13 +58,10 @@ watch(emailSuccess, (newValue) => {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
 
-    // Führe das Abziehen der Währung aus
     currencyStore.subtractCurrency(0, 0, 30);
 
-    // Führe sendMail() aus, um den Sound abzuspielen
     mailStore.sendMail();
 
-    // Setze das Formular zurück
     if (contactModalRef.value && contactModalRef.value.resetForm) {
       contactModalRef.value.resetForm();
     }

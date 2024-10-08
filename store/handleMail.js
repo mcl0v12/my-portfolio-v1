@@ -5,7 +5,7 @@ import { SoundManager } from "~/utils/soundManager";
 const modalSounds = {
   open: new SoundManager(["/sounds/interface/iQuestLogOpen.ogg"]),
   close: new SoundManager(["/sounds/interface/iQuestLogClose.ogg"]),
-  coinFlip: new SoundManager(["/sounds/interface/coinFlips.ogg"]), 
+  coinFlip: new SoundManager(["/sounds/utils/coinFlips.ogg"]), 
 };
 
 export const useHandleMailStore = defineStore("handleMail", {
