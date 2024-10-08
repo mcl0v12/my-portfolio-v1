@@ -30,7 +30,10 @@
         </svg>
 
         <img
-          v-show="currentState === 'stand' || (currentState === 'special' && !isSpecialGifLoaded)"
+          v-show="
+            currentState === 'stand' ||
+            (currentState === 'special' && !isSpecialGifLoaded)
+          "
           :src="standGifUrl"
           draggable="false"
           alt="standing"
@@ -124,12 +127,12 @@ const startAnimation = () => {
     currentState.value = "special";
     reloadGif(dynamicSpecialGifUrl, specialGifUrl);
     isSpecialGifLoaded.value = false;
-    playGif("stand", specialGifDuration);
   }
 };
 
 const onSpecialGifLoad = () => {
   isSpecialGifLoaded.value = true;
+  playGif("stand", specialGifDuration);
 };
 
 const playGif = (nextState, duration) => {
