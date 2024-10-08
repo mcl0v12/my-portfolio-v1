@@ -21,7 +21,7 @@
 
 <script setup>
 import { computed, onMounted } from 'vue';
-import Preloader from '~/components/preloader/Preloader.vue';
+import Preloader from '~/components/pre/Preloader.vue';
 import HeaderNav from '~/layouts/header-nav.vue';
 import UiOverlay from '~/components/misc/UiOverlay.vue';
 import ObjectivesTracker from '~/components/main/ObjectivesTracker.vue';
