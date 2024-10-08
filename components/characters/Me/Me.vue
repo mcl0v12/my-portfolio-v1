@@ -30,7 +30,7 @@
         </svg>
 
         <img
-          v-show="currentState === 'stand'"
+          v-show="currentState === 'stand' || (currentState === 'special' && !isSpecialGifLoaded)"
           :src="standGifUrl"
           draggable="false"
           alt="standing"
