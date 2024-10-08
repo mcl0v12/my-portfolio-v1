@@ -16,9 +16,8 @@
         />
       </div>
 
-      <ContactModal v-if="openMail" ref="contactModalRef" />
+      <ContactModal v-if="openMail" />
     </div>
-
   </section>
 </template>
 
@@ -44,8 +43,6 @@ const currencyStore = useCurrencyStore();
 const openMail = computed(() => mailStore.isModalOpen);
 const emailSuccess = computed(() => mailStore.emailSuccess);
 
-const contactModalRef = ref(null);
-
 const contactSection = ref(null);
 const observer = ref(null);
 
@@ -59,12 +56,8 @@ watch(emailSuccess, (newValue) => {
     mailStore.setEmailSuccess(false);
 
     currencyStore.subtractCurrency(0, 0, 30);
-
     mailStore.sendMail();
-
-    if (contactModalRef.value && contactModalRef.value.resetForm) {
-      contactModalRef.value.resetForm();
-    }
+    mailStore.resetForm();
   }
 });
 

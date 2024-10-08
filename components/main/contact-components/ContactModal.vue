@@ -102,7 +102,7 @@
                       type="text"
                       class="name_input"
                       placeholder="Your Name"
-                      v-model="name"
+                      v-model="mailStore.name"
                       @blur="validateNameOnBlur"
                     />
                   </div>
@@ -124,7 +124,7 @@
                       type="email"
                       class="email_input"
                       placeholder="Your E-Mail"
-                      v-model="email"
+                      v-model="mailStore.email"
                       @blur="validateEmail"
                     />
                   </div>
@@ -139,7 +139,7 @@
                       type="text"
                       class="subject_input"
                       placeholder="Subject"
-                      v-model="subject"
+                      v-model="mailStore.subject"
                       @blur="validateSubjectOnBlur"
                     />
                   </div>
@@ -157,9 +157,6 @@
                 >
                   <ContactForm
                     ref="contactFormRef"
-                    :name="name"
-                    :email="email"
-                    :subject="subject"
                   />
                 </div>
                 <div class="scrollbar-utils">
@@ -260,39 +257,29 @@ const currencyStore = useCurrencyStore();
 const uiOverlayStore = useUiOverlayStore();
 const mailStore = useHandleMailStore();
 
-const name = ref("");
-const subject = ref("");
-const email = ref("");
 const contactFormRef = ref(null);
 
 const resetForm = () => {
-  name.value = "";
-  email.value = "";
-  subject.value = "";
-
-  if (contactFormRef.value && contactFormRef.value.resetForm) {
-    contactFormRef.value.resetForm();
-  }
+  mailStore.setName("");
+  mailStore.setEmail("");
+  mailStore.setSubject("");
+  mailStore.setAdditionalInfo("");
 };
 
 const validateNameOnBlur = () => {
-  if (!name.value) {
+  if (!mailStore.name) {
     uiOverlayStore.showMessage("Please enter your name", 3000, "error");
   }
 };
 
 const validateEmail = () => {
-  if (!isValidEmail(email.value)) {
-    uiOverlayStore.showMessage(
-      "Please enter a valid email address",
-      3000,
-      "error"
-    );
+  if (!isValidEmail(mailStore.email)) {
+    uiOverlayStore.showMessage("Please enter a valid email address", 3000, "error");
   }
 };
 
 const validateSubjectOnBlur = () => {
-  if (!subject.value) {
+  if (!mailStore.subject) {
     uiOverlayStore.showMessage("Please enter a subject", 3000, "error");
   }
 };
@@ -475,10 +462,6 @@ onBeforeUnmount(() => {
   if (scrollContent.value) {
     scrollContent.value.removeEventListener("scroll", handleScroll);
   }
-});
-
-defineExpose({
-  resetForm,
 });
 </script>
 

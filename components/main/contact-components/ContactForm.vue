@@ -3,9 +3,10 @@
   <form @submit.prevent="submitForm" class="h-full flex flex-col px-5">
     <div class="flex-grow">
       <textarea
-        v-model="form.additionalInfo"
+        v-model="mailStore.additionalInfo"
         id="additional-info"
         rows="4"
+        placeholder="Write your message here"
       ></textarea>
     </div>
 
@@ -25,52 +26,31 @@ import { useHandleMailStore } from "~/store/handleMail.js";
 
 const mailStore = useHandleMailStore();
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  subject: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-});
-
-const form = ref({
-  additionalInfo: "",
-});
-
 const hcaptchaRef = ref(null);
 const isLoading = ref(false);
 const formSubmitAttempted = ref(false);
 
+// Berechne die Gültigkeit des Formulars basierend auf dem Store
 const isFormValid = computed(() => {
   return (
-    props.name && props.subject && props.email && form.value.additionalInfo
+    mailStore.name &&
+    mailStore.subject &&
+    mailStore.email &&
+    mailStore.additionalInfo
   );
 });
 
+// Überwache die Gültigkeit des Formulars und aktualisiere sie im Store
 watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
 
-const resetForm = () => {
-  form.value.additionalInfo = ""; // interne Daten zurücksetzen
-  formSubmitAttempted.value = false;
-};
-
 const sendFormData = async (recaptchaToken) => {
-  console.log("Sending recaptchaToken to server:", recaptchaToken);
-
   const formData = {
-    name: props.name,
-    subject: props.subject,
-    email: props.email,
-    additionalInfo: form.value.additionalInfo,
+    name: mailStore.name,
+    subject: mailStore.subject,
+    email: mailStore.email,
+    additionalInfo: mailStore.additionalInfo,
     recaptchaToken: recaptchaToken,
   };
 
@@ -110,7 +90,6 @@ const submitForm = async () => {
 
   try {
     isLoading.value = true;
-
     hcaptchaRef.value.execute();
   } catch (error) {
     console.error("hCaptcha execution failed", error);
@@ -119,14 +98,11 @@ const submitForm = async () => {
 };
 
 const onVerify = async (recaptchaToken) => {
-  console.log("Generated recaptchaToken:", recaptchaToken);
-
   await sendFormData(recaptchaToken);
 };
 
 defineExpose({
   submitForm,
-  resetForm,
 });
 </script>
 

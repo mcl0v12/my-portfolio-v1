@@ -83,8 +83,8 @@
   const onyxiaGifUrl = "/gif/preloader/onyxia.gif";
   const showOnyxia = ref(false);
   
-  const runGifDuration = 3000; /* 3000 */
-  const finishRunGifDuration = 3500; /* 3500 */
+  const runGifDuration = 10; /* 3000 */
+  const finishRunGifDuration = 10; /* 3500 */
   
   const fadeOut = ref(false);
   const hasInteracted = ref(false);
