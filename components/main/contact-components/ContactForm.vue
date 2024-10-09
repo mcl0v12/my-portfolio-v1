@@ -113,20 +113,4 @@ defineExpose({
 </script>
 
 <style scoped>
-.contenteditable-input {
-  width: 100%;
-  height: 100%;
-  font-family: var(--special-font);
-  font-size: 20px;
-  outline: none;
-  border: none;
-  padding: 0;
-  background: transparent;
-}
-.contenteditable-input:empty:before {
-  content: attr(placeholder);
-  color: var(--black);
-  opacity: 0.7;
-  cursor: text;
-}
 </style>
