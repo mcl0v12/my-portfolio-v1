@@ -1,4 +1,4 @@
-<!-- ~/components/header/MenuIcon.vue -->
+<!-- ~/components/header/Burger.vue -->
 <template>
   <div
     class="hr-lg:hidden fade-item"

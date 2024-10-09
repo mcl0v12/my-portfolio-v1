@@ -22,6 +22,7 @@ import Contact from "~/components/main/Contact.vue";
 
 
 useHead({
+  title: "Fabian Daume",
   bodyAttrs: {
     class: 'overflow-hidden' 
   }

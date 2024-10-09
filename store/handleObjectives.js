@@ -1,5 +1,7 @@
 // /store/handleObjectives.js
+
 import { defineStore } from "pinia";
+import { questData } from "~/data/questData.js";
 
 export const useObjectivesStore = defineStore("objectives", {
   state: () => ({
@@ -7,19 +9,13 @@ export const useObjectivesStore = defineStore("objectives", {
   }),
   actions: {
     addObjectiveByQuestId(id) {
-      if (id === 2) {
+      const quest = questData.find((q) => q.id === id && q.type === 'Objective');
+      if (quest && quest.objective) {
         this.addObjective({
-          name: "Logo Challenge",
-          progress: 0,
-          total: 10,
-          description: "Logo Clicked",
-        });
-      } else if (id === 3) {
-        this.addObjective({
-          name: "Logo Challenge x2",
-          progress: 0,
-          total: 20,
-          description: "Logo Clicked",
+          name: quest.title,
+          progress: quest.objective.progress,
+          total: quest.objective.total,
+          description: quest.objective.description,
         });
       }
       this.saveObjectives();

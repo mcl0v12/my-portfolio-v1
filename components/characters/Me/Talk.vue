@@ -57,6 +57,10 @@ import { useQuestStore } from "~/store/handleInteraction.js";
 import { iconPaths } from "~/data/questPaths.js";
 import { useModalLoader } from "~/composables/useModalLoader";
 
+import { defineEmits } from "vue";
+
+const emit = defineEmits(["update"]);
+
 import WhoAreYou from "~/components/quests/WhoAreYou.vue";
 import ClickLogoChallenge from "~/components/quests/ClickLogoChallenge.vue";
 import ExtremeClickLogoChallenge from "~/components/quests/ExtremeClickLogoChallenge.vue";

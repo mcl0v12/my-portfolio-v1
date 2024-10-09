@@ -1,4 +1,4 @@
-<!-- QuestButtons.vue -->
+<!-- CharacterButtons.vue -->
 <template>
   <div
     class="bottom-wrap w-full h-full flex justify-between items-center px-5 gap-4"
@@ -89,7 +89,7 @@ const isCompleteDisabled = computed(() => {
 
 const acceptQuest = () => {
   if (selectedQuest.value) {
-    questStore.acceptQuest(selectedQuest.value.id); // Quest zur Liste hinzufügen
+    questStore.acceptQuest(selectedQuest.value.id);
   }
 };
 

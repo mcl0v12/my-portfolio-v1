@@ -2,7 +2,7 @@
 
 <template>
   <Preloader />
-  <HeaderNav />
+  <Header />
   <NuxtPage />
 
   <UiOverlay />
@@ -22,7 +22,7 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import Preloader from "~/components/pre/Preloader.vue";
-import HeaderNav from "~/layouts/header-nav.vue";
+import Header from "~/layouts/header.vue";
 import UiOverlay from "~/components/misc/UiOverlay.vue";
 import ObjectivesTracker from "~/components/main/ObjectivesTracker.vue";
 import ExperienceBar from "~/components/misc/ExperienceBar.vue";

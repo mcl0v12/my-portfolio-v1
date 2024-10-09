@@ -1,5 +1,6 @@
+<!-- Disclaimer.vue -->
+
 <template>
-    <!-- Entfernt: <div v-if="!hasInteracted"> -->
     <img
       src="/img/alliance-logo.png"
       draggable="false"
@@ -15,8 +16,8 @@
             prevent a heart attack, I recommend checking your system audio
             before starting the intro.
           </p>
-          <p class="italic mt-1 space-lg">
-            Note: Sound starts playing after you click on somewhere on this page
+          <p class="text-sm mt-1 space-lg">
+            Note: Sound starts playing after you click on somewhere on this page.
           </p>
           <ThemeButton
             buttonText="Start Intro"

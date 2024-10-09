@@ -19,7 +19,6 @@
 }
 
 .timeline-mark {
-  content: "";
   width: 40px;
   height: 40px;
   position: absolute;
@@ -132,16 +131,18 @@
   }
 
   .timeline-item::after {
-    display: block;
+    height: 50px;
+    display: flex;
+    align-items: center;
     content: attr(timeline-text);
     position: absolute;
-    top: calc(25% + 5px);
+    top: calc(25% + -10px);
     font-size: 14px;
   }
 
   .timeline-item:nth-child(odd)::after {
     left: 50%;
-    margin-left: 40px;
+    margin-left: 50px;
   }
 
   .timeline-item:nth-child(even) {
@@ -151,7 +152,7 @@
   .timeline-item:nth-child(even)::after {
     right: 50%;
     left: auto;
-    margin-right: 40px;
+    margin-right: 50px;
   }
 
   .timeline-item:nth-child(odd)[data-visible="true"] .timeline-content {

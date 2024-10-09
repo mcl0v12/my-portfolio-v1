@@ -1,4 +1,4 @@
-// data/questData.js
+// /data/questData.js
 
 export const questData = [
   {
@@ -13,6 +13,11 @@ export const questData = [
     title: 'Logo Challenge',
     experience: 500,
     rewards: { gold: 1, silver: 50, copper: 20 },
+    objective: {
+      progress: 0,
+      total: 10,
+      description: 'Logo Clicked',
+    },
   },
   {
     id: 3,
@@ -20,6 +25,11 @@ export const questData = [
     title: 'Logo Challenge x2',
     experience: 500,
     rewards: { gold: 5, silver: 20, copper: 80 },
+    objective: {
+      progress: 0,
+      total: 20,
+      description: 'Logo Clicked',
+    },
   },
   {
     id: 99,

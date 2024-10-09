@@ -7,28 +7,32 @@
     @click="startProgress"
   >
     <img
-      v-if="currentState === 'closed'"
+      v-show="currentState === 'closed'"
       :src="closedPngUrl"
       draggable="false"
       alt="Chest closed"
+      @load="onImageLoad('closed')"
     />
     <img
-      v-if="currentState === 'opened'"
+      v-show="currentState === 'opened'"
       :src="openedPngUrl"
       draggable="false"
       alt="Chest opened"
+      @load="onImageLoad('opened')"
     />
     <img
-      v-if="currentState === 'opening'"
+      v-show="currentState === 'opening' && isOpeningGifLoaded"
       :src="dynamicOpeningGifUrl"
       draggable="false"
       alt="Chest opening"
+      @load="onOpeningGifLoad"
     />
     <img
-      v-if="currentState === 'closing'"
+      v-show="currentState === 'closing'"
       :src="closingGifUrl"
       draggable="false"
       alt="Chest closing"
+      @load="onImageLoad('closing')"
     />
   </div>
 
@@ -54,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, computed, watch } from "vue";
+import { ref, onBeforeUnmount, onMounted, watch } from "vue";
 import LootModal from "~/components/main/loot-components/LootModal.vue";
 import { lootItemsData } from "~/data/lootItems.js";
 import { useLootStore } from "~/store/loot.js";
@@ -69,10 +73,10 @@ const props = defineProps({
 const lootStore = useLootStore();
 const currentState = ref("closed");
 
-const closedPngUrl = "/gif/chest/closed.png";
-const openingGifUrl = "/gif/chest/open.gif";
-const openedPngUrl = "/gif/chest/opened.png";
-const closingGifUrl = "/gif/chest/close.gif";
+const closedPngUrl = "/chest/closed.png";
+const openingGifUrl = "/chest/open.gif";
+const openedPngUrl = "/chest/opened.png";
+const closingGifUrl = "/chest/close.gif";
 
 const dynamicOpeningGifUrl = ref(openingGifUrl);
 
@@ -83,6 +87,16 @@ const gifDuration = 1000;
 
 let gifTimeout = null;
 let animationFrame = null;
+
+// Lade-Status für Bilder
+const imageLoadStates = {
+  closed: ref(false),
+  opened: ref(false),
+  opening: ref(false),
+  closing: ref(false),
+};
+
+const isOpeningGifLoaded = ref(false);
 
 onMounted(() => {
   if (props.chestId && lootItemsData[props.chestId]) {
@@ -104,7 +118,7 @@ onMounted(() => {
 });
 
 const startProgress = () => {
-  if (showProgress.value) return;
+  if (showProgress.value || !imageLoadStates.closed.value) return;
 
   if (currentState.value === "closed") {
     showProgress.value = true;
@@ -127,6 +141,14 @@ const startProgress = () => {
     animationFrame = requestAnimationFrame(updateProgress);
     window.addEventListener("scroll", handleScrollCancel);
   }
+};
+
+const onImageLoad = (state) => {
+  imageLoadStates[state].value = true;
+};
+
+const onOpeningGifLoad = () => {
+  isOpeningGifLoaded.value = true;
 };
 
 const handleEscKey = (event) => {
@@ -160,6 +182,7 @@ const cancelProgressAnimation = () => {
 const playChestOpening = () => {
   currentState.value = "opening";
   reloadGif(dynamicOpeningGifUrl, openingGifUrl);
+  isOpeningGifLoaded.value = false; // Reset before loading
   playGif("opened", gifDuration);
   clearProgress();
 };

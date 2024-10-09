@@ -70,15 +70,19 @@ function handleTransitionEnd() {
 }
 
 function trackProgress() {
-  const logoChallengeId = 2;
-  const extremeLogoChallengeId = 3;
+  const quests = [
+    { id: 2, name: "Logo Challenge", total: 10 },
+    { id: 3, name: "Logo Challenge x2", total: 20 },
+  ];
 
-  if (questStore.acceptedQuestIds.includes(logoChallengeId)) {
-    updateQuestProgress("Logo Challenge", logoChallengeId, 10);
-  }
-
-  if (questStore.acceptedQuestIds.includes(extremeLogoChallengeId)) {
-    updateQuestProgress("Logo Challenge x2", extremeLogoChallengeId, 20);
+  for (const quest of quests) {
+    if (
+      questStore.acceptedQuestIds.includes(quest.id) &&
+      !questStore.taskCompletedIds.includes(quest.id)
+    ) {
+      updateQuestProgress(quest.name, quest.id, quest.total);
+      break;
+    }
   }
 }
 

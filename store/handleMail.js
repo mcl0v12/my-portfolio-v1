@@ -5,7 +5,7 @@ import { SoundManager } from "~/utils/soundManager";
 const modalSounds = {
   open: new SoundManager(["/sounds/interface/iQuestLogOpen.ogg"]),
   close: new SoundManager(["/sounds/interface/iQuestLogClose.ogg"]),
-  coinFlip: new SoundManager(["/sounds/utils/coinFlips.ogg"]), 
+  coinFlip: new SoundManager(["/sounds/utils/coinFlips.ogg"]),
 };
 
 export const useHandleMailStore = defineStore("handleMail", {
@@ -16,19 +16,19 @@ export const useHandleMailStore = defineStore("handleMail", {
     name: "",
     subject: "",
     email: "",
-    additionalInfo: "", 
+    additionalInfo: "",
   }),
   actions: {
     openModal() {
       this.isModalOpen = true;
-      modalSounds.open.playNextSound(); 
+      modalSounds.open.playNextSound();
     },
     closeModal() {
       if (this.isModalOpen) {
         this.isModalOpen = false;
         this.isFormValid = false;
         this.resetForm();
-        modalSounds.close.playNextSound(); 
+        modalSounds.close.playNextSound();
       }
     },
     setFormValidity(isValid) {
@@ -38,7 +38,7 @@ export const useHandleMailStore = defineStore("handleMail", {
       this.emailSuccess = success;
     },
     mailSend() {
-      modalSounds.coinFlip.playNextSound(); 
+      modalSounds.coinFlip.playNextSound();
       this.resetForm();
     },
     setName(name) {

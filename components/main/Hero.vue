@@ -42,7 +42,7 @@
             data-animation="enter-up"
           >
             <p class="text-gray-40">
-              A versatile developer who specializes in creating standout digital
+              A developer who specializes in creating standout digital
               experiences that are built to work for everyone.
               <!--   <a
               href="https://www.codieshub.com"

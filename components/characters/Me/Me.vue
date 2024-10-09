@@ -2,7 +2,7 @@
 
 <template>
   <div
-    style="transition-delay: 900ms"
+    style="transition-delay: 1000ms"
     class="max-w-stacked mx-auto speech-cursor fade-item"
     :ref="animationRef"
     data-animation="enter"

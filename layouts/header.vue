@@ -7,7 +7,7 @@
     >
       <div class="flex items-center space-x-10">
         <Logo />
-        <MenuIcon :isMenuOpen="isMenuOpen" @toggle="toggleMenu" />
+        <Burger :isMenuOpen="isMenuOpen" @toggle="toggleMenu" />
       </div>
 
       <DesktopNav />
@@ -15,7 +15,7 @@
       <Backpack />
     </div>
 
-    <MobileMenu :isMenuOpen="isMenuOpen" :toggleMenu="toggleMenu" />
+    <MobileNav :isMenuOpen="isMenuOpen" :toggleMenu="toggleMenu" />
 
     <div
       class="w-full h-full fixed inset-0 transition-background-color duration-300 ease-in-out bg-overlay z-[-1]"
@@ -31,8 +31,8 @@
 import Logo from "~/components/header/Logo.vue";
 import DesktopNav from "~/components/header/DesktopNav.vue";
 
-import MenuIcon from "~/components/header/MenuIcon.vue";
-import MobileMenu from "~/components/header/MobileMenu.vue";
+import Burger from "~/components/header/Burger.vue";
+import MobileNav from "~/components/header/MobileNav.vue";
 
 import Backpack from "~/components/header/Backpack.vue";
 

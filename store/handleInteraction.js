@@ -46,12 +46,12 @@ export const useQuestStore = defineStore("quest", {
     completedQuestIds: [],
   }),
   getters: {
-    // Alle 'Objective' Quests zählen
+    // count all 'Objective' quests
     totalObjectiveQuests() {
       return questData.filter((quest) => quest.type === "Objective").length;
     },
 
-    // Akzeptierte 'Objective' Quests zählen
+    // count accepted 'Objective' quests
     acceptedObjectiveQuests() {
       return this.acceptedQuestIds.filter((acceptedId) => {
         const quest = questData.find((q) => q.id === acceptedId);
@@ -59,21 +59,20 @@ export const useQuestStore = defineStore("quest", {
       }).length;
     },
 
-    // Verfügbare Quests, die nicht abgeschlossen sind
+    // character specific quests that arent completed
     availableQuests(state) {
       if (!state.currentCharacterId) return [];
-      
-      // Charakter-spezifische Quests abrufen
+
       const character = npcData[state.currentCharacterId];
       const characterQuestIds = character ? character.quests : [];
 
       return questData.filter((quest) => {
         if (!characterQuestIds.includes(quest.id)) return false;
-        if (quest.id === 3 && !state.completedQuestIds.includes(2)) return false;
+        if (quest.id === 3 && !state.completedQuestIds.includes(2))
+          return false;
         return !state.completedQuestIds.includes(quest.id);
       });
     },
-
   },
   actions: {
     startInteraction() {
@@ -103,7 +102,7 @@ export const useQuestStore = defineStore("quest", {
         }
       }
 
-      // Reset der Quest-Log- und UI-Zustände
+      // close Talk.vue and Quest Objectives
       this.showQuests = false;
       this.showQuestId = null;
 

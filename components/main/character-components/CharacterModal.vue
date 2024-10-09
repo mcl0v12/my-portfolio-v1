@@ -66,6 +66,7 @@
           ></polygon>
         </svg>
 
+        <!-- 'ElitePlayerFrame.vue ' or 'ModalImage.vue' -->
         <component
           :is="character.FrameComponent"
           :imageSrc="character.imageSrc"
@@ -107,6 +108,7 @@
                         : 'url(/img/quest-paper.png)',
                   }"
                 >
+                  <!-- Character 'Talk.vue' Component -->
                   <component
                     :is="character.TalkComponent"
                     @update="updateScrollButtons"

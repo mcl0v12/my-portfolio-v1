@@ -27,17 +27,17 @@
               :data-icon="item.icon"
             ></div>
             <div
-              class="timeline-content relative p-5 rounded-lg transition-background-color ease duration-300"
+              class="timeline-content relative p-5 space-y-3 rounded-lg transition-background-color ease duration-300"
               :style="{ animationDelay: `${index * 100}ms` }"
             >
-              <h3 class="text-theme-color font-normal pb-0.5">
+              <h3 class="text-theme-color font-normal">
                 {{ item.title }}
               </h3>
-              <p class="mt-3">
+              <p>
                 <strong>{{ item.subtitle }}</strong>
               </p>
-              <p class="text-gray-30 mt-3">{{ item.description }}</p>
-              <p class="md:hidden mt-3">{{ item.timelineText }}</p>
+              <p class="text-gray-30">{{ item.description }}</p>
+              <p class="md:hidden">{{ item.timelineText }}</p>
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import { timelineItems as timelineData } from "@/data/experienceData";
+import { timelineItems as timelineData } from "~/data/achievmentsData";
 import FishingPanda from "~/components/characters/FisherPo/FishingPanda.vue";
 
 const timelineItems = ref(timelineData);

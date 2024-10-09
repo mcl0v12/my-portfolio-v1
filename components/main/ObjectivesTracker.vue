@@ -31,14 +31,13 @@
         >
           <div class="status-indicator"></div>
           <div class="flex flex-col">
-            <p
-              class="text-theme-color mb-1"
-              :class="{ 'shimmer-effect': !playedAnimations.has(index) }"
-              @animationend="onAnimationEnd(index)"
-            >
+            <p class="text-theme-color mb-1">
               {{ objective.name }}
             </p>
-            <p>
+            <p v-if="objective.progress >= objective.total" class="text-gray-50">
+              Ready for turn-in
+            </p>
+            <p v-else>
               {{ objective.progress }}/{{ objective.total }}
               {{ objective.description }}
             </p>
@@ -72,6 +71,3 @@ const onAnimationEnd = (index) => {
   playedAnimations.value.add(index);
 };
 </script>
-
-<style scoped>
-</style>

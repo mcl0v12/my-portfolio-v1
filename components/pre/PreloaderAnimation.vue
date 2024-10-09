@@ -2,7 +2,10 @@
 
 <template>
   <div class="relative h-screen flex flex-center">
-    <Disclaimer v-if="!hasInteracted" @startInteraction="startInteraction" />
+    <Disclaimer
+      v-if="!hasInteracted && isLoaded"
+      @startInteraction="startInteraction"
+    />
 
     <!-- Animationen -->
     <div v-if="hasInteracted" class="max-w-lg">
@@ -37,11 +40,20 @@
 import { ref } from "vue";
 import { SoundManager } from "@/utils/soundManager";
 import Disclaimer from "~/components/pre/Disclaimer.vue";
-import { useTooltipStore } from "~/store/tooltip.js";
+
+import { useModalLoader } from "~/composables/useModalLoader";
+
+const resources = [
+  "/img/alliance-logo.png",
+  "/gif/preloader/palm.png",
+  "/gif/preloader/camel-stand.gif",
+];
+
+const { isLoaded } = useModalLoader(resources);
 
 const emit = defineEmits(["animationEnded"]);
-const tooltipStore = useTooltipStore();
 
+// Gif Logic
 const currentState = ref("run");
 const runGifUrl = "/gif/preloader/run.gif";
 const finishRunGifUrl = "/gif/preloader/finishRun.gif";
@@ -71,7 +83,6 @@ const soundManager = new SoundManager(footstepSounds);
 const startInteraction = () => {
   hasInteracted.value = true;
   startAnimation();
-  tooltipStore.hideTooltip();
 };
 
 const startAnimation = () => {
