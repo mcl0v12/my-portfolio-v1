@@ -1,6 +1,6 @@
 <!-- Contact.vue -->
 <template>
-  <section id="contact" ref="contactSection">
+  <section id="mailbox" ref="contactSection">
     <div
       class="max-w-base mx-auto px-base py-16 lg:py-24 text-white text-shadow leading-relaxed"
     >

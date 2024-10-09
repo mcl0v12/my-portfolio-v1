@@ -31,14 +31,14 @@
           message.type === 'notification' && typeof message.text === 'string'
         "
       >
-        <p class="text-shadow text-theme-color mt-2 select-none">
+        <p class="font-default text-shadow text-theme-color mt-2 select-none">
           {{ message.text }}
         </p>
       </template>
 
       <!-- Error-Messages -->
       <template v-else-if="typeof message.text === 'string'">
-        <p class="text-shadow text-notice-color mt-2 select-none">
+        <p class="font-default text-shadow text-notice-color mt-2 select-none">
           {{ message.text }}
         </p>
       </template>

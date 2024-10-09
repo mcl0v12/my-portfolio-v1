@@ -2,7 +2,6 @@
 
 <template>
     <div class="flex flex-center max-w-lg min-h-[600px] mx-auto cursor-pointer text-notice-color" @click="startAnimation">
-        <p class="whitespace-nowrap font-bold" >IN PROGRESS</p>
       <!-- Zeige das richtige Bild oder GIF basierend auf dem aktuellen Zustand -->
       <img v-show="currentState === 'fishing'" :src="fishingLoopUrl" draggable="false" alt="Fishing Panda" />
       <img v-show="currentState === 'stun'" :src="dynamicStunGifUrl" draggable="false" alt="Stunned Panda" />
