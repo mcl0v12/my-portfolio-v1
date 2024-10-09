@@ -54,10 +54,8 @@ watch(emailSuccess, (newValue) => {
   if (newValue) {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
-
     currencyStore.subtractCurrency(0, 0, 30);
     mailStore.mailSend();
-    mailStore.resetForm();
   }
 });
 

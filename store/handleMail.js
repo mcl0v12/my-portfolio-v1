@@ -39,6 +39,7 @@ export const useHandleMailStore = defineStore("handleMail", {
     },
     mailSend() {
       modalSounds.coinFlip.playNextSound(); 
+      this.resetForm();
     },
     setName(name) {
       this.name = name;
