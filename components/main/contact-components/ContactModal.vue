@@ -153,53 +153,43 @@
                 <div
                   class="scroll-content"
                   ref="scrollContent"
+                  @scroll="handleScroll"
                   style="background-image: url(/img/quest-paper.png)"
                 >
-                  <ContactForm
-                    ref="contactFormRef"
-                  />
+                  <ContactForm ref="contactFormRef" />
                 </div>
                 <div class="scrollbar-utils">
                   <div class="scrollbar-track">
-                    <button class="scroll-button up" @click="scrollUp">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 15l7-7 7 7"
-                        />
-                      </svg>
-                    </button>
+                    <button
+                      class="scroll-button up"
+                      @click="scrollUp"
+                      :style="{
+                        backgroundImage: `url(${
+                          showUpButton
+                            ? '/img/buttons/up-button--enabled.png'
+                            : '/img/buttons/up-button.png'
+                        })`,
+                      }"
+                    ></button>
 
                     <div
                       class="scrollbar-thumb"
                       ref="scrollbar"
                       @mousedown="startDrag"
+                      :style="{ transform: thumbTop }"
                     ></div>
 
-                    <button class="scroll-button down" @click="scrollDown">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+                    <button
+                      class="scroll-button down"
+                      @click="scrollDown"
+                      :style="{
+                        backgroundImage: `url(${
+                          showDownButton
+                            ? '/img/buttons/down-button--enabled.png'
+                            : '/img/buttons/down-button.png'
+                        })`,
+                      }"
+                    ></button>
                   </div>
                 </div>
               </div>
@@ -259,13 +249,6 @@ const mailStore = useHandleMailStore();
 
 const contactFormRef = ref(null);
 
-const resetForm = () => {
-  mailStore.setName("");
-  mailStore.setEmail("");
-  mailStore.setSubject("");
-  mailStore.setAdditionalInfo("");
-};
-
 const validateNameOnBlur = () => {
   if (!mailStore.name) {
     uiOverlayStore.showMessage("Please enter your name", 3000, "error");
@@ -274,7 +257,11 @@ const validateNameOnBlur = () => {
 
 const validateEmail = () => {
   if (!isValidEmail(mailStore.email)) {
-    uiOverlayStore.showMessage("Please enter a valid email address", 3000, "error");
+    uiOverlayStore.showMessage(
+      "Please enter a valid email address",
+      3000,
+      "error"
+    );
   }
 };
 
@@ -316,21 +303,13 @@ const closeModal = () => {
   mailStore.closeModal();
 };
 
-// Scrollbar Logic
-const scrollbar = ref(null);
-const scrollContent = ref(null);
-let isDragging = false;
-let startY = 0;
-let startScrollTop = 0;
-
-// Reactive variables
+// Polygon Logic
 const originalWidth = 450;
 const originalHeight = 600;
 const targetWidth = ref(450);
 const padding = 30;
-const uniqueId = "C";
+const uniqueId = "M";
 
-// Computed properties
 const cutCornersId = computed(() => `clip-${uniqueId}`);
 
 const scaleFactorX = computed(() => targetWidth.value / originalWidth);
@@ -389,19 +368,44 @@ const updateDimensions = () => {
   }
 };
 
+// Scrollbar Logic
+const scrollbar = ref(null);
+const scrollContent = ref(null);
+
+let isDragging = false;
+let startY = 0;
+let startScrollTop = 0;
+
+const showUpButton = ref(false);
+const showDownButton = ref(false);
+
+const updateScrollButtons = () => {
+  if (scrollContent.value) {
+    const containerHeight = scrollContent.value.clientHeight;
+    const contentHeight = scrollContent.value.scrollHeight;
+
+    showUpButton.value = scrollContent.value.scrollTop > 0;
+    showDownButton.value =
+      scrollContent.value.scrollTop + containerHeight < contentHeight;
+  }
+};
+
+const thumbTop = ref("translate3d(0, 0, 0)");
+
 const handleScroll = () => {
   if (scrollContent.value && scrollbar.value) {
     const containerHeight = scrollContent.value.clientHeight;
     const contentHeight = scrollContent.value.scrollHeight;
-    const thumbHeight = scrollbar.value.clientHeight;
     const trackHeight = scrollbar.value.parentElement.clientHeight;
+    const thumbHeight = 22;
 
     const maxThumbTop = trackHeight - thumbHeight;
     const scrollRatio =
       scrollContent.value.scrollTop / (contentHeight - containerHeight);
+    const translateY = scrollRatio * maxThumbTop;
 
-    const thumbTop = scrollRatio * maxThumbTop;
-    scrollbar.value.style.transform = `translate3d(0, ${thumbTop}px, 0)`;
+    thumbTop.value = `translate3d(0, ${translateY}px, 0)`;
+    updateScrollButtons();
   }
 };
 
@@ -409,12 +413,14 @@ const scrollUp = () => {
   if (scrollContent.value) {
     scrollContent.value.scrollTop -= 20;
   }
+  handleScroll();
 };
 
 const scrollDown = () => {
   if (scrollContent.value) {
     scrollContent.value.scrollTop += 20;
   }
+  handleScroll();
 };
 
 const startDrag = (event) => {
@@ -449,11 +455,12 @@ const stopDrag = () => {
 
 onMounted(() => {
   updateDimensions();
+  updateScrollButtons();
   nextTick(() => {
+    window.addEventListener("resize", updateDimensions);
     if (scrollContent.value) {
       scrollContent.value.addEventListener("scroll", handleScroll);
     }
-    window.addEventListener("resize", updateDimensions);
   });
 });
 

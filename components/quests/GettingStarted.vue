@@ -55,7 +55,7 @@
   
   import { useModalLoader } from "~/composables/useModalLoader";
   
-  import { questItems } from "~/data/questItems.js";
+  import { questData } from "~/data/questData.js";
   
   const resources = [
     "/img/questRewards/social-credit.png",
@@ -67,7 +67,7 @@
   const { isLoaded } = useModalLoader(resources);
   
   const questId = 5;
-  const quest = questItems.find((item) => item.id === questId);
+  const quest = questData.find((item) => item.id === questId);
   
   const rewards = [
     {

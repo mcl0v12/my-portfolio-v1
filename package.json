@@ -27,8 +27,6 @@
     "particles.js": "^2.0.0",
     "pinia": "^2.2.2",
     "postcss": "^8.4.41",
-    "photoswipe": "^5.4.4",
-    "swiper": "^11.1.9",
     "vue": "^3.2.47"
   },
   "devDependencies": {

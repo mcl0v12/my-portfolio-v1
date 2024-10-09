@@ -1,13 +1,16 @@
 <!-- ContactForm.vue -->
 <template>
-  <form @submit.prevent="submitForm" class="h-full flex flex-col px-5">
+  <form @submit.prevent="submitForm" class="flex flex-col px-5">
     <div class="flex-grow">
-      <textarea
-        v-model="mailStore.additionalInfo"
+      <!-- Anstelle des <textarea> -->
+      <div
         id="additional-info"
-        rows="4"
+        contenteditable="true"
+        class="contenteditable-input"
+        @input="updateAdditionalInfo"
+        @blur="updateAdditionalInfo"
         placeholder="Write your message here"
-      ></textarea>
+      ></div>
     </div>
 
     <VueHcaptcha
@@ -42,6 +45,11 @@ const isFormValid = computed(() => {
 watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
+
+// Funktion zum Speichern des Inhalts des contenteditable Divs
+const updateAdditionalInfo = (event) => {
+  mailStore.additionalInfo = event.target.innerText;
+};
 
 const sendFormData = async (recaptchaToken) => {
   const formData = {
@@ -104,4 +112,21 @@ defineExpose({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.contenteditable-input {
+  width: 100%;
+  height: 100%;
+  font-family: var(--special-font);
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+.contenteditable-input:empty:before {
+  content: attr(placeholder);
+  color: var(--black);
+  opacity: 0.7;
+  cursor: text;
+}
+</style>

@@ -53,14 +53,14 @@ import { defineProps } from "vue";
 import RewardBadge from "~/components/misc/RewardBadge.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 
-import { questItems } from "~/data/questItems.js";
+import { questData } from "~/data/questData.js";
 
 const props = defineProps({
   showQuestId: Number,
 });
 
 const questId = 2;
-const quest = questItems.find((item) => item.id === questId);
+const quest = questData.find((item) => item.id === questId);
 
 const rewards = [
   {

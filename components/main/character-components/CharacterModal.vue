@@ -1,7 +1,10 @@
 <!-- CharacterModal.vue -->
 
 <template>
-  <div v-if="isLoaded" class="fixed inset-0 flex justify-center items-center z-[2]">
+  <div
+    v-if="isLoaded"
+    class="fixed inset-0 flex justify-center items-center z-[2]"
+  >
     <div
       class="max-w-base w-full px-base relative flex justify-center hr:justify-start"
     >
@@ -63,7 +66,10 @@
           ></polygon>
         </svg>
 
-        <ElitePlayerFrame imageSrc="/img/char-profile.png" />
+        <component
+          :is="character.FrameComponent"
+          :imageSrc="character.imageSrc"
+        />
 
         <div
           :class="['absolute light-gradient-to-b top-0 left-0']"
@@ -76,7 +82,7 @@
                 <p
                   class="w-full text-sm text-theme-color text-shadow flex flex-center ml-[18vw] md:ml-[100px]"
                 >
-                 Grand Marshal Fabian
+                  {{ character.name }}
                 </p>
                 <CloseModalButton
                   :width="30"
@@ -93,6 +99,7 @@
                 <div
                   class="scroll-content"
                   ref="scrollContent"
+                  @scroll="handleScroll"
                   :style="{
                     backgroundImage:
                       showQuestId === 99
@@ -100,49 +107,43 @@
                         : 'url(/img/quest-paper.png)',
                   }"
                 >
-                  <MeTalk />
+                  <component
+                    :is="character.TalkComponent"
+                    @update="updateScrollButtons"
+                  />
                 </div>
                 <div class="scrollbar-utils">
                   <div class="scrollbar-track">
-                    <button class="scroll-button up" @click="scrollUp">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 15l7-7 7 7"
-                        />
-                      </svg>
-                    </button>
+                    <button
+                      class="scroll-button up"
+                      @click="scrollUp"
+                      :style="{
+                        backgroundImage: `url(${
+                          showUpButton
+                            ? '/img/buttons/up-button--enabled.png'
+                            : '/img/buttons/up-button.png'
+                        })`,
+                      }"
+                    ></button>
 
                     <div
                       class="scrollbar-thumb"
                       ref="scrollbar"
                       @mousedown="startDrag"
+                      :style="{ transform: thumbTop }"
                     ></div>
 
-                    <button class="scroll-button down" @click="scrollDown">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+                    <button
+                      class="scroll-button down"
+                      @click="scrollDown"
+                      :style="{
+                        backgroundImage: `url(${
+                          showDownButton
+                            ? '/img/buttons/down-button--enabled.png'
+                            : '/img/buttons/down-button.png'
+                        })`,
+                      }"
+                    ></button>
                   </div>
                 </div>
               </div>
@@ -161,14 +162,11 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import ElitePlayerFrame from "~/components/main/character-components/ElitePlayerFrame.vue";
-import CloseModalButton from "~/components/misc/CloseModalButton.vue";
 
+import CloseModalButton from "~/components/misc/CloseModalButton.vue";
 import CharacterButtons from "~/components/main/character-components/CharacterButtons.vue";
-import MeTalk from "~/components/characters/Me/Talk.vue";
 
 import { useModalLoader } from "~/composables/useModalLoader";
-
 import { useQuestStore } from "~/store/handleInteraction.js";
 
 const resources = [
@@ -176,32 +174,35 @@ const resources = [
   "/img/char-profile.png",
   "/img/quest-paper.png",
   "/svg/speechbubble.svg",
-  "/svg/vendor.svg"
+  "/svg/vendor.svg",
 ];
 
 const { isLoaded } = useModalLoader(resources);
+
+import { npcData } from "~/data/npcData";
+
+const props = defineProps({
+  characterId: {
+    type: String,
+  },
+});
+
+const character = npcData[props.characterId];
 
 const questStore = useQuestStore();
 const showQuestId = computed(() => questStore.showQuestId);
 
 const closeQuestModal = () => {
-  questStore.closeInteraction(); 
+  questStore.closeInteraction();
 };
 
-const scrollbar = ref(null);
-const scrollContent = ref(null);
-let isDragging = false;
-let startY = 0;
-let startScrollTop = 0;
-
-// Reactive variables
+// Polygon Logic
 const originalWidth = 450;
 const originalHeight = 600;
-const targetWidth = ref(450); 
-const padding = 30; 
-const uniqueId = "F"; 
+const targetWidth = ref(450);
+const padding = 30;
+const uniqueId = "C";
 
-// Computed properties
 const cutCornersId = computed(() => `clip-${uniqueId}`);
 
 const scaleFactorX = computed(() => targetWidth.value / originalWidth);
@@ -222,7 +223,7 @@ const wrapperStyle = computed(() => ({
 }));
 
 const topDivStyle = computed(() => ({
-  height: `80px`, 
+  height: `80px`,
 }));
 
 const contentDivStyle = computed(() => ({
@@ -249,13 +250,13 @@ const updateDimensions = () => {
   const isLandscape = screenWidth > screenHeight;
 
   if (screenWidth <= 767) {
-    // Skalierung basierend auf Bildschirmbreite für kleine Bildschirme
+    // Skalierung basierend auf Bildschirmbreite
     targetWidth.value = screenWidth - 2 * padding;
   } else if (screenWidth <= 1024) {
-    // Maximal 320px bei max-width: 1024px
+    // Maximal 420px
     targetWidth.value = Math.min(420, screenWidth - 2 * padding);
   } else {
-    // Standardbreite für größere Bildschirme
+    // Standardbreite
     targetWidth.value = 450;
   }
   // Anpassung im Querformat
@@ -264,19 +265,48 @@ const updateDimensions = () => {
   }
 };
 
+// Scrollbar Logic
+const scrollbar = ref(null);
+const scrollContent = ref(null);
+
+let isDragging = false;
+let startY = 0;
+let startScrollTop = 0;
+
+const showUpButton = ref(false);
+const showDownButton = ref(false);
+
+const updateScrollButtons = () => {
+  if (scrollContent.value) {
+    const containerHeight = scrollContent.value.clientHeight;
+    const contentHeight = scrollContent.value.scrollHeight;
+
+    showUpButton.value = scrollContent.value.scrollTop > 0;
+    showDownButton.value =
+      scrollContent.value.scrollTop + containerHeight < contentHeight;
+  }
+};
+
+onUpdated(() => {
+  updateScrollButtons();
+});
+
+const thumbTop = ref("translate3d(0, 0, 0)");
+
 const handleScroll = () => {
   if (scrollContent.value && scrollbar.value) {
     const containerHeight = scrollContent.value.clientHeight;
     const contentHeight = scrollContent.value.scrollHeight;
-    const thumbHeight = scrollbar.value.clientHeight;
     const trackHeight = scrollbar.value.parentElement.clientHeight;
+    const thumbHeight = 22;
 
     const maxThumbTop = trackHeight - thumbHeight;
     const scrollRatio =
       scrollContent.value.scrollTop / (contentHeight - containerHeight);
+    const translateY = scrollRatio * maxThumbTop;
 
-    const thumbTop = scrollRatio * maxThumbTop;
-    scrollbar.value.style.transform = `translate3d(0, ${thumbTop}px, 0)`;
+    thumbTop.value = `translate3d(0, ${translateY}px, 0)`;
+    updateScrollButtons();
   }
 };
 
@@ -284,12 +314,14 @@ const scrollUp = () => {
   if (scrollContent.value) {
     scrollContent.value.scrollTop -= 20;
   }
+  handleScroll();
 };
 
 const scrollDown = () => {
   if (scrollContent.value) {
     scrollContent.value.scrollTop += 20;
   }
+  handleScroll();
 };
 
 const startDrag = (event) => {
@@ -324,6 +356,7 @@ const stopDrag = () => {
 
 onMounted(() => {
   updateDimensions();
+  updateScrollButtons();
   nextTick(() => {
     if (scrollContent.value) {
       scrollContent.value.addEventListener("scroll", handleScroll);

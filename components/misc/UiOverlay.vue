@@ -3,11 +3,14 @@
   <transition-group
     class="w-full max-w-lg px-base fixed top-[15%] left-1/2 -translate-x-1/2 text-center z-[1000]"
     tag="div"
-    leave-active-class="transition-opacity ease duration-500"
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
   >
-    <div v-for="(message, index) in uiOverlayStore.messages" :key="index">
+    <div
+      v-for="(message, index) in uiOverlayStore.messages"
+      :key="index"
+      class="transition-opacity ease duration-500 opacity-100"
+    >
       <!-- Level-Up-Messages -->
       <template v-if="message.type === 'level-up'">
         <div
@@ -33,7 +36,7 @@
         </p>
       </template>
 
-      <!-- Standard Error-Messages -->
+      <!-- Error-Messages -->
       <template v-else-if="typeof message.text === 'string'">
         <p class="text-shadow text-notice-color mt-2 select-none">
           {{ message.text }}

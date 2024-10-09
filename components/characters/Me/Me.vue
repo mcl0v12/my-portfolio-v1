@@ -57,7 +57,7 @@ import { animationObserver } from "~/composables/useIntersectionObserver";
 
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { iconPaths } from "~/data/questPaths.js";
-import { questItems } from "~/data/questItems.js";
+import { questData } from "~/data/questData.js";
 
 const questStore = useQuestStore();
 
@@ -70,7 +70,7 @@ const getLargeIconPaths = () => {
   const completedQuests = questStore.completedQuestIds;
 
   // Finde die aktive Quest (akzeptiert, aber nicht abgeschlossen)
-  const activeQuest = questItems.find(
+  const activeQuest = questData.find(
     (quest) =>
       acceptedQuests.includes(quest.id) && !completedQuests.includes(quest.id)
   );

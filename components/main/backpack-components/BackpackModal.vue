@@ -33,7 +33,6 @@
               <stop offset="100%" stop-color="#444444" stop-opacity="1" />
             </linearGradient>
 
-            <!-- General Clip-Path for all corners -->
             <clipPath :id="cutCornersId">
               <polygon
                 :points="
@@ -72,7 +71,6 @@
           patternId="backpackPattern"
         />
 
-        <!-- Wrapper for Top, Content, and Bottom Elements -->
         <div
           :class="['absolute light-gradient-to-b top-0 left-0']"
           :style="wrapperStyle"
@@ -156,14 +154,13 @@ const gold = computed(() => currencyStore.gold);
 const silver = computed(() => currencyStore.silver);
 const copper = computed(() => currencyStore.copper);
 
-// Reactive variables
+// Polygon Logic
 const originalWidth = 400;
 const originalHeight = 600;
-const targetWidth = ref(400); // Default width for non-mobile screens
-const padding = 20; // Padding for mobile screens
-const uniqueId = "B"; // Static ID
+const targetWidth = ref(400);
+const padding = 20;
+const uniqueId = "B";
 
-// Computed properties
 const cutCornersId = computed(() => `clip-${uniqueId}`);
 
 const scaleFactorX = computed(() => targetWidth.value / originalWidth);
@@ -184,7 +181,7 @@ const wrapperStyle = computed(() => ({
 }));
 
 const topDivStyle = computed(() => ({
-  height: `37px`, // Feste Höhe von 37px
+  height: `37px`,
 }));
 
 const contentDivStyle = computed(() => ({
@@ -210,10 +207,8 @@ const updateDimensions = () => {
   const screenHeight = window.innerHeight;
   const isLandscape = screenWidth > screenHeight;
 
-  // Feste Breite für alle Bildschirme
-  targetWidth.value = 230; // Setze eine feste Breite
+  targetWidth.value = 230;
 
-  // Anpassung im Querformat
   if (isLandscape && screenWidth <= 1024) {
     targetWidth.value = Math.min(250, screenWidth - 2 * padding);
   }
@@ -230,12 +225,4 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.content-wrap {
-  height: 100%;
-  padding: 2rem 0.5rem 1rem;
-  background-image: url(/img/blackish-bg.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
 </style>

@@ -29,7 +29,7 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   transition: background-color 300ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  background-size: 60% 60%;
+  background-size: 50% 50%;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -117,9 +117,14 @@
     cubic-bezier(0, 0, 0.58, 1) forwards;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .timeline-text {
     display: none;
+  }
+
+  .timeline-mark {
+    width: 50px;
+    height: 50px;
   }
 
   .timeline-container::before {

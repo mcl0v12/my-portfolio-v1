@@ -1,7 +1,6 @@
-// data/questItems.js
-import { iconPaths } from '~/data/questPaths.js';
+// data/questData.js
 
-export const questItems = [
+export const questData = [
   {
     id: 1,
     type: 'Talk',

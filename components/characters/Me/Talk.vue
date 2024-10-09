@@ -1,4 +1,4 @@
-<!-- Talk.vue -->
+<!-- /Me/Talk.vue -->
 <template>
   <p v-if="!showQuestId" class="px-4 mb-3">Hi, how can I help you?</p>
 
@@ -75,7 +75,6 @@ const vendorResources = [
   "/img/empty-slot.png",
 ];
 
-
 // ClickLogoChallenge.vue
 const clickLogoChallengeResources = [
   "/img/questRewards/social-credit.png",
@@ -116,6 +115,10 @@ const showQuest = (quest) => {
     questStore.showQuest(quest.id);
   }
 };
+
+onMounted(() => {
+  questStore.setCharacterId("fabian");
+});
 
 const isTaskCompleted = (questId) => {
   return questStore.taskCompletedIds.includes(questId);

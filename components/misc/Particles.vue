@@ -1,7 +1,7 @@
 <!-- /components/misc/Particles.vue -->
 
 <template>
-  <div class="w-[300px] h-[300px] md:w-[350px] md:h-[350px] relative">
+  <div class="w-[300px] h-[300px] md:w-[400px] md:h-[400px] relative">
     <div
       v-for="(imageSrc, index) in filteredImages"
       :key="index"

@@ -27,6 +27,7 @@ export const useHandleMailStore = defineStore("handleMail", {
       if (this.isModalOpen) {
         this.isModalOpen = false;
         this.isFormValid = false;
+        this.resetForm();
         modalSounds.close.playNextSound(); 
       }
     },

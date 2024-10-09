@@ -41,7 +41,7 @@
 import { computed } from "vue";
 import ThemeButton from "~/components/misc/ThemeButton.vue";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
-import { questItems } from "~/data/questItems.js";
+import { questData } from "~/data/questData.js";
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { useExperienceStore } from "~/store/experience.js";
 import { useCurrencyStore } from "~/store/currency.js";
@@ -57,7 +57,7 @@ const copper = computed(() => currencyStore.copper);
 // Zugriff auf die ausgewählte Quest basierend auf der ID im Store
 const selectedQuest = computed(() => {
   return questStore.showQuestId
-    ? questItems.find((quest) => quest.id === questStore.showQuestId)
+    ? questData.find((quest) => quest.id === questStore.showQuestId)
     : null;
 });
 

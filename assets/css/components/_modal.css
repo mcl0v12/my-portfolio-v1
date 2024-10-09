@@ -1,3 +1,14 @@
+.content-wrap {
+  height: 100%;
+  padding: 2rem 0.5rem 1rem;
+  background-image: url(/img/blackish-bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* --- */
+
 .element-wrap {
   width: calc(100% - 7px);
   height: calc(100% - 7px);
@@ -26,7 +37,7 @@
 .scroll-content {
   width: calc(100% - 40px);
   padding: 1.25rem 0 2.5rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   color: var(--black);
   font-family: var(--default-font);
   font-size: 15px;
@@ -75,6 +86,7 @@
   border-radius: 4px;
   background-color: var(--gray-80);
   cursor: pointer;
+  transition: transform 0.1s ease;
 }
 
 .scroll-button {
@@ -82,12 +94,17 @@
   height: 22px;
   width: 100%;
   border-radius: 4px;
-  background-color: var(--gray-80);
+  border: 1px solid var(--black);
+  background-color: #424142;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
+
 .scroll-button.up {
   top: -29px;
 }

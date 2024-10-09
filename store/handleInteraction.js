@@ -1,7 +1,8 @@
 // /store/handleInteraction.js
 import { defineStore } from "pinia";
-import { questItems } from "~/data/questItems.js";
-import { useTooltipStore } from "~/store/tooltip"; 
+import { questData } from "~/data/questData.js";
+import { npcData } from "~/data/npcData.js";
+import { useTooltipStore } from "~/store/tooltip";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
 import { useBackpackStore } from "~/store/backpack.js";
 import { SoundManager } from "~/utils/soundManager";
@@ -37,6 +38,7 @@ const interfaceSounds = {
 
 export const useQuestStore = defineStore("quest", {
   state: () => ({
+    currentCharacterId: null,
     showQuests: false,
     showQuestId: null,
     acceptedQuestIds: [],
@@ -46,25 +48,32 @@ export const useQuestStore = defineStore("quest", {
   getters: {
     // Alle 'Objective' Quests zählen
     totalObjectiveQuests() {
-      return questItems.filter((quest) => quest.type === "Objective").length;
+      return questData.filter((quest) => quest.type === "Objective").length;
     },
 
     // Akzeptierte 'Objective' Quests zählen
     acceptedObjectiveQuests() {
       return this.acceptedQuestIds.filter((acceptedId) => {
-        const quest = questItems.find((q) => q.id === acceptedId);
+        const quest = questData.find((q) => q.id === acceptedId);
         return quest && quest.type === "Objective";
       }).length;
     },
 
     // Verfügbare Quests, die nicht abgeschlossen sind
-    availableQuests() {
-      return questItems.filter((quest) => {
-        // Quest 3 nur anzeigen, wenn Quest 2 abgeschlossen ist
-        if (quest.id === 3 && !this.completedQuestIds.includes(2)) return false;
-        return !this.completedQuestIds.includes(quest.id);
+    availableQuests(state) {
+      if (!state.currentCharacterId) return [];
+      
+      // Charakter-spezifische Quests abrufen
+      const character = npcData[state.currentCharacterId];
+      const characterQuestIds = character ? character.quests : [];
+
+      return questData.filter((quest) => {
+        if (!characterQuestIds.includes(quest.id)) return false;
+        if (quest.id === 3 && !state.completedQuestIds.includes(2)) return false;
+        return !state.completedQuestIds.includes(quest.id);
       });
     },
+
   },
   actions: {
     startInteraction() {
@@ -72,11 +81,14 @@ export const useQuestStore = defineStore("quest", {
       npcGreetingSounds.playNextSound();
     },
 
+    setCharacterId(characterId) {
+      this.currentCharacterId = characterId;
+    },
+
     closeInteraction() {
       const backpackStore = useBackpackStore();
-      const tooltipStore = useTooltipStore(); // Tooltip Store verwenden
+      const tooltipStore = useTooltipStore();
 
-      // Schließe das Tooltip, wenn die Interaktion endet
       tooltipStore.hideTooltip();
 
       if (this.showQuestId === 99) {
@@ -85,7 +97,7 @@ export const useQuestStore = defineStore("quest", {
       }
 
       if (this.showQuestId !== null) {
-        const quest = questItems.find((q) => q.id === this.showQuestId);
+        const quest = questData.find((q) => q.id === this.showQuestId);
         if (quest && quest.type === "Objective") {
           interfaceSounds.questLogClose.playNextSound();
         }
@@ -106,7 +118,7 @@ export const useQuestStore = defineStore("quest", {
         backpackStore.openBackpack();
         interfaceSounds.characterSheetOpen.playNextSound();
       } else {
-        const quest = questItems.find((q) => q.id === id);
+        const quest = questData.find((q) => q.id === id);
         if (quest && quest.type === "Objective") {
           interfaceSounds.questLogOpen.playNextSound();
         }
@@ -144,7 +156,7 @@ export const useQuestStore = defineStore("quest", {
             JSON.stringify(this.taskCompletedIds)
           );
         }
-        const quest = questItems.find((quest) => quest.id === id);
+        const quest = questData.find((quest) => quest.id === id);
         if (quest) quest.completed = false;
       }
     },
@@ -160,10 +172,9 @@ export const useQuestStore = defineStore("quest", {
         }
 
         const objectivesStore = useObjectivesStore();
-        const quest = questItems.find((q) => q.id === id);
+        const quest = questData.find((q) => q.id === id);
         if (quest) objectivesStore.removeObjective(quest.title);
 
-        // Sound für Quest Abschluss abspielen
         interfaceSounds.questComplete.playNextSound();
 
         this.deselectQuest();
@@ -188,7 +199,7 @@ export const useQuestStore = defineStore("quest", {
         if (savedCompletedQuests) this.completedQuestIds = savedCompletedQuests;
 
         this.completedQuestIds.forEach((completedId) => {
-          const quest = questItems.find((q) => q.id === completedId);
+          const quest = questData.find((q) => q.id === completedId);
           if (quest) quest.completed = true;
         });
       }

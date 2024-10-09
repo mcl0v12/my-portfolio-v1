@@ -85,17 +85,17 @@
           }"
         />
       </div>
-      <IntroCharacter ref="introCharacter" />
+      <Me ref="fabian" />
     </div>
   </section>
-  <CharacterModal v-if="showQuests" />
+  <CharacterModal v-if="showQuests" characterId="fabian" />
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 
 import ThemeButton from "~/components/misc/ThemeButton.vue";
-import IntroCharacter from "~/components/characters/Me/Me.vue";
+import Me from "~/components/characters/Me/Me.vue";
 import CharacterModal from "~/components/main/character-components/CharacterModal.vue";
 import { useQuestStore } from "~/store/handleInteraction.js";
 
@@ -118,13 +118,13 @@ const animationRef = (el) => {
 
 animationObserver([intersectionItems]);
 
-const introCharacter = ref(null);
+const fabian = ref(null);
 
 const startInteraction = () => {
   rootMargin.value = "-25%";
 
-  if (introCharacter.value && introCharacter.value.startAnimation) {
-    introCharacter.value.startAnimation();
+  if (fabian.value && fabian.value.startAnimation) {
+    fabian.value.startAnimation();
   }
 };
 
