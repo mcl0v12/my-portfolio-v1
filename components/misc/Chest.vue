@@ -6,10 +6,12 @@
     class="cursor-pointer"
     @click="startProgress"
   >
+    <!-- Opening Video (startet per Klick) -->
     <video
       ref="openingVideo"
-      v-show="currentState === 'opening'"
+      v-show="currentState === 'opening' && isOpeningVideoLoaded"
       src="/chest/open-chest.webm"
+      @loadeddata="onOpeningVideoLoad"
       @ended="onOpeningVideoEnd"
       draggable="false"
       playsinline
@@ -17,10 +19,12 @@
       :controls="false"
     ></video>
 
+    <!-- Closing Video (startet nach dem Schließen des Loot Modals) -->
     <video
       ref="closingVideo"
-      v-show="currentState === 'closing'"
+      v-show="currentState === 'closing' && isClosingVideoLoaded"
       src="/chest/close-chest.webm"
+      @loadeddata="onClosingVideoLoad"
       @ended="onClosingVideoEnd"
       draggable="false"
       playsinline
@@ -60,6 +64,9 @@ let animationFrame = null;
 const openingVideo = ref(null);
 const closingVideo = ref(null);
 
+const isOpeningVideoLoaded = ref(false);
+const isClosingVideoLoaded = ref(false);
+
 let modalOpenedInitially = false;
 let openVideoFullyPlayed = false;
 
@@ -68,20 +75,16 @@ onMounted(() => {
     lootStore.initializeLoot(props.chestId, lootItemsData[props.chestId]);
   }
 
-  // Watch für das Schließen des Modals
   watch(
     () => lootStore.openModals[props.chestId],
     (isModalOpen, previousModalOpen) => {
       if (isModalOpen) {
         modalOpenedInitially = true;
-        // Füge Event Listener hinzu
         window.addEventListener("scroll", handleScrollCancel);
         window.addEventListener("keydown", handleEscKey);
       } else if (previousModalOpen && !isModalOpen) {
-        // Entferne Event Listener bei Modal-Schließung
         window.removeEventListener("scroll", handleScrollCancel);
         window.removeEventListener("keydown", handleEscKey);
-        
         if (modalOpenedInitially && openVideoFullyPlayed) {
           playChestClosing();
         }
@@ -114,8 +117,12 @@ const startProgress = () => {
 };
 
 const handleEscKey = (event) => {
-  if (event.key === "Escape" && lootStore.openModals[props.chestId]) {
-    lootStore.closeLootModal(props.chestId);
+  if (event.key === "Escape") {
+    if (lootStore.openModals[props.chestId]) {
+      lootStore.closeLootModal(props.chestId);
+    } else {
+      clearProgress();
+    }
   }
 };
 
@@ -139,15 +146,27 @@ const cancelProgressAnimation = () => {
 };
 
 const playChestOpening = () => {
-  currentState.value = "opening";
-  showProgress.value = false;
-  openVideoFullyPlayed = false;
-  openingVideo.value.play();
+  if (isOpeningVideoLoaded.value) {
+    currentState.value = "opening";
+    showProgress.value = false;
+    openVideoFullyPlayed = false;
+    openingVideo.value.play();
+  }
 };
 
 const playChestClosing = () => {
-  currentState.value = "closing";
-  closingVideo.value.play();
+  if (isClosingVideoLoaded.value) {
+    currentState.value = "closing";
+    closingVideo.value.play();
+  }
+};
+
+const onOpeningVideoLoad = () => {
+  isOpeningVideoLoaded.value = true;
+};
+
+const onClosingVideoLoad = () => {
+  isClosingVideoLoaded.value = true;
 };
 
 const onOpeningVideoEnd = () => {
