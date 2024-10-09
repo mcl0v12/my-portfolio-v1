@@ -2,14 +2,14 @@
 <template>
   <form @submit.prevent="submitForm" class="flex flex-col px-5">
     <div class="flex-grow">
-      <!-- Anstelle des <textarea> -->
-      <div
+        <div
         id="additional-info"
         contenteditable="true"
         class="contenteditable-input"
         @input="updateAdditionalInfo"
         @blur="updateAdditionalInfo"
         placeholder="Write your message here"
+        ref="additionalInfo"
       ></div>
     </div>
 
@@ -46,9 +46,14 @@ watch(isFormValid, (newValue) => {
   mailStore.setFormValidity(newValue);
 });
 
-// Funktion zum Speichern des Inhalts des contenteditable Divs
 const updateAdditionalInfo = (event) => {
   mailStore.additionalInfo = event.target.innerText;
+};
+
+const resetAdditionalInfo = () => {
+  if (additionalInfoRef.value) {
+    additionalInfoRef.value.innerText = "";
+  }
 };
 
 const sendFormData = async (recaptchaToken) => {
@@ -109,6 +114,7 @@ const onVerify = async (recaptchaToken) => {
 
 defineExpose({
   submitForm,
+  resetAdditionalInfo,
 });
 </script>
 
