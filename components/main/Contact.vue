@@ -50,6 +50,8 @@ const openModal = () => {
   mailStore.openModal();
 };
 
+const contactFormRef = ref(null);
+
 const mailSendAndReset = () => {
   mailStore.mailSend();
   contactFormRef.value.resetAdditionalInfo();
