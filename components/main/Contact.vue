@@ -50,19 +50,12 @@ const openModal = () => {
   mailStore.openModal();
 };
 
-const contactFormRef = ref(null);
-
-const mailSendAndReset = () => {
-  mailStore.mailSend();
-  contactFormRef.value.resetAdditionalInfo();
-};
-
 watch(emailSuccess, (newValue) => {
   if (newValue) {
     uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
     currencyStore.subtractCurrency(0, 0, 30);
-    mailSendAndReset();
+    mailStore.mailSend();
   }
 });
 

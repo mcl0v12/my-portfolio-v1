@@ -9,7 +9,6 @@
         @input="updateAdditionalInfo"
         @blur="updateAdditionalInfo"
         placeholder="Write your message here"
-        ref="additionalInfo"
       ></div>
     </div>
 
@@ -48,12 +47,6 @@ watch(isFormValid, (newValue) => {
 
 const updateAdditionalInfo = (event) => {
   mailStore.additionalInfo = event.target.innerText;
-};
-
-const resetAdditionalInfo = () => {
-  if (additionalInfoRef.value) {
-    additionalInfoRef.value.innerText = "";
-  }
 };
 
 const sendFormData = async (recaptchaToken) => {
@@ -114,7 +107,6 @@ const onVerify = async (recaptchaToken) => {
 
 defineExpose({
   submitForm,
-  resetAdditionalInfo,
 });
 </script>
 

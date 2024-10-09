@@ -59,6 +59,11 @@ export const useHandleMailStore = defineStore("handleMail", {
       this.email = "";
       this.additionalInfo = "";
       this.isFormValid = false;
+
+      const additionalInfoDiv = document.getElementById("additional-info");
+      if (additionalInfoDiv) {
+        additionalInfoDiv.innerText = "";
+      }
     },
   },
 });

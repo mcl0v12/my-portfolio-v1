@@ -156,7 +156,7 @@
                   @scroll="handleScroll"
                   style="background-image: url(/img/quest-paper.png)"
                 >
-                  <ContactForm ref="contactFormRef" />
+                <ContactForm ref="contactFormRef" />
                 </div>
                 <div class="scrollbar-utils">
                   <div class="scrollbar-track">
