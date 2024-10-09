@@ -1,22 +1,21 @@
 <!-- /components/misc/Chest.vue -->
 
 <template>
-  <div
-    style="width: 300px; height: 300px"
-    class="cursor-pointer"
-    @click="startProgress"
-  >
+  <div style="width: 300px; height: 300px">
     <!-- Opening Video (startet per Klick) -->
     <video
       ref="openingVideo"
       v-show="currentState === 'opening' && isOpeningVideoLoaded"
       src="/chest/open-chest.webm"
+      @click="startProgress"
       @loadeddata="onOpeningVideoLoad"
       @ended="onOpeningVideoEnd"
       draggable="false"
       playsinline
       muted
       :controls="false"
+      preload="auto"
+      class="cursor-pointer"
     ></video>
 
     <!-- Closing Video (startet nach dem Schließen des Loot Modals) -->
@@ -29,6 +28,7 @@
       draggable="false"
       playsinline
       muted
+      preload="auto"
       :controls="false"
     ></video>
   </div>
@@ -177,7 +177,7 @@ const onClosingVideoLoad = () => {
 };
 
 const onOpeningVideoEnd = () => {
-  openVideoFullyPlayed = true; 
+  openVideoFullyPlayed = true;
 
   if (lootStore.openModals[props.chestId]) {
     lootStore.openLootModal(props.chestId);
