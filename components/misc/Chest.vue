@@ -75,6 +75,13 @@ onMounted(() => {
     lootStore.initializeLoot(props.chestId, lootItemsData[props.chestId]);
   }
 
+  if (openingVideo.value) {
+    openingVideo.value.load();
+  }
+  if (closingVideo.value) {
+    closingVideo.value.load();
+  }
+
   watch(
     () => lootStore.openModals[props.chestId],
     (isModalOpen, previousModalOpen) => {
@@ -170,7 +177,7 @@ const onClosingVideoLoad = () => {
 };
 
 const onOpeningVideoEnd = () => {
-  openVideoFullyPlayed = true;
+  openVideoFullyPlayed = true; 
 
   if (lootStore.openModals[props.chestId]) {
     lootStore.openLootModal(props.chestId);
