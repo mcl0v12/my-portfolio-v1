@@ -4,7 +4,7 @@
   <!-- Opening Video -->
   <video
     ref="openingVideo"
-    v-if="currentState === 'opening' && !isClosingTriggered"
+    v-if="currentState === 'opening' || (currentState === 'closing' && !isClosingVideoLoaded)"
     class="cursor-pointer"
     src="/webm/chest/open.webm"
     @click="startProgressBar"
@@ -14,12 +14,16 @@
     preload="auto"
     :controls="false"
     disablePictureInPicture
+    loop
+    autoplay
+    muted
   ></video>
 
   <!-- Closing Video -->
   <video
     ref="closingVideo"
-    v-if="currentState === 'closing' && isClosingTriggered"
+    v-if="currentState === 'closing'"
+    v-show="isClosingVideoLoaded"
     src="/webm/chest/close.webm"
     @ended="onClosingVideoEnd"
     @loadeddata="onClosingVideoLoad"
@@ -143,14 +147,18 @@ const startClosingSequence = async () => {
   isClosingTriggered.value = true;
   currentState.value = "closing";
   await nextTick();
-  if (isClosingVideoLoaded.value && closingVideo.value) {
-    playLootClosing();
+  if (closingVideo.value) {
+    closingVideo.value.load();
   }
 };
 
-const playLootClosing = () => {
-  if (isClosingVideoLoaded.value && closingVideo.value) {
-    closingVideo.value.currentTime = 0;
+const onOpeningVideoLoad = () => {
+  isOpeningVideoLoaded.value = true;
+};
+
+const onClosingVideoLoad = () => {
+  isClosingVideoLoaded.value = true;
+  if (currentState.value === "closing" && closingVideo.value) {
     requestAnimationFrame(() => {
       closingVideo.value.play();
     });
@@ -167,19 +175,6 @@ const onClosingVideoEnd = async () => {
   await nextTick();
 };
 
-const onOpeningVideoLoad = () => {
-  isOpeningVideoLoaded.value = true;
-};
-
-const onClosingVideoLoad = () => {
-  isClosingVideoLoaded.value = true;
-  if (currentState.value === "closing") {
-    requestAnimationFrame(() => {
-      closingVideo.value.play();
-    });
-  }
-};
-
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScrollCancel);
   window.removeEventListener("scroll", clearProgress);
@@ -193,3 +188,5 @@ onBeforeUnmount(() => {
   }
 });
 </script>
+
+<style scoped></style>

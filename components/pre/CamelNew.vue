@@ -65,7 +65,7 @@ const playSpecialAnimation = async () => {
     await nextTick();
 
     if (specialVideo.value) {
-      specialVideo.value.load(); // Lade das Video, um sicherzustellen, dass es bereit ist
+      specialVideo.value.load();
     }
   }
 };
