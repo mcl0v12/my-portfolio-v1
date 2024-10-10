@@ -1,23 +1,28 @@
-// /store/experience.js
+// /store/experience.ts
 import { defineStore } from "pinia";
 import { useUiOverlayStore } from "~/store/uiOverlay";
 import { SoundManager } from "~/utils/soundManager";
 
-// Interface Sounds (für LevelUp Sound)
+interface ExperienceState {
+  currentExperience: number;
+  experienceToLevel: number;
+  level: number;
+}
+
 const interfaceSounds = {
   levelUp: new SoundManager(["/sounds/utils/LevelUp.ogg"]),
 };
 
 export const useExperienceStore = defineStore("experience", {
-  state: () => ({
+  state: (): ExperienceState => ({
     currentExperience: 0,
     experienceToLevel: 1000,
     level: 1,
   }),
   actions: {
-    addExperience(amount) {
+    addExperience(amount: number) {
       this.currentExperience += amount;
-      if (import.meta.client) {
+      if (import.meta.env.SSR === false) {
         localStorage.setItem(
           "currentExperience",
           JSON.stringify(this.currentExperience)
@@ -34,10 +39,10 @@ export const useExperienceStore = defineStore("experience", {
         }, 1000);
       }
     },
-    levelUp(overflow) {
+    levelUp(overflow: number) {
       this.level += 1;
       this.currentExperience = overflow;
-      if (import.meta.client) {
+      if (import.meta.env.SSR === false) {
         localStorage.setItem(
           "currentExperience",
           JSON.stringify(this.currentExperience)
@@ -45,10 +50,8 @@ export const useExperienceStore = defineStore("experience", {
         localStorage.setItem("level", JSON.stringify(this.level));
       }
 
-      // Spiele den LevelUp-Sound ab
       interfaceSounds.levelUp.playNextSound();
 
-      // Zeige Level-Up-Nachricht
       const uiOverlayStore = useUiOverlayStore();
       uiOverlayStore.showMessage(
         {
@@ -62,13 +65,13 @@ export const useExperienceStore = defineStore("experience", {
       this.processLevelUp();
     },
     loadExperience() {
-      if (import.meta.client) {
+      if (import.meta.env.SSR === false) {
         const savedExperience = JSON.parse(
-          localStorage.getItem("currentExperience")
+          localStorage.getItem("currentExperience") || "0"
         );
-        const savedLevel = JSON.parse(localStorage.getItem("level"));
-        if (savedExperience !== null) this.currentExperience = savedExperience;
-        if (savedLevel !== null) this.level = savedLevel;
+        const savedLevel = JSON.parse(localStorage.getItem("level") || "1");
+        this.currentExperience = savedExperience;
+        this.level = savedLevel;
       }
     },
     resetExperience() {

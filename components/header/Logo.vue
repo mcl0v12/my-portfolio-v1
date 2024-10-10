@@ -41,7 +41,7 @@
 import { ref } from "vue";
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
-import { useExperienceStore } from "~/store/experience.js";
+import { useExperienceStore } from "~/store/experience";
 
 import { animationObserver } from "~/composables/useIntersectionObserver";
 

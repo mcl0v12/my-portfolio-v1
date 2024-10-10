@@ -28,7 +28,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { useExperienceStore } from '~/store/experience.js';
+import { useExperienceStore } from '~/store/experience';
 
 const experienceStore = useExperienceStore();
 const currentExperience = computed(() => experienceStore.currentExperience);
@@ -42,7 +42,7 @@ const noTransition = ref(false);
 
 watch(currentExperience, (newVal) => {
   if (newVal === 0) {
-    // Level-Up passiert, setze Transition auf 0 % sofort
+    // setze Transition auf 0 % sofort nach level up
     noTransition.value = true;
     fillPercentage.value = 0;
   } else {

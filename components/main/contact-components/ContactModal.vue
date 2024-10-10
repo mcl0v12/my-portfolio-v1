@@ -3,7 +3,7 @@
 <template>
   <div
     v-if="isLoaded"
-    class="fixed inset-0 flex justify-center items-center z-[2]"
+    class="fixed inset-0 flex justify-center items-center z-[900]"
   >
     <div
       class="max-w-base w-full px-base relative flex justify-center hr:justify-start"
@@ -230,7 +230,7 @@ import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 import { useModalLoader } from "~/composables/useModalLoader";
 
 import { useUiOverlayStore } from "~/store/uiOverlay";
-import { useCurrencyStore } from "~/store/currency.js";
+import { useCurrencyStore } from "~/store/currency";
 import { useHandleMailStore } from "~/store/handleMail.js";
 
 const resources = [

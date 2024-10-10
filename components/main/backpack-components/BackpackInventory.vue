@@ -5,34 +5,43 @@
       <ItemBadge
         :size="50"
         :overlayScale="1"
-        :imageUrl="slot.imageUrl || '/img/empty-slot.png'"
+        :imageUrl="slot?.imageUrl || '/img/empty-slot.png'"
         :gradientId="index"
-        :gradientTopColor="getGradientColor(slot.rarity, 'top', !!slot.id)"
-        :gradientMidColor="getGradientColor(slot.rarity, 'mid', !!slot.id)"
-        :gradientBottomColor="
-          getGradientColor(slot.rarity, 'bottom', !!slot.id)
+        :gradientTopColor="
+          getGradientColor(slot?.rarity, 'top', slot?.id !== null)
         "
-        @click="slot.id ? handleItemClick(slot, index) : null"
-        @mouseenter="slot.id ? handleMouseEnter($event, slot) : null"
+        :gradientMidColor="
+          getGradientColor(slot?.rarity, 'mid', slot?.id !== null)
+        "
+        :gradientBottomColor="
+          getGradientColor(slot?.rarity, 'bottom', slot?.id !== null)
+        "
+        @click="slot && slot.id !== null ? handleItemClick(slot, index) : null"
+        @mouseenter="
+          slot && slot.id !== null ? handleMouseEnter($event, slot) : null
+        "
         @mouseleave="handleMouseLeave"
         :class="{
-          'cursor-buy': isQuest99Active && slot.vendor?.sellPrice,
-          'cursor-pointer': !isQuest99Active && slot.vendor?.sellPrice,
+          'cursor-buy':
+            slot?.id !== null && isQuest99Active && slot?.vendor?.sellPrice,
+          'cursor-pointer':
+            slot?.id !== null && !isQuest99Active && slot?.vendor?.sellPrice,
         }"
       />
     </template>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
-import { useBackpackStore } from "~/store/backpack.js";
-import { useQuestStore } from "~/store/handleInteraction.js";
-import { useCurrencyStore } from "~/store/currency.js";
-import { useOnUseItemEffectsStore } from "~/store/onUseItemEffects.js";
-import ItemBadge from "~/components/misc/ItemBadge.vue";
-import { useTooltipStore } from "~/store/tooltip.js";
+import { useBackpackStore } from "~/store/backpack";
+import { useCurrencyStore } from "~/store/currency";
+import { useQuestStore } from "~/store/handleInteraction";
+import { useOnUseItemEffectsStore } from "~/store/onUseItemEffects";
+import { useTooltipStore } from "~/store/tooltip";
 import { useRarityColors } from "~/composables/useRarityColors";
+import ItemBadge from "~/components/misc/ItemBadge.vue";
+import type { BackpackItem } from "~/store/backpack";
 
 const backpackStore = useBackpackStore();
 const questStore = useQuestStore();
@@ -41,17 +50,17 @@ const tooltipStore = useTooltipStore();
 const { getColorFromRarity, getGradientColor } = useRarityColors();
 const onUseItemEffectsStore = useOnUseItemEffectsStore();
 
-const filledSlots = computed(() => {
-  return backpackStore.items.concat(
-    Array(16 - backpackStore.items.length).fill({ id: null })
-  );
-});
+const filledSlots = computed<(BackpackItem | null)[]>(
+  () => backpackStore.items
+);
 
 const isQuest99Active = computed(() => questStore.showQuestId === 99);
 
-const handleItemClick = (slot, index) => {
-  if (isQuest99Active.value && slot.vendor && slot.vendor.sellPrice) {
-    const { gold, silver, copper } = slot.vendor.sellPrice;
+const handleItemClick = (slot: BackpackItem, index: number) => {
+  if (!slot.id) return;
+
+  if (isQuest99Active.value && slot.vendor?.sellPrice) {
+    const { gold = 0, silver = 0, copper = 0 } = slot.vendor.sellPrice;
     currencyStore.addCurrency(gold, silver, copper, "sell");
     backpackStore.replaceItemWithEmpty(index);
     tooltipStore.hideTooltip();
@@ -60,15 +69,16 @@ const handleItemClick = (slot, index) => {
   }
 };
 
-const handleMouseEnter = (event, slot) => {
-  const titleColor = getColorFromRarity(slot.rarity);
+const handleMouseEnter = (event: MouseEvent, slot: BackpackItem) => {
+  if (!slot.id) return;
 
+  const titleColor = getColorFromRarity(slot.rarity);
   tooltipStore.showTooltip(event, {
     title: slot.title,
     description: slot.description,
     titleColor,
     descriptionColor: slot.descriptionColor,
-    sellPrice: slot.vendor?.sellPrice || null,
+    sellPrice: slot.vendor?.sellPrice,
   });
 };
 
@@ -77,4 +87,4 @@ const handleMouseLeave = () => {
 };
 </script>
 
-<style></style>
+<style scoped></style>

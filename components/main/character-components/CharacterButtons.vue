@@ -40,11 +40,12 @@
 <script setup>
 import { computed } from "vue";
 import ThemeButton from "~/components/misc/ThemeButton.vue";
+import { useCurrencyStore } from "~/store/currency";
+import { useExperienceStore } from "~/store/experience";
+
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 import { questData } from "~/data/questData.js";
 import { useQuestStore } from "~/store/handleInteraction.js";
-import { useExperienceStore } from "~/store/experience.js";
-import { useCurrencyStore } from "~/store/currency.js";
 
 const questStore = useQuestStore();
 const experienceStore = useExperienceStore();

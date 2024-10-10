@@ -40,12 +40,14 @@ import BackpackModal from "~/components/main/backpack-components/BackpackModal.v
 import ProgressBar from "~/components/misc/ProgressBar.vue";
 import LootModal from "~/components/main/loot-components/LootModal.vue";
 
-import { useExperienceStore } from "~/store/experience.js";
+
+import { useBackpackStore } from "~/store/backpack";
+import { useCurrencyStore } from "~/store/currency";
+import { useExperienceStore } from "~/store/experience";
+
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { useProgressBarStore } from "~/store/progressBar.js";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
-import { useBackpackStore } from "~/store/backpack.js";
-import { useCurrencyStore } from "~/store/currency.js";
 import { useOnUseItemEffectsStore } from "~/store/onUseItemEffects.js";
 import { useLootStore } from "~/store/loot.js";
 import { lootItemsData } from "~/data/lootItems.js";

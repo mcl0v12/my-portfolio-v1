@@ -2,9 +2,10 @@
 import { defineStore } from "pinia";
 import { questData } from "~/data/questData.js";
 import { npcData } from "~/data/npcData.js";
+import { useBackpackStore } from "~/store/backpack";
+
 import { useTooltipStore } from "~/store/tooltip";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
-import { useBackpackStore } from "~/store/backpack.js";
 import { SoundManager } from "~/utils/soundManager";
 
 const npcGreetingSounds = new SoundManager([

@@ -3,7 +3,7 @@
 <template>
   <div
     v-if="isLoaded"
-    class="fixed bottom-[20px] right-[20px] flex justify-center items-center z-[2]"
+    class="fixed bottom-[20px] right-[20px] flex justify-center items-center z-[900]"
   >
     <div class="relative flex justify-center hr:justify-end">
       <div
@@ -130,8 +130,8 @@ import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 
 import { useModalLoader } from "~/composables/useModalLoader";
 
-import { useBackpackStore } from "~/store/backpack.js";
-import { useCurrencyStore } from "~/store/currency.js";
+import { useBackpackStore } from "~/store/backpack";
+import { useCurrencyStore } from "~/store/currency";
 
 const resources = [
   "/img/blackish-bg.png",
@@ -158,7 +158,7 @@ const copper = computed(() => currencyStore.copper);
 const originalWidth = 400;
 const originalHeight = 600;
 const targetWidth = ref(400);
-const padding = 20;
+// const padding = 20;
 const uniqueId = "B";
 
 const cutCornersId = computed(() => `clip-${uniqueId}`);
@@ -203,15 +203,7 @@ const scalePoints = (points) => {
 };
 
 const updateDimensions = () => {
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  const isLandscape = screenWidth > screenHeight;
-
   targetWidth.value = 230;
-
-  if (isLandscape && screenWidth <= 1024) {
-    targetWidth.value = Math.min(250, screenWidth - 2 * padding);
-  }
 };
 
 onMounted(() => {

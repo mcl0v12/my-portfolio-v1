@@ -10,6 +10,7 @@ export const onUseItems = [
     type: "wand",
     vendor: {
       costs: { gold: 1, silver: 30 },
+      sellPrice: { gold: 1, silver: 0, copper: 0 },
       quantity: 1,
       requiredLevel: 2,
     },

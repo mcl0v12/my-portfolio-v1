@@ -43,7 +43,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted } from "vue";
 import { useTooltipStore } from "~/store/tooltip.js";
-import { useExperienceStore } from "~/store/experience.js";
+import { useExperienceStore } from "~/store/experience";
 import CurrencyDisplay from "~/components/main/CurrencyDisplay.vue";
 
 const tooltipStore = useTooltipStore();

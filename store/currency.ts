@@ -1,20 +1,37 @@
-// /store/currency.js
+// /store/currency.ts
 import { defineStore } from "pinia";
 import { SoundManager } from "~/utils/soundManager";
 
-const currencyLargeSound = new SoundManager(['/sounds/pick-up/LootCoinLarge.ogg']);
-const currencySmallSound = new SoundManager(['/sounds/pick-up/LootCoinSmall.ogg']);
-const coinFlipSound = new SoundManager(['/sounds/utils/coinFlips.ogg']); 
+const currencyLargeSound = new SoundManager([
+  "/sounds/pick-up/LootCoinLarge.ogg",
+]);
+const currencySmallSound = new SoundManager([
+  "/sounds/pick-up/LootCoinSmall.ogg",
+]);
+const coinFlipSound = new SoundManager(["/sounds/utils/coinFlips.ogg"]);
+
+interface CurrencyState {
+  gold: number;
+  silver: number;
+  copper: number;
+}
+
+type ContextType = "default" | "quest" | "sell" | "loot";
 
 export const useCurrencyStore = defineStore("currency", {
-  state: () => ({
+  state: (): CurrencyState => ({
     gold: 0,
     silver: 0,
     copper: 0,
   }),
 
   actions: {
-    addCurrency(g, s, c, context = "default") {
+    addCurrency(
+      g: number,
+      s: number,
+      c: number,
+      context: ContextType = "default"
+    ) {
       this.copper += c;
       this.silver += s;
       this.gold += g;
@@ -29,9 +46,6 @@ export const useCurrencyStore = defineStore("currency", {
       }
 
       // Spiele Sound basierend auf dem Kontext ab
-      // quest = CharacterButtons.vue
-      // sell = BackpackInventory.vue
-      // loot = LootItems.vue
       if (context === "quest" || context === "sell") {
         currencyLargeSound.playNextSound();
       } else if (context === "loot") {
@@ -41,7 +55,7 @@ export const useCurrencyStore = defineStore("currency", {
       this.saveCurrency();
     },
 
-    subtractCurrency(g, s, c) {
+    subtractCurrency(g: number, s: number, c: number) {
       this.copper -= c;
       this.silver -= s;
       this.gold -= g;
@@ -72,11 +86,14 @@ export const useCurrencyStore = defineStore("currency", {
     },
 
     loadCurrency() {
-      const savedCurrency = JSON.parse(localStorage.getItem("currency"));
+      const savedCurrency = localStorage.getItem("currency");
       if (savedCurrency) {
-        this.gold = savedCurrency.gold || 0;
-        this.silver = savedCurrency.silver || 0;
-        this.copper = savedCurrency.copper || 0;
+        const parsedCurrency = JSON.parse(
+          savedCurrency
+        ) as Partial<CurrencyState>;
+        this.gold = parsedCurrency.gold || 0;
+        this.silver = parsedCurrency.silver || 0;
+        this.copper = parsedCurrency.copper || 0;
       }
     },
   },

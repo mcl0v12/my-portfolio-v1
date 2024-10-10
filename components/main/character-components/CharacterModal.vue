@@ -3,7 +3,7 @@
 <template>
   <div
     v-if="isLoaded"
-    class="fixed inset-0 flex justify-center items-center z-[2]"
+    class="fixed inset-0 flex justify-center items-center z-[900]"
   >
     <div
       class="max-w-base w-full px-base relative flex justify-center hr:justify-start"

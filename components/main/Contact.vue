@@ -34,7 +34,7 @@ import ContactModal from "~/components/main/contact-components/ContactModal.vue"
 
 import { useHandleMailStore } from "~/store/handleMail.js";
 import { useUiOverlayStore } from "~/store/uiOverlay";
-import { useCurrencyStore } from "~/store/currency.js";
+import { useCurrencyStore } from "~/store/currency";
 
 const mailStore = useHandleMailStore();
 const uiOverlayStore = useUiOverlayStore();

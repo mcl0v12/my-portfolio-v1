@@ -1,11 +1,12 @@
 // /store/onUseItemEffects.js
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useBackpackStore } from "~/store/backpack";
+import { useCurrencyStore } from "~/store/currency";
+import { useExperienceStore } from "~/store/experience";
+
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
-import { useExperienceStore } from "~/store/experience.js";
-import { useCurrencyStore } from "~/store/currency.js";
-import { useBackpackStore } from "~/store/backpack.js";
 import { useTooltipStore } from '~/store/tooltip.js';
 import { useLootStore } from '~/store/loot.js'; 
 import { lootItemsData } from '~/data/lootItems.js'; 

@@ -36,8 +36,6 @@ export const useHandleMailStore = defineStore("handleMail", {
     setEmailSuccess(success) {
       this.emailSuccess = success;
     },
-
-    // Setters
     setName(name) {
       this.name = name;
     },

@@ -9,7 +9,7 @@
         (currentState === 'special' && !isSpecialVideoLoaded)
       "
       class="cursor-pointer"
-      src="/webm/preloader/camel-stand.webm"
+      src="/webm/disclaimer/stand.webm"
       @click="playSpecialAnimation"
       draggable="false"
       :controls="false"
@@ -24,7 +24,7 @@
       ref="specialVideo"
       v-if="currentState === 'special'"
       v-show="isSpecialVideoLoaded"
-      src="/webm/preloader/camel-special.webm"
+      src="/webm/disclaimer/mountSpecial.webm"
       @ended="onSpecialVideoEnd"
       @loadeddata="onSpecialVideoLoad"
       draggable="false"

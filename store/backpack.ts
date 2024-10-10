@@ -1,13 +1,38 @@
-// /store/backpack.js
+// /store/backpack.ts
 import { defineStore } from "pinia";
 import { SoundManager } from "~/utils/soundManager";
 
-const backpackSounds = {
+export interface Vendor {
+  sellPrice?: {
+    gold?: number;
+    silver?: number;
+    copper?: number;
+  };
+  quantity: number;
+  requiredLevel?: number;
+}
+
+export interface BackpackItem {
+  id: number | null;
+  type?: "currency" | "water" | "ring" | "wand";
+  imageUrl?: string;
+  title?: string;
+  description?: string;
+  descriptionColor?: string;
+  rarity?: "common" | "uncommon" | "rare" | "epic";
+  vendor?: Vendor;
+}
+
+interface BackpackState {
+  isBackpackOpen: boolean;
+  items: BackpackItem[];
+  totalSlots: number;
+}
+
+const backpackSounds: Record<string, SoundManager> = {
   open: new SoundManager(["/sounds/interface/iBackpackOpen.ogg"]),
   close: new SoundManager(["/sounds/interface/iBackpackClose.ogg"]),
   coinFlip: new SoundManager(["/sounds/utils/coinFlips.ogg"]),
-
-  // Item specific Sounds
   currency: new SoundManager(["/sounds/pick-up/LootCoinLarge.ogg"]),
   water: new SoundManager(["/sounds/pick-up/PickUpWater.ogg"]),
   ring: new SoundManager(["/sounds/pick-up/PickUpRing.ogg"]),
@@ -15,71 +40,66 @@ const backpackSounds = {
 };
 
 export const useBackpackStore = defineStore("backpack", {
-  state: () => ({
+  state: (): BackpackState => ({
     isBackpackOpen: false,
     items: Array(16).fill({ id: null }),
+    totalSlots: 16,
   }),
+  getters: {
+    freeSlots(state): number {
+      const filledSlots = state.items.filter((item) => item.id !== null).length;
+      return state.totalSlots - filledSlots;
+    },
+  },
 
   actions: {
     openBackpack() {
       this.isBackpackOpen = true;
       backpackSounds.open.playNextSound();
     },
+
     closeBackpack() {
       this.isBackpackOpen = false;
       backpackSounds.close.playNextSound();
     },
+
     toggleBackpack() {
       this.isBackpackOpen = !this.isBackpackOpen;
-      if (this.isBackpackOpen) {
-        backpackSounds.open.playNextSound();
-      } else {
-        backpackSounds.close.playNextSound();
-      }
+      this.isBackpackOpen
+        ? backpackSounds.open.playNextSound()
+        : backpackSounds.close.playNextSound();
     },
 
-    addItemToBackpack(item) {
+    addItemToBackpack(item: BackpackItem) {
       const emptySlotIndex = this.items.findIndex((slot) => slot.id === null);
-
       if (emptySlotIndex !== -1) {
         this.items[emptySlotIndex] = item;
       } else {
         this.items.push(item);
       }
-
-      // Sound abspielen, basierend auf dem Item-Typ
       this.playSoundForItem(item);
-
       this.saveBackpackItems();
     },
 
-    // Spielt den spezifischen Sound für das hinzugefügte Item ab
-    playSoundForItem(item) {
-      const sound = backpackSounds[item.type];
-      if (sound) {
-        sound.playNextSound();
-      }
+    playSoundForItem(item: BackpackItem) {
+      const sound = item.type ? backpackSounds[item.type] : undefined;
+      if (sound) sound.playNextSound();
     },
 
-    // For Selling Items
-    replaceItemWithEmpty(index) {
+    replaceItemWithEmpty(index: number) {
       this.items.splice(index, 1, { id: null });
       this.saveBackpackItems();
       backpackSounds.coinFlip.playNextSound();
     },
 
-    removeItemFromBackpack(itemId) {
+    removeItemFromBackpack(itemId: number) {
       const index = this.items.findIndex((item) => item.id === itemId);
-      if (index !== -1) {
-        this.replaceItemWithEmpty(index);
-      }
+      if (index !== -1) this.replaceItemWithEmpty(index);
     },
 
     loadBackpackItems() {
-      const savedItems = JSON.parse(localStorage.getItem("backpackItems"));
-      if (savedItems) {
-        this.items = savedItems;
-      }
+      const savedItems = localStorage.getItem("backpackItems");
+      if (savedItems) this.items = JSON.parse(savedItems);
     },
 
     saveBackpackItems() {
@@ -91,7 +111,7 @@ export const useBackpackStore = defineStore("backpack", {
     },
 
     $reset() {
-      this.items = Array(16).fill({ id: null });
+      this.items = Array.from({ length: 16 }).map(() => ({ id: null }));
       this.clearBackpackStorage();
       this.closeBackpack();
     },

@@ -38,9 +38,9 @@
 import { ref } from "vue";
 import { useRarityColors } from "~/composables/useRarityColors";
 import { useTooltipStore } from "~/store/tooltip.js";
-import { useBackpackStore } from "~/store/backpack.js";
+import { useBackpackStore } from "~/store/backpack.ts";
 import { useLootStore } from "~/store/loot.js";
-import { useCurrencyStore } from "~/store/currency.js";
+import { useCurrencyStore } from "~/store/currency";
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 
 const props = defineProps({

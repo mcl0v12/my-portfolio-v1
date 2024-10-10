@@ -3,13 +3,13 @@
 <template>
   <div
     style="transition-delay: 1000ms"
-    class="max-w-stacked mx-auto speech-cursor fade-item"
+    class="max-w-stacked mx-auto fade-item"
     :ref="animationRef"
     data-animation="enter"
     @click="startAnimation"
   >
     <picture>
-      <div class="flex flex-col flex-center gap-6">
+      <div class="flex flex-col flex-center gap-6 speech-cursor">
         <svg
           class="max-w-obj h-full relative left-[-1.5%]"
           xmlns="http://www.w3.org/2000/svg"
@@ -29,37 +29,61 @@
           />
         </svg>
 
-        <img
-          v-show="
+        <!-- Stand Video (Loop) -->
+        <video
+          v-if="
             currentState === 'stand' ||
-            (currentState === 'special' && !isSpecialGifLoaded)
+            (currentState === 'special' && !isSpecialVideoLoaded)
           "
-          :src="standGifUrl"
+          src="/webm/npc/me/stand.webm"
           draggable="false"
-          alt="standing"
-        />
+          :controls="false"
+          loop
+          autoplay
+          muted
+          disablePictureInPicture
+        ></video>
 
-        <img
-          v-show="currentState === 'special' && isSpecialGifLoaded"
-          :src="dynamicSpecialGifUrl"
+        <!-- Emote Talk Video -->
+        <video
+          ref="specialVideo"
+          v-if="currentState === 'special'"
+          v-show="isSpecialVideoLoaded"
+          src="/webm/npc/me/emoteTalk.webm"
+          @ended="onSpecialVideoEnd"
+          @loadeddata="onSpecialVideoLoad"
           draggable="false"
-          alt="talking"
-          @load="onSpecialGifLoad"
-        />
+          :controls="false"
+          disablePictureInPicture
+        ></video>
       </div>
     </picture>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { animationObserver } from "~/composables/useIntersectionObserver";
-
 import { useQuestStore } from "~/store/handleInteraction.js";
 import { iconPaths } from "~/data/questPaths.js";
 import { questData } from "~/data/questData.js";
 
 const questStore = useQuestStore();
+
+const currentState = ref("stand");
+const specialVideo = ref(null);
+const isSpecialVideoLoaded = ref(false);
+const isLandscape = ref(false);
+
+// Transition Logic
+const intersectionItems = ref([]);
+const animationRef = (el) => {
+  if (el) {
+    intersectionItems.value.push(el);
+  }
+};
+
+animationObserver([intersectionItems]);
 
 const isTaskCompleted = (questId) => {
   return questStore.taskCompletedIds.includes(questId);
@@ -91,69 +115,37 @@ const getLargeIconPaths = () => {
   }));
 };
 
-// Transition Logic
-const intersectionItems = ref([]);
-const animationRef = (el) => {
-  if (el) {
-    intersectionItems.value.push(el);
-  }
-};
-
-animationObserver([intersectionItems]);
-
-// Gif Logic
-const isLandscape = ref(false);
-
-const checkLandscapeOrientation = () => {
-  isLandscape.value = window.matchMedia("(orientation: landscape)").matches;
-};
-
-const currentState = ref("stand");
-const standGifUrl = "/gif/stand.gif";
-const specialGifUrl = "/gif/emoteTalk.gif";
-const dynamicSpecialGifUrl = ref(specialGifUrl);
-const specialGifDuration = 2000;
-
-const isSpecialGifLoaded = ref(false);
-
-let gifTimeout = null;
-
-const startAnimation = () => {
+const startAnimation = async () => {
   checkLandscapeOrientation();
-
   questStore.startInteraction();
 
   if (isLandscape.value && currentState.value === "stand") {
     currentState.value = "special";
-    reloadGif(dynamicSpecialGifUrl, specialGifUrl);
-    isSpecialGifLoaded.value = false;
-  }
-};
+    isSpecialVideoLoaded.value = false;
+    await nextTick();
 
-const onSpecialGifLoad = () => {
-  isSpecialGifLoaded.value = true;
-  playGif("stand", specialGifDuration);
-};
-
-const playGif = (nextState, duration) => {
-  clearGifTimeout();
-  gifTimeout = setTimeout(() => {
-    currentState.value = nextState;
-    if (nextState === "stand") {
-      questStore.triggerTalkAnimation = false;
+    if (specialVideo.value) {
+      specialVideo.value.load();
     }
-  }, duration);
-};
-
-const reloadGif = (dynamicGifRef, gifUrl) => {
-  dynamicGifRef.value = `${gifUrl}?t=${new Date().getTime()}`;
-};
-
-const clearGifTimeout = () => {
-  if (gifTimeout) {
-    clearTimeout(gifTimeout);
-    gifTimeout = null;
   }
+};
+
+const onSpecialVideoLoad = () => {
+  isSpecialVideoLoaded.value = true;
+  if (currentState.value === "special" && specialVideo.value) {
+    requestAnimationFrame(() => {
+      specialVideo.value.play();
+    });
+  }
+};
+
+const onSpecialVideoEnd = async () => {
+  currentState.value = "stand";
+  await nextTick();
+};
+
+const checkLandscapeOrientation = () => {
+  isLandscape.value = window.matchMedia("(orientation: landscape)").matches;
 };
 
 defineExpose({
@@ -166,8 +158,11 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  clearGifTimeout();
   window.removeEventListener("resize", checkLandscapeOrientation);
+
+  if (specialVideo.value) {
+    specialVideo.value.removeEventListener("loadeddata", onSpecialVideoLoad);
+  }
 });
 </script>
 

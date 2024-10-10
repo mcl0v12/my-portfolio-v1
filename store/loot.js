@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { SoundManager } from "~/utils/soundManager";
 
-// SoundManager-Instanz für die Loot-Sounds
 const lootSounds = {
   open: new SoundManager(["/sounds/chest/Treasurechest_GoldenDragon_Open.ogg"]),
   close: new SoundManager(["/sounds/chest/Treasurechest_GoldenDragon_Close.ogg"]),
@@ -14,7 +13,7 @@ export const useLootStore = defineStore("loot", {
     lootItems: {}, 
     removedItems: {}, 
     openModals: {},
-    cursorPosition: ref({ x: 0, y: 0 }) // Hinzugefügt: speichert die Klick-Position
+    cursorPosition: ref({ x: 0, y: 0 }) 
   }),
   getters: {
     isAnyModalOpen(state) {
@@ -65,7 +64,6 @@ export const useLootStore = defineStore("loot", {
       }
     },
 
-    // Methode zum Speichern der Klick-Position
     setCursorPosition(x, y) {
       this.cursorPosition = { x, y };
     },

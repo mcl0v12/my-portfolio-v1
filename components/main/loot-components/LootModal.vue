@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="fixed z-[2]"
+    class="fixed z-[900]"
     v-if="isVisible && isLoaded"
     :style="{ top: `${modalPosition.y}px`, left: `${modalPosition.x}px` }"
   >
