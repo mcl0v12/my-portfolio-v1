@@ -4,7 +4,7 @@
   <!-- Opening Video -->
   <video
     ref="openingVideo"
-    v-if="currentState === 'opening' || (currentState === 'closing' && !isClosingVideoLoaded)"
+    v-if="currentState === 'opening' && !isClosingTriggered"
     class="cursor-pointer"
     src="/webm/chest/open.webm"
     @click="startProgressBar"
@@ -14,16 +14,12 @@
     preload="auto"
     :controls="false"
     disablePictureInPicture
-    loop
-    autoplay
-    muted
   ></video>
 
   <!-- Closing Video -->
   <video
     ref="closingVideo"
-    v-if="currentState === 'closing'"
-    v-show="isClosingVideoLoaded"
+    v-if="currentState === 'closing' && isClosingTriggered"
     src="/webm/chest/close.webm"
     @ended="onClosingVideoEnd"
     @loadeddata="onClosingVideoLoad"
@@ -69,7 +65,9 @@ onMounted(() => {
 
   if (openingVideo.value) {
     openingVideo.value.load();
-    openingVideo.value.addEventListener("loadeddata", onOpeningVideoLoad);
+    openingVideo.value.addEventListener("loadeddata", () => {
+      isOpeningVideoLoaded.value = true;
+    });
   }
 
   progressBarStore.setCompletionCallback(() => {
@@ -147,18 +145,14 @@ const startClosingSequence = async () => {
   isClosingTriggered.value = true;
   currentState.value = "closing";
   await nextTick();
-  if (closingVideo.value) {
-    closingVideo.value.load();
+  if (isClosingVideoLoaded.value && closingVideo.value) {
+    playLootClosing();
   }
 };
 
-const onOpeningVideoLoad = () => {
-  isOpeningVideoLoaded.value = true;
-};
-
-const onClosingVideoLoad = () => {
-  isClosingVideoLoaded.value = true;
-  if (currentState.value === "closing" && closingVideo.value) {
+const playLootClosing = () => {
+  if (isClosingVideoLoaded.value && closingVideo.value) {
+    closingVideo.value.currentTime = 0;
     requestAnimationFrame(() => {
       closingVideo.value.play();
     });
@@ -175,18 +169,22 @@ const onClosingVideoEnd = async () => {
   await nextTick();
 };
 
+const onOpeningVideoLoad = () => {
+  isOpeningVideoLoaded.value = true;
+};
+
+const onClosingVideoLoad = () => {
+  isClosingVideoLoaded.value = true;
+  if (currentState.value === "closing") {
+    requestAnimationFrame(() => {
+      closingVideo.value.play();
+    });
+  }
+};
+
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScrollCancel);
   window.removeEventListener("scroll", clearProgress);
   window.removeEventListener("keydown", handleEscKey);
-
-  if (openingVideo.value) {
-    openingVideo.value.removeEventListener("loadeddata", onOpeningVideoLoad);
-  }
-  if (closingVideo.value) {
-    closingVideo.value.removeEventListener("loadeddata", onClosingVideoLoad);
-  }
 });
 </script>
-
-<style scoped></style>
