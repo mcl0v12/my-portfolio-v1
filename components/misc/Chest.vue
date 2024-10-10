@@ -1,10 +1,8 @@
-<!-- Chest.vue -->
-
 <template>
   <!-- Opening Video -->
   <video
     ref="openingVideo"
-    v-if="currentState === 'opening' && !isClosingTriggered"
+    v-if="currentState === 'opening' || (currentState === 'closing' && !isClosingVideoLoaded)"
     class="cursor-pointer"
     src="/webm/chest/open.webm"
     @click="startProgressBar"
@@ -19,7 +17,8 @@
   <!-- Closing Video -->
   <video
     ref="closingVideo"
-    v-if="currentState === 'closing' && isClosingTriggered"
+    v-if="currentState === 'closing'"
+    v-show="isClosingVideoLoaded"
     src="/webm/chest/close.webm"
     @ended="onClosingVideoEnd"
     @loadeddata="onClosingVideoLoad"
@@ -51,7 +50,6 @@ const openingVideo = ref(null);
 const closingVideo = ref(null);
 const isOpeningVideoLoaded = ref(false);
 const isClosingVideoLoaded = ref(false);
-const isClosingTriggered = ref(false);
 let openVideoFullyPlayed = false;
 let autoCloseAfterOpening = false;
 
@@ -65,9 +63,7 @@ onMounted(() => {
 
   if (openingVideo.value) {
     openingVideo.value.load();
-    openingVideo.value.addEventListener("loadeddata", () => {
-      isOpeningVideoLoaded.value = true;
-    });
+    openingVideo.value.addEventListener("loadeddata", onOpeningVideoLoad);
   }
 
   progressBarStore.setCompletionCallback(() => {
@@ -142,20 +138,12 @@ const onOpeningVideoEnd = async () => {
 };
 
 const startClosingSequence = async () => {
-  isClosingTriggered.value = true;
   currentState.value = "closing";
+  isClosingVideoLoaded.value = false;
   await nextTick();
-  if (isClosingVideoLoaded.value && closingVideo.value) {
-    playLootClosing();
-  }
-};
 
-const playLootClosing = () => {
-  if (isClosingVideoLoaded.value && closingVideo.value) {
-    closingVideo.value.currentTime = 0;
-    requestAnimationFrame(() => {
-      closingVideo.value.play();
-    });
+  if (closingVideo.value) {
+    closingVideo.value.load(); // Lädt das Video vor dem Abspielen
   }
 };
 
@@ -165,7 +153,6 @@ const onClosingVideoEnd = async () => {
   }
   currentState.value = "opening";
   openVideoFullyPlayed = false;
-  isClosingTriggered.value = false;
   await nextTick();
 };
 
@@ -186,5 +173,14 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScrollCancel);
   window.removeEventListener("scroll", clearProgress);
   window.removeEventListener("keydown", handleEscKey);
+
+  if (openingVideo.value) {
+    openingVideo.value.removeEventListener("loadeddata", onOpeningVideoLoad);
+  }
+  if (closingVideo.value) {
+    closingVideo.value.removeEventListener("loadeddata", onClosingVideoLoad);
+  }
 });
 </script>
+
+<style scoped></style>
