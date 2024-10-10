@@ -46,7 +46,7 @@ import { useModalLoader } from "~/composables/useModalLoader";
 const resources = [
   "/img/alliance-logo.png",
   "/img/palm.png",
-  "/webm/preloader/camel-stand.gif",
+  "/webm/preloader/camel-stand.webm",
 ];
 
 const { isLoaded } = useModalLoader(resources);

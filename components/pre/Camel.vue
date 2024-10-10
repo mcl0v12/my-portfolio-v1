@@ -2,7 +2,7 @@
 
 <template>
   <div class="max-w-stacked--lg relative mx-auto">
-    <!-- Stand Video -->
+    <!-- Stand Video /// LOOP -->
     <video
       v-if="
         currentState === 'stand' ||
