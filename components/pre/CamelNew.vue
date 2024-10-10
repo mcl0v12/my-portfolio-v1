@@ -1,9 +1,9 @@
-<!-- CamelNew.vue -->
 <template>
     <div class="max-w-stacked--lg relative mx-auto">
+      <!-- Stand Video -->
       <video
         ref="standVideo"
-        v-if="currentState === 'stand' && !isSpecialTriggered"
+        v-if="currentState === 'stand' || (currentState === 'special' && !isSpecialVideoLoaded)"
         class="cursor-pointer"
         src="/webm/preloader/camel-stand.webm"
         @click="playSpecialAnimation"
@@ -15,9 +15,11 @@
         autoplay
         muted
       ></video>
+  
+      <!-- Special Video -->
       <video
         ref="specialVideo"
-        v-if="currentState === 'special' && isSpecialTriggered"
+        v-if="currentState === 'special' && isSpecialVideoLoaded"
         src="/webm/preloader/camel-special.webm"
         @ended="onSpecialVideoEnd"
         @loadeddata="onSpecialVideoLoad"
@@ -25,6 +27,7 @@
         preload="auto"
         :controls="false"
       ></video>
+      
       <picture>
         <img
           src="/gif/preloader/palm.png"
@@ -48,23 +51,16 @@
   onMounted(() => {
     if (standVideo.value) {
       standVideo.value.load();
-      standVideo.value.addEventListener("loadeddata", () => {
-        isStandVideoLoaded.value = true;
-      });
+      standVideo.value.addEventListener("loadeddata", onStandVideoLoad);
     }
   });
   
   const playSpecialAnimation = async () => {
     if (currentState.value === "stand") {
-      currentState.value = "special";
       isSpecialTriggered.value = true;
       isSpecialVideoLoaded.value = false;
-      await nextTick();
-    
       if (specialVideo.value) {
-        requestAnimationFrame(() => {
-          specialVideo.value.play();
-        });
+        specialVideo.value.load(); // Erst das Video laden, bevor es abgespielt wird
       }
     }
   };
@@ -75,7 +71,9 @@
   
   const onSpecialVideoLoad = () => {
     isSpecialVideoLoaded.value = true;
-    if (currentState.value === "special" && specialVideo.value) {
+    currentState.value = "special"; // Jetzt den Zustand umschalten, wenn das Video geladen ist
+    
+    if (specialVideo.value) {
       requestAnimationFrame(() => {
         specialVideo.value.play();
       });
@@ -89,14 +87,13 @@
   };
   
   onBeforeUnmount(() => {
-  if (standVideo.value) {
-    standVideo.value.removeEventListener("loadeddata", onStandVideoLoad);
-  }
-  if (specialVideo.value) {
-    specialVideo.value.removeEventListener("loadeddata", onSpecialVideoLoad);
-  }
-});
-
+    if (standVideo.value) {
+      standVideo.value.removeEventListener("loadeddata", onStandVideoLoad);
+    }
+    if (specialVideo.value) {
+      specialVideo.value.removeEventListener("loadeddata", onSpecialVideoLoad);
+    }
+  });
   </script>
   
   <style scoped></style>
