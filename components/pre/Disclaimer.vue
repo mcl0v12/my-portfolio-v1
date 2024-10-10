@@ -27,13 +27,14 @@
           />
         </div>
       </div>
-      <Camel />
+      <CamelNew />
     </div>
+    
   </template>
   
   <script setup>
   import ThemeButton from "~/components/misc/ThemeButton.vue";
-  import Camel from "~/components/pre/Camel.vue";
+  import CamelNew from "~/components/pre/CamelNew.vue";
   import { useTooltipStore } from "~/store/tooltip.js";
   
   const emit = defineEmits(["startInteraction"]);

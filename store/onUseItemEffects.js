@@ -30,59 +30,56 @@ export const useOnUseItemEffectsStore = defineStore('onUseItemEffects', () => {
     }
   };
 
-  const applyItemEffect = (itemId) => {
-    switch (itemId) {
-      case 1: // Resume Key (id: 1)
-        resumeKeyUsed.value = true; // Zustand auf true setzen
-        localStorage.setItem('resumeKeyUsed', JSON.stringify(true)); // In LocalStorage speichern
-        backpackStore.removeItemFromBackpack(itemId); // Item aus dem Rucksack entfernen
-        alert("You have unlocked the resume!");
-        break;
+const applyItemEffect = (itemId) => {
+  switch (itemId) {
+    case 1: 
+      resumeKeyUsed.value = true;
+      localStorage.setItem('resumeKeyUsed', JSON.stringify(true));
+      backpackStore.removeItemFromBackpack(itemId);
+      alert("You have unlocked the resume!");
+      break;
 
-      case 3: // Reset Item (id: 3)
-        if (confirm("Are you sure you want to start from new?")) {
-          // Entferne den Zustand für die Chests (entfernte Items)
-          Object.keys(lootStore.lootItems).forEach(chestId => {
-            localStorage.removeItem(`removedItems_${chestId}`); // Entferne die gespeicherten entfernten Items für jede Chest
-          });
+    case 3: 
+      if (confirm("Are you sure you want to start from new?")) {
+        Object.keys(lootStore.lootItems).forEach(chestId => {
+          localStorage.removeItem(`removedItems_${chestId}`);
+        });
 
-          // Setze den Loot Store zurück und initialisiere ihn neu
-          lootStore.$reset(); // Setze den Zustand der Loot-Items in allen Chests zurück
-          
-          // Lade die ursprünglichen Loot-Items neu
-          Object.keys(lootItemsData).forEach(chestId => {
-            lootStore.initializeLoot(chestId, lootItemsData[chestId]);
-          });
+        lootStore.$reset();
+        
+        // Nur `items` aus `lootItemsData` an `initializeLoot` übergeben
+        Object.keys(lootItemsData).forEach(chestId => {
+          lootStore.initializeLoot(chestId, lootItemsData[chestId].items);
+        });
 
-          // Entferne den Fortschritt aus dem LocalStorage
-          localStorage.removeItem("acceptedQuests");
-          localStorage.removeItem("completedQuests");
-          localStorage.removeItem("taskCompletedQuests");
-          localStorage.removeItem("objectives");
-          localStorage.removeItem("currency");
-          localStorage.removeItem("resumeKeyUsed"); // Zustand des Resume-Keys zurücksetzen
+        localStorage.removeItem("acceptedQuests");
+        localStorage.removeItem("completedQuests");
+        localStorage.removeItem("taskCompletedQuests");
+        localStorage.removeItem("objectives");
+        localStorage.removeItem("currency");
+        localStorage.removeItem("resumeKeyUsed"); 
 
-          // Setze alle Stores zurück
-          resumeKeyUsed.value = false;
-          questStore.$reset();
-          objectivesStore.$reset();
-          currencyStore.$reset();
-          backpackStore.$reset();
-          experienceStore.resetExperience();
-          tooltipStore.hideTooltip();
-        }
-        break;
+        resumeKeyUsed.value = false;
+        questStore.$reset();
+        objectivesStore.$reset();
+        currencyStore.$reset();
+        backpackStore.$reset();
+        experienceStore.resetExperience();
+        tooltipStore.hideTooltip();
+      }
+      break;
 
-      case 2: // Speed Boost Item (id: 2)
-        alert("Your treasure open speed has been increased by 200% for 10 minutes!");
-        backpackStore.removeItemFromBackpack(itemId);
-        break;
+    case 2:
+      alert("Your treasure open speed has been increased by 200% for 10 minutes!");
+      backpackStore.removeItemFromBackpack(itemId);
+      break;
 
-      default:
-        alert("This item has no special effect.");
-        break;
-    }
-  };
+    default:
+      alert("This item has no special effect.");
+      break;
+  }
+};
+
 
   return {
     resumeKeyUsed,

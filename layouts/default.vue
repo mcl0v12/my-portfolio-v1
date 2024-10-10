@@ -25,7 +25,7 @@
   />
 
   <!-- LootModal: Überprüfe, ob ein Modal geöffnet ist und zeige es an -->
-  <LootModal v-if="lootStore.isAnyModalOpen" :chestId="lootStore.activeChestId" />
+  <LootModal v-if="lootStore.isAnyModalOpen" :lootId="lootStore.activeLootId" />
 </template>
 
 <script setup>
@@ -59,11 +59,11 @@ const currencyStore = useCurrencyStore();
 const onUseItemEffectsStore = useOnUseItemEffectsStore();
 const lootStore = useLootStore();
 
-// Liste aller Chest-IDs
-const chestIds = Object.keys(lootItemsData);
-
-// Check, ob es Objectives gibt (mindestens eines vorhanden)
+// For showing ObjectivesTracker.vue
 const hasObjectives = computed(() => objectivesStore.objectives.length > 0);
+
+// Liste aller Loot-IDs
+const lootIds = Object.keys(lootItemsData);
 
 // Lade alle Daten, wenn die Seite gemountet wird
 onMounted(() => {
@@ -75,7 +75,19 @@ onMounted(() => {
   onUseItemEffectsStore.loadResumeKeyUsed();
 
   // Lade die entfernten Items aus allen Chests
-  lootStore.loadAllRemovedItems(chestIds);
+  lootStore.loadAllRemovedItems(lootIds);
+
+  // Im Hauptlayout oder root-Komponente sicherstellen, dass das Event registriert wird:
+  document.addEventListener("click", (event) => {
+    const lootStore = useLootStore();
+    lootStore.setCursorPosition(event.clientX, event.clientY);
+  });
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", (event) => {
+    lootStore.setCursorPosition(event.clientX, event.clientY);
+  });
 });
 </script>
 

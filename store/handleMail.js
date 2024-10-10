@@ -5,7 +5,6 @@ import { SoundManager } from "~/utils/soundManager";
 const modalSounds = {
   open: new SoundManager(["/sounds/interface/iQuestLogOpen.ogg"]),
   close: new SoundManager(["/sounds/interface/iQuestLogClose.ogg"]),
-  coinFlip: new SoundManager(["/sounds/utils/coinFlips.ogg"]),
 };
 
 export const useHandleMailStore = defineStore("handleMail", {
@@ -37,10 +36,8 @@ export const useHandleMailStore = defineStore("handleMail", {
     setEmailSuccess(success) {
       this.emailSuccess = success;
     },
-    mailSend() {
-      modalSounds.coinFlip.playNextSound();
-      this.resetForm();
-    },
+
+    // Setters
     setName(name) {
       this.name = name;
     },

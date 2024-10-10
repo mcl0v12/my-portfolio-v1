@@ -28,7 +28,7 @@
   
   <style scoped>
   .progress-bar-container {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     border: 2px solid var(--gray-80);
     border-radius: 1rem;
   }

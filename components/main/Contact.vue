@@ -52,10 +52,10 @@ const openModal = () => {
 
 watch(emailSuccess, (newValue) => {
   if (newValue) {
-    uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     mailStore.setEmailSuccess(false);
+    mailStore.resetForm();
+    uiOverlayStore.showMessage("Send successfully!", 3000, "notification");
     currencyStore.subtractCurrency(0, 0, 30);
-    mailStore.mailSend();
   }
 });
 

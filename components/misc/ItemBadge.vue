@@ -128,9 +128,29 @@ const props = defineProps({
   },
 });
 
-const uniqueId = ref("");
 const isActive = ref(false);
 const isHover = ref(false);
+
+// Event-Handler für Hover und Active Zustände
+function onMouseEnter() {
+  isHover.value = true;
+}
+
+function onMouseLeave() {
+  isHover.value = false;
+  isActive.value = false;
+}
+
+function onMouseDown() {
+  isActive.value = true;
+}
+
+function onMouseUp() {
+  isActive.value = false;
+}
+
+// Polygon Logic
+const uniqueId = ref("");
 
 onMounted(() => {
   uniqueId.value = nanoid();
@@ -153,7 +173,7 @@ const activeShadowStyle = computed(() => {
           inset 0 0 ${10 * scale}px ${5 * scale}px rgba(173, 216, 230, 0.4)`;
 });
 
-// Aktueller Schattenstil basierend auf hover oder active Zustand
+// Schattenstil basierend auf hover oder active Zustand
 const currentShadowStyle = computed(() => {
   if (isActive.value) {
     return activeShadowStyle.value;
@@ -163,25 +183,6 @@ const currentShadowStyle = computed(() => {
   return "none";
 });
 
-// Event-Handler für Hover und Active Zustände
-function onMouseEnter() {
-  isHover.value = true;
-}
-
-function onMouseLeave() {
-  isHover.value = false;
-  isActive.value = false;
-}
-
-function onMouseDown() {
-  isActive.value = true;
-}
-
-function onMouseUp() {
-  isActive.value = false;
-}
-
-// Berechne die Punkte für die inneren und äußeren Polygone sowie den Clip Path
 function calculateInnerPolygonPoints(size) {
   const scale = size / 80;
   return [

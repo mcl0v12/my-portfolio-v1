@@ -1,5 +1,10 @@
 // /store/currency.js
 import { defineStore } from "pinia";
+import { SoundManager } from "~/utils/soundManager";
+
+const currencyLargeSound = new SoundManager(['/sounds/pick-up/LootCoinLarge.ogg']);
+const currencySmallSound = new SoundManager(['/sounds/pick-up/LootCoinSmall.ogg']);
+const coinFlipSound = new SoundManager(['/sounds/utils/coinFlips.ogg']); 
 
 export const useCurrencyStore = defineStore("currency", {
   state: () => ({
@@ -9,12 +14,11 @@ export const useCurrencyStore = defineStore("currency", {
   }),
 
   actions: {
-    addCurrency(g, s, c) {
+    addCurrency(g, s, c, context = "default") {
       this.copper += c;
       this.silver += s;
       this.gold += g;
 
-      // Umwandlung von Kupfer zu Silber und Silber zu Gold
       if (this.copper >= 100) {
         this.silver += Math.floor(this.copper / 100);
         this.copper %= 100;
@@ -22,6 +26,16 @@ export const useCurrencyStore = defineStore("currency", {
       if (this.silver >= 100) {
         this.gold += Math.floor(this.silver / 100);
         this.silver %= 100;
+      }
+
+      // Spiele Sound basierend auf dem Kontext ab
+      // quest = CharacterButtons.vue
+      // sell = BackpackInventory.vue
+      // loot = LootItems.vue
+      if (context === "quest" || context === "sell") {
+        currencyLargeSound.playNextSound();
+      } else if (context === "loot") {
+        currencySmallSound.playNextSound();
       }
 
       this.saveCurrency();
@@ -32,7 +46,6 @@ export const useCurrencyStore = defineStore("currency", {
       this.silver -= s;
       this.gold -= g;
 
-      // Anpassung negativer Werte für Kupfer und Silber
       if (this.copper < 0) {
         this.silver -= Math.ceil(Math.abs(this.copper) / 100);
         this.copper = ((this.copper % 100) + 100) % 100;
@@ -41,6 +54,8 @@ export const useCurrencyStore = defineStore("currency", {
         this.gold -= Math.ceil(Math.abs(this.silver) / 100);
         this.silver = ((this.silver % 100) + 100) % 100;
       }
+
+      coinFlipSound.playNextSound();
 
       this.saveCurrency();
     },

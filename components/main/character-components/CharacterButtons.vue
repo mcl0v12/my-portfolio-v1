@@ -101,24 +101,16 @@ const handleCompleteQuest = () => {
 
 // Quest abschließen und Belohnungen zuweisen
 const completeQuest = () => {
-  if (
-    selectedQuest.value &&
-    !questStore.completedQuestIds.includes(selectedQuest.value.id)
-  ) {
-    console.log(`Complete Quest: ${selectedQuest.value.id}`);
-
-    // Füge Erfahrung hinzu
+  if (selectedQuest.value && !questStore.completedQuestIds.includes(selectedQuest.value.id)) {
     if (isObjectiveQuest.value && selectedQuest.value.experience) {
       experienceStore.addExperience(selectedQuest.value.experience);
     }
 
-    // Füge Belohnungen zur Währung hinzu
     const { gold, silver, copper } = selectedQuest.value.rewards;
     if (gold || silver || copper) {
-      currencyStore.addCurrency(gold, silver, copper);
+      currencyStore.addCurrency(gold, silver, copper, "quest"); 
     }
 
-    // Markiere die Quest als abgeschlossen
     questStore.completeQuest(selectedQuest.value.id);
   }
 };

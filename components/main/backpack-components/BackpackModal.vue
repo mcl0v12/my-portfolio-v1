@@ -94,7 +94,7 @@
             </div>
             <!-- Content Element -->
             <div class="relative" :style="contentDivStyle">
-              <div class="content-wrap">
+              <div class="content-wrap pt-8 pr-2 pb-4 pl-2">
                 <BackpackInventory />
               </div>
             </div>

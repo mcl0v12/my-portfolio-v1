@@ -18,7 +18,10 @@
           :style="{ transitionDelay: `${index * 100}ms` }"
           class="project-item fly-item"
           :ref="animationRef"
-          :class="{ 'project-right': index % 2 === 0, 'project-left': index % 2 !== 0 }"
+          :class="{
+            'project-right': index % 2 === 0,
+            'project-left': index % 2 !== 0,
+          }"
           data-animation="enter-up"
         >
           <div class="project-content">
@@ -71,8 +74,10 @@
         </li>
 
         <!-- Chest-Element -->
-        <li class="w-[300px] md:w-[400px] py-8 lg:py-14 mx-auto">
-          <Chest :chestId="'chest1'" />
+        <li
+          class="w-[300px] md:w-[400px] py-8 lg:py-14 mx-auto"
+        >
+          <Chest :lootId="'chest1'" />
         </li>
 
         <!-- Zweite Schleife mit angepasstem Index -->
@@ -82,7 +87,10 @@
           :style="{ transitionDelay: `${(projectIndex + 2) * 100}ms` }"
           class="project-item fly-item"
           :ref="animationRef"
-          :class="{ 'project-right': projectIndex % 2 === 0, 'project-left': projectIndex % 2 !== 0 }"
+          :class="{
+            'project-right': projectIndex % 2 === 0,
+            'project-left': projectIndex % 2 !== 0,
+          }"
           data-animation="enter-up"
         >
           <div class="project-content">

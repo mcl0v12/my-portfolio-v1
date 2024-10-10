@@ -6,7 +6,6 @@
   >
     <div v-for="(column, index) in columns" :key="index" class="flex">
       <template v-if="column.id">
-        <!-- Belegter Slot mit Item -->
         <div class="item-wrap">
           <ItemBadge
             :size="50"
@@ -24,7 +23,7 @@
                 column.title,
                 column.description,
                 getColorFromRarity(column.rarity),
-                column.requiredLevel,
+                column.vendor?.requiredLevel, 
                 column
               )
             "
@@ -32,9 +31,9 @@
             @click="handleItemClick(column)"
             :class="{
               'cursor-buy':
-                canAffordItem(column.costs) && !isItemDisabled(column),
+                canAffordItem(column.vendor?.costs) && !isItemDisabled(column),
               'cursor-no-buy':
-                isItemDisabled(column) || !canAffordItem(column.costs),
+                isItemDisabled(column) || !canAffordItem(column.vendor?.costs),
             }"
             :isDisabled="isItemDisabled(column)"
           />
@@ -50,21 +49,18 @@
           >
             {{ column.title }}
           </p>
-          <!-- CurrencyDisplay für jedes Item -->
           <div
             class="flex mt-2"
-            :class="{ 'text-gray-80': !canAffordItem(column.costs) }"
+            :class="{ 'text-gray-80': !canAffordItem(column.vendor?.costs) }"
           >
             <CurrencyDisplay
-              :gold="column.costs.gold"
-              :silver="column.costs.silver"
-              :copper="column.costs.copper"
+              :gold="column.vendor?.costs?.gold || 0"
+              :silver="column.vendor?.costs?.silver || 0"
+              :copper="column.vendor?.costs?.copper || 0"
             />
           </div>
         </div>
       </template>
-
-      <!-- Leerer Slot mit Hintergrundbild -->
       <template v-else>
         <div class="item-wrap">
           <div class="empty-item"></div>
@@ -96,7 +92,6 @@ const props = defineProps({
 });
 
 const experienceStore = useExperienceStore();
-
 const tooltipStore = useTooltipStore();
 const currencyStore = useCurrencyStore();
 const uiOverlayStore = useUiOverlayStore();
@@ -106,11 +101,11 @@ const { getColorFromRarity, getGradientColor } = useRarityColors();
 const maxSlots = 10;
 
 const vendorSounds = {
-  notBuyable: new SoundManager(["/sounds/utils/notBuyable.ogg"]), // Sound für nicht käuflich
+  notBuyable: new SoundManager(["/sounds/utils/notBuyable.ogg"]),
 };
 
 const isItemDisabled = (item) => {
-  return !!(item.requiredLevel && experienceStore.level < item.requiredLevel);
+  return !!(item.vendor?.requiredLevel && experienceStore.level < item.vendor?.requiredLevel);
 };
 
 const columns = [
@@ -118,42 +113,39 @@ const columns = [
   ...Array(maxSlots - onUseItems.length).fill({}),
 ];
 
-// Überprüfung, ob der Spieler das Item kaufen kann (Währung und Level)
 const canAffordItem = (costs, requiredLevel = 0) => {
   const currentGold = currencyStore.gold;
   const currentSilver = currencyStore.silver;
   const currentCopper = currencyStore.copper;
 
-  // Überprüfen, ob der Spieler das benötigte Level hat
   if (experienceStore.level < requiredLevel) {
     return false;
   }
 
-  if (currentGold > costs.gold) return true;
-  if (currentGold === costs.gold) {
-    if (currentSilver > costs.silver) return true;
-    if (currentSilver === costs.silver && currentCopper >= costs.copper)
+  if (currentGold > (costs?.gold || 0)) return true;
+  if (currentGold === (costs?.gold || 0)) {
+    if (currentSilver > (costs?.silver || 0)) return true;
+    if (currentSilver === (costs?.silver || 0) && currentCopper >= (costs?.copper || 0))
       return true;
   }
   return false;
 };
 
 const handleItemClick = (column) => {
-  if (!canAffordItem(column.costs, column.requiredLevel)) {
+  if (!canAffordItem(column.vendor?.costs, column.vendor?.requiredLevel)) {
     vendorSounds.notBuyable.playNextSound();
 
     uiOverlayStore.showMessage(
-      experienceStore.level < column.requiredLevel
-        ? `You dont have the required Level to buy this item.`
+      experienceStore.level < column.vendor?.requiredLevel
+        ? `You don't have the required Level to buy this item.`
         : "You don't have enough money.",
       3000
     );
   } else {
-    // Geld abziehen und Item zum Rucksack hinzufügen
     currencyStore.subtractCurrency(
-      column.costs.gold,
-      column.costs.silver,
-      column.costs.copper
+      column.vendor?.costs?.gold || 0,
+      column.vendor?.costs?.silver || 0,
+      column.vendor?.costs?.copper || 0
     );
     backpackStore.addItemToBackpack(column);
   }

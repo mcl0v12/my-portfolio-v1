@@ -4,36 +4,40 @@
   <!-- Opening Video -->
   <video
     ref="openingVideo"
-    v-show="currentState === 'opening'"
+    v-if="currentState === 'opening' && !isClosingTriggered"
     class="cursor-pointer"
-    src="/chest/open.webm"
+    src="/webm/chest/open.webm"
     @click="startProgressBar"
     @ended="onOpeningVideoEnd"
+    @loadeddata="onOpeningVideoLoad"
     draggable="false"
     preload="auto"
     :controls="false"
+    disablePictureInPicture
   ></video>
 
   <!-- Closing Video -->
   <video
     ref="closingVideo"
-    v-show="currentState === 'closing'"
-    src="/chest/close.webm"
+    v-if="currentState === 'closing' && isClosingTriggered"
+    src="/webm/chest/close.webm"
     @ended="onClosingVideoEnd"
+    @loadeddata="onClosingVideoLoad"
     draggable="false"
     preload="auto"
     :controls="false"
+    disablePictureInPicture
   ></video>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, watch } from "vue";
+import { ref, onBeforeUnmount, onMounted, watch, nextTick } from "vue";
 import { useLootStore } from "~/store/loot.js";
 import { useProgressBarStore } from "~/store/progressBar.js";
 import { lootItemsData } from "~/data/lootItems.js";
 
 const props = defineProps({
-  chestId: {
+  lootId: {
     type: String,
     required: true,
   },
@@ -45,70 +49,66 @@ const currentState = ref("opening");
 
 const openingVideo = ref(null);
 const closingVideo = ref(null);
-
-const playClosingAfterOpening = ref(false);
-
-let modalOpenedInitially = false;
+const isOpeningVideoLoaded = ref(false);
+const isClosingVideoLoaded = ref(false);
+const isClosingTriggered = ref(false);
 let openVideoFullyPlayed = false;
+let autoCloseAfterOpening = false;
 
 onMounted(() => {
-  const chestData = lootItemsData[props.chestId];
-  if (chestData) {
-    lootStore.initializeLoot(props.chestId, chestData.items);
-    
-    const chestDuration = chestData.duration; 
-    progressBarStore.setProgressDuration(props.chestId, chestDuration);
+  const lootData = lootItemsData[props.lootId];
+  if (lootData) {
+    lootStore.initializeLoot(props.lootId, lootData.items);
+    const lootDuration = lootData.duration;
+    progressBarStore.setProgressDuration(props.lootId, lootDuration);
   }
 
   if (openingVideo.value) {
     openingVideo.value.load();
-  }
-  if (closingVideo.value) {
-    closingVideo.value.load();
+    openingVideo.value.addEventListener("loadeddata", onOpeningVideoLoad);
   }
 
   progressBarStore.setCompletionCallback(() => {
-    openLootModal(); 
-    playChestOpening();
+    openLootModal();
+    playLootOpening();
   });
 
   watch(
-    () => lootStore.openModals[props.chestId],
-    (isModalOpen, previousModalOpen) => {
+    () => lootStore.openModals[props.lootId],
+    (isModalOpen) => {
       if (isModalOpen) {
-        modalOpenedInitially = true;
         window.addEventListener("scroll", handleScrollCancel);
-      } else if (previousModalOpen && !isModalOpen) {
+      } else {
         window.removeEventListener("scroll", handleScrollCancel);
         if (openVideoFullyPlayed) {
-          playChestClosing();
+          startClosingSequence();
         } else {
-          playClosingAfterOpening.value = true;
+          autoCloseAfterOpening = true;
         }
       }
     }
   );
 
   window.addEventListener("scroll", clearProgress);
-  window.addEventListener("keydown", handleEscKey); 
+  window.addEventListener("keydown", handleEscKey);
 });
 
 const startProgressBar = () => {
-  progressBarStore.startProgress(props.chestId);
+  progressBarStore.startProgress(props.lootId);
 };
 
 const handleEscKey = (event) => {
   if (event.key === "Escape") {
-    if (lootStore.openModals[props.chestId]) {
-      lootStore.closeLootModal(props.chestId);
+    if (lootStore.openModals[props.lootId]) {
+      lootStore.closeLootModal(props.lootId);
     }
     progressBarStore.clearProgress();
   }
 };
 
 const handleScrollCancel = () => {
-  if (lootStore.openModals[props.chestId]) {
-    lootStore.closeLootModal(props.chestId);
+  if (lootStore.openModals[props.lootId]) {
+    lootStore.closeLootModal(props.lootId);
   }
 };
 
@@ -116,45 +116,80 @@ const clearProgress = () => {
   progressBarStore.clearProgress();
 };
 
-const playChestOpening = () => {
-  currentState.value = "opening";
-  openVideoFullyPlayed = false;
-  openingVideo.value.play();
-};
-
-const openLootModal = () => {
-  lootStore.openLootModal(props.chestId);
-};
-
-const onOpeningVideoEnd = () => {
-  openVideoFullyPlayed = true;
-
-  if (playClosingAfterOpening.value) {
-    playChestClosing();
-    playClosingAfterOpening.value = false;
-  } else {
-    lootStore.openLootModal(props.chestId);
+const playLootOpening = () => {
+  if (isOpeningVideoLoaded.value && openingVideo.value) {
+    currentState.value = "opening";
+    openVideoFullyPlayed = false;
+    requestAnimationFrame(() => {
+      openingVideo.value.play();
+    });
   }
 };
 
-const playChestClosing = () => {
-  currentState.value = "closing";
-  closingVideo.value.play();
+const openLootModal = () => {
+  lootStore.openLootModal(props.lootId);
 };
 
-const onClosingVideoEnd = () => {
+const onOpeningVideoEnd = async () => {
+  openVideoFullyPlayed = true;
+  if (autoCloseAfterOpening) {
+    autoCloseAfterOpening = false;
+    await nextTick();
+    startClosingSequence();
+  }
+};
+
+const startClosingSequence = async () => {
+  isClosingTriggered.value = true;
+  currentState.value = "closing";
+  await nextTick();
+  if (isClosingVideoLoaded.value && closingVideo.value) {
+    playLootClosing();
+  }
+};
+
+const playLootClosing = () => {
+  if (isClosingVideoLoaded.value && closingVideo.value) {
+    closingVideo.value.currentTime = 0;
+    requestAnimationFrame(() => {
+      closingVideo.value.play();
+    });
+  }
+};
+
+const onClosingVideoEnd = async () => {
   if (openingVideo.value) {
     openingVideo.value.currentTime = 0;
   }
   currentState.value = "opening";
+  openVideoFullyPlayed = false;
+  isClosingTriggered.value = false;
+  await nextTick();
+};
+
+const onOpeningVideoLoad = () => {
+  isOpeningVideoLoaded.value = true;
+};
+
+const onClosingVideoLoad = () => {
+  isClosingVideoLoaded.value = true;
+  if (currentState.value === "closing") {
+    requestAnimationFrame(() => {
+      closingVideo.value.play();
+    });
+  }
 };
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScrollCancel);
-  window.removeEventListener("scroll", clearProgress); 
+  window.removeEventListener("scroll", clearProgress);
   window.removeEventListener("keydown", handleEscKey);
+
+  if (openingVideo.value) {
+    openingVideo.value.removeEventListener("loadeddata", onOpeningVideoLoad);
+  }
+  if (closingVideo.value) {
+    closingVideo.value.removeEventListener("loadeddata", onClosingVideoLoad);
+  }
 });
 </script>
-
-
-

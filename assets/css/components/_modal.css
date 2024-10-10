@@ -1,12 +1,11 @@
 .content-wrap {
   height: 100%;
-  padding: 2rem 0.5rem 1rem;
+  font-family: var(--default-font);
   background-image: url(/img/blackish-bg.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-
 /* --- */
 
 .element-wrap {

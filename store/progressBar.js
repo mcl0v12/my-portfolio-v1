@@ -9,18 +9,18 @@ export const useProgressBarStore = defineStore("progressBar", () => {
   let animationFrame = null;
   let completionCallback = null;
 
-  const setProgressDuration = (chestId, duration) => {
-    progressDurations.value[chestId] = duration;
+  const setProgressDuration = (lootId, duration) => {
+    progressDurations.value[lootId] = duration;
   };
 
   const setCompletionCallback = (callback) => {
     completionCallback = callback;
   };
 
-  const startProgress = (chestId) => {
+  const startProgress = (lootId) => {
     if (showProgress.value) return;
 
-    const duration = progressDurations.value[chestId];
+    const duration = progressDurations.value[lootId];
     showProgress.value = true;
     progress.value = 0;
     const startTime = performance.now();
@@ -34,7 +34,7 @@ export const useProgressBarStore = defineStore("progressBar", () => {
       } else {
         showProgress.value = false;
         if (completionCallback) {
-          completionCallback(); // Finish Callback
+          completionCallback();
         }
       }
     };

@@ -1,12 +1,11 @@
 <!-- BackpackInventory.vue -->
-
 <template>
   <div class="grid grid-cols-4 gap-1 text-white">
     <template v-for="(slot, index) in filledSlots" :key="index">
       <ItemBadge
         :size="50"
         :overlayScale="1"
-        :imageUrl="slot.id ? slot.imageUrl : '/img/empty-slot.png'"
+        :imageUrl="slot.imageUrl || '/img/empty-slot.png'"
         :gradientId="index"
         :gradientTopColor="getGradientColor(slot.rarity, 'top', !!slot.id)"
         :gradientMidColor="getGradientColor(slot.rarity, 'mid', !!slot.id)"
@@ -17,8 +16,8 @@
         @mouseenter="slot.id ? handleMouseEnter($event, slot) : null"
         @mouseleave="handleMouseLeave"
         :class="{
-          'cursor-buy': isQuest99Active && slot.sellPrice,
-          'cursor-pointer': !isQuest99Active && slot.sellPrice,
+          'cursor-buy': isQuest99Active && slot.vendor?.sellPrice,
+          'cursor-pointer': !isQuest99Active && slot.vendor?.sellPrice,
         }"
       />
     </template>
@@ -51,11 +50,9 @@ const filledSlots = computed(() => {
 const isQuest99Active = computed(() => questStore.showQuestId === 99);
 
 const handleItemClick = (slot, index) => {
-  if (isQuest99Active.value) {
-    if (slot.sellPrice) {
-      const { gold, silver, copper } = slot.sellPrice;
-      currencyStore.addCurrency(gold, silver, copper);
-    }
+  if (isQuest99Active.value && slot.vendor && slot.vendor.sellPrice) {
+    const { gold, silver, copper } = slot.vendor.sellPrice;
+    currencyStore.addCurrency(gold, silver, copper, "sell");
     backpackStore.replaceItemWithEmpty(index);
     tooltipStore.hideTooltip();
   } else {
@@ -65,14 +62,13 @@ const handleItemClick = (slot, index) => {
 
 const handleMouseEnter = (event, slot) => {
   const titleColor = getColorFromRarity(slot.rarity);
-  const descriptionColor = slot.descriptionColor;
 
   tooltipStore.showTooltip(event, {
     title: slot.title,
     description: slot.description,
     titleColor,
-    descriptionColor,
-    sellPrice: slot.sellPrice,
+    descriptionColor: slot.descriptionColor,
+    sellPrice: slot.vendor?.sellPrice || null,
   });
 };
 

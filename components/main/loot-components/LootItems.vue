@@ -1,30 +1,29 @@
+<!-- LootItems.vue -->
+
 <template>
-  <div class="loot-items">
-    <ul class="loot-list space-y-1">
+    <ul class="space-y-1">
       <li
         v-for="(item, index) in items"
         :key="index"
-        class="loot-item flex bg-black cursor-pointer"
+        class="flex bg-black cursor-pointer p-0.5 border border-solid border-gray-80 rounded-lg hover:border-gray-60"
         @click="handleItemClick(item)"
         @mouseenter="handleMouseEnter($event, item, index)"
         @mouseleave="handleMouseLeave($event, index)"
-        @mousedown="forwardEventToBadge('mousedown', index)"
-        @mouseup="forwardEventToBadge('mouseup', index)"
+        :style="{ borderColor: isActive[index] ? 'var(--gray-10)' : '' }"
+        @mousedown="activateItem(index)"
       >
-        <div class="item-badge-wrap">
-          <ItemBadge
-            ref="itemBadges"
-            :size="50"
-            :overlayScale="1"
-            :imageUrl="item.imageUrl"
-            :gradientId="index"
-            :gradientTopColor="getGradientColor(item.rarity, 'top', !!item.id)"
-            :gradientMidColor="getGradientColor(item.rarity, 'mid', !!item.id)"
-            :gradientBottomColor="
-              getGradientColor(item.rarity, 'bottom', !!item.id)
-            "
-          />
-        </div>
+        <ItemBadge
+          ref="itemBadges"
+          :size="50"
+          :overlayScale="1"
+          :imageUrl="item.imageUrl"
+          :gradientId="index"
+          :gradientTopColor="getGradientColor(item.rarity, 'top', !!item.id)"
+          :gradientMidColor="getGradientColor(item.rarity, 'mid', !!item.id)"
+          :gradientBottomColor="
+            getGradientColor(item.rarity, 'bottom', !!item.id)
+          "
+        />
         <div
           class="w-full text-sm mt-1 ml-2 select-none"
           :style="{ color: getColorFromRarity(item.rarity) }"
@@ -33,20 +32,19 @@
         </div>
       </li>
     </ul>
-  </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useRarityColors } from "~/composables/useRarityColors";
 import { useTooltipStore } from "~/store/tooltip.js";
 import { useBackpackStore } from "~/store/backpack.js";
 import { useLootStore } from "~/store/loot.js";
 import { useCurrencyStore } from "~/store/currency.js";
-import { ref } from "vue";
 import ItemBadge from "~/components/misc/ItemBadge.vue";
 
 const props = defineProps({
-  chestId: {
+  lootId: {
     type: String,
     required: true,
   },
@@ -58,6 +56,7 @@ const props = defineProps({
 });
 
 const itemBadges = ref([]);
+const isActive = ref([]);
 
 const backpackStore = useBackpackStore();
 const lootStore = useLootStore();
@@ -67,22 +66,19 @@ const tooltipStore = useTooltipStore();
 
 const handleItemClick = (item) => {
   if (item.type === "currency") {
-    currencyStore.addCurrency(item.gold, item.silver, item.copper);
+    currencyStore.addCurrency(item.gold, item.silver, item.copper, "loot");
   } else {
     backpackStore.addItemToBackpack(item);
   }
-
-  lootStore.removeLootItem(props.chestId, item.id);
+  lootStore.removeLootItem(props.lootId, item.id);
 };
 
 const handleMouseEnter = (event, item, index) => {
   forwardEventToBadge("mouseenter", index);
-
   if (item.type === "currency") {
     tooltipStore.hideTooltip();
   } else {
     const color = getColorFromRarity(item.rarity);
-
     tooltipStore.showTooltip(event, {
       title: item.title,
       description: item.description,
@@ -94,13 +90,21 @@ const handleMouseEnter = (event, item, index) => {
 
 const handleMouseLeave = (event, index) => {
   forwardEventToBadge("mouseleave", index);
-
   const relatedTarget = event.relatedTarget;
-
   if (!relatedTarget || !event.currentTarget.contains(relatedTarget)) {
     tooltipStore.hideTooltip();
+    deactivateItem(index);
   }
 };
+
+function activateItem(index) {
+  isActive.value[index] = true;
+  forwardEventToBadge("mousedown", index);
+}
+
+function deactivateItem(index) {
+  isActive.value[index] = false;
+}
 
 const forwardEventToBadge = (eventType, index) => {
   const itemBadge = itemBadges.value[index];

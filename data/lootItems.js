@@ -1,15 +1,14 @@
 // data/lootItems.js
 export const lootItemsData = {
   chest1: {
-    duration: 3000,
+    duration: 1000,
     items: [
       {
-        id: 20,
         imageUrl: "/img/items/coin.png",
         title: "10 Silver, 50 Copper",
         description: "",
         rarity: "common",
-        type: "currency",
+        type: "currency", 
         gold: 0,
         silver: 10,
         copper: 50,
@@ -21,8 +20,11 @@ export const lootItemsData = {
         description: "X",
         descriptionColor: "#08e403",
         rarity: "uncommon",
-        sellPrice: { gold: 1, silver: 20, copper: 0 },
-        quantity: 1,
+        type: "water",
+        vendor: {
+          sellPrice: { gold: 1, silver: 20, copper: 0 },
+          quantity: 1,
+        },
       },
     ],
   },
@@ -30,12 +32,11 @@ export const lootItemsData = {
     duration: 1000,
     items: [
       {
-        id: 21,
         imageUrl: "/img/items/coin.png",
         title: "30 Silver, 20 Copper",
         description: "",
         rarity: "common",
-        type: "currency",
+        type: "currency", 
         gold: 0,
         silver: 50,
         copper: 20,
@@ -47,8 +48,11 @@ export const lootItemsData = {
         description: "X",
         descriptionColor: "#08e403",
         rarity: "epic",
-        sellPrice: { gold: 1, silver: 25, copper: 0 },
-        quantity: 1,
+        type: "wand",
+        vendor: {
+          sellPrice: { gold: 1, silver: 25, copper: 0 },
+          quantity: 1,
+        },
       },
     ],
   },

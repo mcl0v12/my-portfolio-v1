@@ -1,58 +1,73 @@
 // store/loot.js
 import { defineStore } from "pinia";
-import { useTooltipStore } from "~/store/tooltip.js";
+import { ref } from "vue";
+import { SoundManager } from "~/utils/soundManager";
+
+// SoundManager-Instanz für die Loot-Sounds
+const lootSounds = {
+  open: new SoundManager(["/sounds/chest/Treasurechest_GoldenDragon_Open.ogg"]),
+  close: new SoundManager(["/sounds/chest/Treasurechest_GoldenDragon_Close.ogg"]),
+};
 
 export const useLootStore = defineStore("loot", {
   state: () => ({
     lootItems: {}, 
     removedItems: {}, 
-    openModals: {}, 
+    openModals: {},
+    cursorPosition: ref({ x: 0, y: 0 }) // Hinzugefügt: speichert die Klick-Position
   }),
-
   getters: {
     isAnyModalOpen(state) {
       return Object.values(state.openModals).includes(true);
     },
-    activeChestId(state) {
-      return Object.keys(state.openModals).find(chestId => state.openModals[chestId]);
+    activeLootId(state) {
+      return Object.keys(state.openModals).find(lootId => state.openModals[lootId]);
     }
   },
-
   actions: {
-    openLootModal(chestId) {
-      this.openModals[chestId] = true;
+    openLootModal(lootId) {
+      if (lootId.startsWith("chest")) { 
+        lootSounds.open.playNextSound();
+      }
+      this.openModals[lootId] = true;
     },
 
-    closeLootModal(chestId) {
-      this.openModals[chestId] = false;
-      useTooltipStore().hideTooltip();
+    closeLootModal(lootId) {
+      if (lootId.startsWith("chest")) { 
+        lootSounds.close.playNextSound();
+      }
+      this.openModals[lootId] = false;
     },
 
-    initializeLoot(chestId, items) {
-      const storedRemovedItems = localStorage.getItem(`removedItems_${chestId}`);
-      this.removedItems[chestId] = storedRemovedItems ? JSON.parse(storedRemovedItems) : [];
-      this.lootItems[chestId] = items.filter(
-        (item) => !this.removedItems[chestId].includes(item.id)
+    initializeLoot(lootId, items) {
+      const storedRemovedItems = localStorage.getItem(`removedItems_${lootId}`);
+      this.removedItems[lootId] = storedRemovedItems ? JSON.parse(storedRemovedItems) : [];
+      this.lootItems[lootId] = items.filter(
+        (item) => !this.removedItems[lootId].includes(item.id)
       );
     },
 
-    loadAllRemovedItems(chests) {
-      chests.forEach((chestId) => {
-        const storedRemovedItems = localStorage.getItem(`removedItems_${chestId}`);
-        this.removedItems[chestId] = storedRemovedItems ? JSON.parse(storedRemovedItems) : [];
+    loadAllRemovedItems(lootTypes) {
+      lootTypes.forEach((lootId) => {
+        const storedRemovedItems = localStorage.getItem(`removedItems_${lootId}`);
+        this.removedItems[lootId] = storedRemovedItems ? JSON.parse(storedRemovedItems) : [];
       });
     },
 
-    removeLootItem(chestId, itemId) {
-      if (this.lootItems[chestId]) {
-        this.lootItems[chestId] = this.lootItems[chestId].filter((item) => item.id !== itemId);
-        this.removedItems[chestId].push(itemId);
+    removeLootItem(lootId, itemId) {
+      if (this.lootItems[lootId]) {
+        this.lootItems[lootId] = this.lootItems[lootId].filter((item) => item.id !== itemId);
+        this.removedItems[lootId].push(itemId);
         localStorage.setItem(
-          `removedItems_${chestId}`,
-          JSON.stringify(this.removedItems[chestId])
+          `removedItems_${lootId}`,
+          JSON.stringify(this.removedItems[lootId])
         );
-        useTooltipStore().hideTooltip();
       }
+    },
+
+    // Methode zum Speichern der Klick-Position
+    setCursorPosition(x, y) {
+      this.cursorPosition = { x, y };
     },
   },
 });
