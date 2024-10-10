@@ -2,10 +2,10 @@
 
 <template>
     <div
-      class="progress-bar-container w-full max-w-[300px] h-[25px] fixed top-[70%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden"
+      class="progress-bar-container w-full max-w-[300px] h-[25px] fixed top-[70%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[2]"
     >
       <span
-        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-default text-sm z-[2]"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-default text-white text-sm z-[2]"
       >
         Opening
       </span>

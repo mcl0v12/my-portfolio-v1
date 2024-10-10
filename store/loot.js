@@ -9,6 +9,15 @@ export const useLootStore = defineStore("loot", {
     openModals: {}, 
   }),
 
+  getters: {
+    isAnyModalOpen(state) {
+      return Object.values(state.openModals).includes(true);
+    },
+    activeChestId(state) {
+      return Object.keys(state.openModals).find(chestId => state.openModals[chestId]);
+    }
+  },
+
   actions: {
     openLootModal(chestId) {
       this.openModals[chestId] = true;
@@ -19,7 +28,6 @@ export const useLootStore = defineStore("loot", {
       useTooltipStore().hideTooltip();
     },
 
-    // Initialisiere Loot-Items und filtere entfernte
     initializeLoot(chestId, items) {
       const storedRemovedItems = localStorage.getItem(`removedItems_${chestId}`);
       this.removedItems[chestId] = storedRemovedItems ? JSON.parse(storedRemovedItems) : [];
@@ -35,7 +43,6 @@ export const useLootStore = defineStore("loot", {
       });
     },
 
-    // Entferne Item und speichere es
     removeLootItem(chestId, itemId) {
       if (this.lootItems[chestId]) {
         this.lootItems[chestId] = this.lootItems[chestId].filter((item) => item.id !== itemId);

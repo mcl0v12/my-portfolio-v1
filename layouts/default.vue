@@ -17,6 +17,15 @@
   <Tooltip />
 
   <BackpackModal v-if="backpackStore.isBackpackOpen" />
+
+  <!-- ProgressBar -->
+  <ProgressBar
+    v-if="progressBarStore.showProgress"
+    :progress="progressBarStore.progress"
+  />
+
+  <!-- LootModal: Überprüfe, ob ein Modal geöffnet ist und zeige es an -->
+  <LootModal v-if="lootStore.isAnyModalOpen" :chestId="lootStore.activeChestId" />
 </template>
 
 <script setup>
@@ -28,9 +37,12 @@ import ObjectivesTracker from "~/components/main/ObjectivesTracker.vue";
 import ExperienceBar from "~/components/misc/ExperienceBar.vue";
 import Tooltip from "~/components/main/Tooltip.vue";
 import BackpackModal from "~/components/main/backpack-components/BackpackModal.vue";
+import ProgressBar from "~/components/misc/ProgressBar.vue";
+import LootModal from "~/components/main/loot-components/LootModal.vue";
 
 import { useExperienceStore } from "~/store/experience.js";
 import { useQuestStore } from "~/store/handleInteraction.js";
+import { useProgressBarStore } from "~/store/progressBar.js";
 import { useObjectivesStore } from "~/store/handleObjectives.js";
 import { useBackpackStore } from "~/store/backpack.js";
 import { useCurrencyStore } from "~/store/currency.js";
@@ -40,6 +52,7 @@ import { lootItemsData } from "~/data/lootItems.js";
 
 const questStore = useQuestStore();
 const objectivesStore = useObjectivesStore();
+const progressBarStore = useProgressBarStore();
 const experienceStore = useExperienceStore();
 const backpackStore = useBackpackStore();
 const currencyStore = useCurrencyStore();

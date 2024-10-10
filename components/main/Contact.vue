@@ -6,11 +6,11 @@
     >
       <h2 class="numbered-heading heading-lg mb-6">Write me a letter</h2>
 
-      <div class="flex justify-center mb-8">
+      <div class="mb-8">
         <img
           src="/gif/mailbox.gif"
           alt="Mailbox Animation"
-          class="max-w-sm mail-cursor"
+          class="w-[300px] md:w-[400px] mx-auto mail-cursor"
           draggable="false"
           @click="openModal"
         />

@@ -5,7 +5,7 @@
   <main>
     <Background />
     <Achievments />
-    <Work />
+    <Collection />
     <Contact />
   </main>
 </template>
@@ -17,7 +17,7 @@ import { ref, onMounted } from "vue";
 import Hero from "~/components/main/Hero.vue";
 import Background from "~/components/main/Background.vue";
 import Achievments from "~/components/main/Achievments.vue";
-import Work from "~/components/main/Work.vue";
+import Collection from "~/components/main/Collection.vue";
 import Contact from "~/components/main/Contact.vue";
 
 
