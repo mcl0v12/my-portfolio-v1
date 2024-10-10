@@ -1,31 +1,38 @@
-<!-- Camel.vue -->
+<!-- CamelNew.vue -->
 
 <template>
   <div class="max-w-stacked--lg relative mx-auto">
+    <!-- Stand Video -->
+    <video
+      v-if="
+        currentState === 'stand' ||
+        (currentState === 'special' && !isSpecialVideoLoaded)
+      "
+      class="cursor-pointer"
+      src="/webm/preloader/camel-stand.webm"
+      @click="playSpecialAnimation"
+      draggable="false"
+      :controls="false"
+      loop
+      autoplay
+      muted
+    ></video>
+
+    <!-- Special Video -->
+    <video
+      ref="specialVideo"
+      v-if="currentState === 'special'"
+      v-show="isSpecialVideoLoaded"
+      src="/webm/preloader/camel-special.webm"
+      @ended="onSpecialVideoEnd"
+      @loadeddata="onSpecialVideoLoad"
+      draggable="false"
+      :controls="false"
+    ></video>
+
     <picture>
       <img
-        v-show="
-          currentState === 'stand' ||
-          (currentState === 'special' && !isSpecialGifLoaded)
-        "
-        :src="standGifUrl"
-        draggable="false"
-        alt="Camel standing"
-        @click="playSpecialAnimation"
-        class="cursor-pointer"
-      />
-      <img
-        v-show="currentState === 'special' && isSpecialGifLoaded"
-        :src="dynamicSpecialGifUrl"
-        draggable="false"
-        alt="Camel special animation"
-        @load="onSpecialGifLoad"
-        class="relative z-[2]"
-      />
-    </picture>
-    <picture>
-      <img
-        src="/gif/preloader/palm.png"
+        src="/img/palm.png"
         alt="Palm tree"
         class="w-[100px] lg:w-[200px] absolute top-1/2 left-[80%] -translate-y-1/2 z-[1]"
       />
@@ -34,51 +41,42 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from "vue";
+import { ref, nextTick, onBeforeUnmount } from "vue";
 
 const currentState = ref("stand");
-const standGifUrl = "/gif/preloader/camel-stand.gif";
-const specialGifUrl = "/gif/preloader/camel-special.gif";
-const dynamicSpecialGifUrl = ref(specialGifUrl);
-const specialGifDuration = 2500;
+const specialVideo = ref(null);
+const isSpecialVideoLoaded = ref(false);
 
-const isSpecialGifLoaded = ref(false);
-
-let gifTimeout = null;
-
-const playSpecialAnimation = () => {
+const playSpecialAnimation = async () => {
   if (currentState.value === "stand") {
     currentState.value = "special";
-    reloadGif(dynamicSpecialGifUrl, specialGifUrl);
-    isSpecialGifLoaded.value = false;
+    isSpecialVideoLoaded.value = false;
+    await nextTick();
+
+    if (specialVideo.value) {
+      specialVideo.value.load();
+    }
   }
 };
 
-const onSpecialGifLoad = () => {
-  isSpecialGifLoaded.value = true;
-  playGif("stand", specialGifDuration);
-};
-
-const playGif = (nextState, duration) => {
-  clearGifTimeout();
-  gifTimeout = setTimeout(() => {
-    currentState.value = nextState;
-  }, duration);
-};
-
-const reloadGif = (dynamicGifRef, gifUrl) => {
-  dynamicGifRef.value = `${gifUrl}?t=${new Date().getTime()}`;
-};
-
-const clearGifTimeout = () => {
-  if (gifTimeout) {
-    clearTimeout(gifTimeout);
-    gifTimeout = null;
+const onSpecialVideoLoad = () => {
+  isSpecialVideoLoaded.value = true;
+  if (currentState.value === "special" && specialVideo.value) {
+    requestAnimationFrame(() => {
+      specialVideo.value.play();
+    });
   }
+};
+
+const onSpecialVideoEnd = async () => {
+  currentState.value = "stand";
+  await nextTick();
 };
 
 onBeforeUnmount(() => {
-  clearGifTimeout();
+  if (specialVideo.value) {
+    specialVideo.value.removeEventListener("loadeddata", onSpecialVideoLoad);
+  }
 });
 </script>
 
