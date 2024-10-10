@@ -16,6 +16,7 @@
       loop
       autoplay
       muted
+      disablePictureInPicture
     ></video>
 
     <!-- Special Video -->
@@ -28,6 +29,7 @@
       @loadeddata="onSpecialVideoLoad"
       draggable="false"
       :controls="false"
+      disablePictureInPicture
     ></video>
 
     <picture>

@@ -1,8 +1,9 @@
-<!-- Chest.vue -->
+  <!-- Chest.vue -->
 
 <template>
   <!-- Opening Video -->
   <video
+    ref="openingVideo"
     v-if="
       currentState === 'opening' ||
       (currentState === 'closing' && !isClosingVideoLoaded)
@@ -11,6 +12,7 @@
     src="/webm/chest/open.webm"
     @click="startProgressBar"
     @ended="onOpeningVideoEnd"
+    @loadeddata="onOpeningVideoLoad"
     draggable="false"
     :controls="false"
     disablePictureInPicture
@@ -47,7 +49,9 @@ const lootStore = useLootStore();
 const progressBarStore = useProgressBarStore();
 const currentState = ref("opening");
 
+const openingVideo = ref(null);
 const closingVideo = ref(null);
+const isOpeningVideoLoaded = ref(false);
 const isClosingVideoLoaded = ref(false);
 let openVideoFullyPlayed = false;
 let autoCloseAfterOpening = false;
@@ -58,6 +62,11 @@ onMounted(() => {
     lootStore.initializeLoot(props.lootId, lootData.items);
     const lootDuration = lootData.duration;
     progressBarStore.setProgressDuration(props.lootId, lootDuration);
+  }
+
+  if (openingVideo.value) {
+    openingVideo.value.load();
+    openingVideo.value.addEventListener("loadeddata", onOpeningVideoLoad);
   }
 
   progressBarStore.setCompletionCallback(() => {
@@ -89,20 +98,6 @@ const startProgressBar = () => {
   progressBarStore.startProgress(props.lootId);
 };
 
-const clearProgress = () => {
-  progressBarStore.clearProgress();
-};
-
-const openLootModal = () => {
-  lootStore.openLootModal(props.lootId);
-};
-
-const handleScrollCancel = () => {
-  if (lootStore.openModals[props.lootId]) {
-    lootStore.closeLootModal(props.lootId);
-  }
-};
-
 const handleEscKey = (event) => {
   if (event.key === "Escape") {
     if (lootStore.openModals[props.lootId]) {
@@ -112,9 +107,28 @@ const handleEscKey = (event) => {
   }
 };
 
+const handleScrollCancel = () => {
+  if (lootStore.openModals[props.lootId]) {
+    lootStore.closeLootModal(props.lootId);
+  }
+};
+
+const clearProgress = () => {
+  progressBarStore.clearProgress();
+};
+
 const playLootOpening = () => {
-  currentState.value = "opening";
-  openVideoFullyPlayed = false;
+  if (isOpeningVideoLoaded.value && openingVideo.value) {
+    currentState.value = "opening";
+    openVideoFullyPlayed = false;
+    requestAnimationFrame(() => {
+      openingVideo.value.play();
+    });
+  }
+};
+
+const openLootModal = () => {
+  lootStore.openLootModal(props.lootId);
 };
 
 const onOpeningVideoEnd = async () => {
@@ -142,6 +156,10 @@ const onClosingVideoEnd = async () => {
   await nextTick();
 };
 
+const onOpeningVideoLoad = () => {
+  isOpeningVideoLoaded.value = true;
+};
+
 const onClosingVideoLoad = () => {
   isClosingVideoLoaded.value = true;
   if (currentState.value === "closing") {
@@ -156,6 +174,9 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", clearProgress);
   window.removeEventListener("keydown", handleEscKey);
 
+  if (openingVideo.value) {
+    openingVideo.value.removeEventListener("loadeddata", onOpeningVideoLoad);
+  }
   if (closingVideo.value) {
     closingVideo.value.removeEventListener("loadeddata", onClosingVideoLoad);
   }
