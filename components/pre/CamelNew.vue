@@ -3,7 +3,7 @@
       <!-- Stand Video -->
       <video
         ref="standVideo"
-        v-if="currentState === 'stand' || (currentState === 'special' && !isSpecialVideoLoaded)"
+        v-show="currentState === 'stand' || (currentState === 'special' && !isSpecialVideoLoaded)"
         class="cursor-pointer"
         src="/webm/preloader/camel-stand.webm"
         @click="playSpecialAnimation"
@@ -19,7 +19,7 @@
       <!-- Special Video -->
       <video
         ref="specialVideo"
-        v-if="currentState === 'special' && isSpecialVideoLoaded"
+        v-show="currentState === 'special' && isSpecialVideoLoaded"
         src="/webm/preloader/camel-special.webm"
         @ended="onSpecialVideoEnd"
         @loadeddata="onSpecialVideoLoad"
@@ -27,7 +27,7 @@
         preload="auto"
         :controls="false"
       ></video>
-      
+  
       <picture>
         <img
           src="/gif/preloader/palm.png"
@@ -53,14 +53,24 @@
       standVideo.value.load();
       standVideo.value.addEventListener("loadeddata", onStandVideoLoad);
     }
+    
+    if (specialVideo.value) {
+      specialVideo.value.load();
+      specialVideo.value.addEventListener("loadeddata", onSpecialVideoLoad);
+    }
   });
   
   const playSpecialAnimation = async () => {
     if (currentState.value === "stand") {
       isSpecialTriggered.value = true;
       isSpecialVideoLoaded.value = false;
+      currentState.value = "special";
+      await nextTick();
+    
       if (specialVideo.value) {
-        specialVideo.value.load(); // Erst das Video laden, bevor es abgespielt wird
+        requestAnimationFrame(() => {
+          specialVideo.value.play();
+        });
       }
     }
   };
@@ -71,9 +81,7 @@
   
   const onSpecialVideoLoad = () => {
     isSpecialVideoLoaded.value = true;
-    currentState.value = "special"; // Jetzt den Zustand umschalten, wenn das Video geladen ist
-    
-    if (specialVideo.value) {
+    if (currentState.value === "special" && specialVideo.value) {
       requestAnimationFrame(() => {
         specialVideo.value.play();
       });
